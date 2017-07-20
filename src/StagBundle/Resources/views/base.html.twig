@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8" />
+	<title>{% block title %}stag.tanecvplzni.cz{% endblock %}</title>
+	{% block stylesheets %}{% endblock %}
+	<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+	
+	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
+	<link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}" />
+	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('js/toastr.min.js') }}"></script>
+</head>
+<body>
+	<nav class="navbar navbar-default">
+	<div class="container">
+        	<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="{{ path('default_index') }}">stag.tanecvplzni.cz</a>
+		</div>
+		<div id="navbar" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+				{# <li {% if app.request.attributes.get('_route') starts with 'lessons_' %}class="active"{% endif %}>
+					<a href="{{ path('lessons_list') }}">Lessons</a>
+				</li>
+				<li {% if app.request.attributes.get('_route') starts with 'students_' %}class="active"{% endif %}>
+					<a href="{{ path('students_list') }}">Students</a>
+				</li> #}
+			</ul>
+
+			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						<span class="glyphicon glyphicon-user"></span> 
+						<strong>{{ app.user.username }}</strong>
+						<span class="glyphicon glyphicon-chevron-down"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a href="{{ path('user_changepassword') }}">Change password</a></li>
+						<li><a href="{{ path('logout') }}">Logout</a></li>
+					</ul>
+				</li>
+			</ul>
+			{% endif %}
+
+		</div><!--/.nav-collapse -->
+	</div>
+	</nav>
+
+	<div class="container-fluid">
+		{% block body %}
+		{% endblock %}
+	</div>
+
+	<script type="text/javascript">
+		{% block javascripts %}
+		toastr.options = {
+			"closeButton": false,
+			"debug": false,
+			"progressBar": false,
+			"positionClass": "toast-top-right",
+			"preventDuplicates": false,
+			"onclick": null,
+			"showDuration": "300",
+			"hideDuration": "1000",
+			"timeOut": "5000",
+			"extendedTimeOut": "1000",
+			"showEasing": "swing",
+			"hideEasing": "linear",
+			"showMethod": "fadeIn",
+			"hideMethod": "fadeOut"
+		};
+	        {% for label, messages in app.flashes %}
+			var type = '{{ label }}';
+			{% for message in messages %}
+				toastr[type]('{{ message }}');
+			{% endfor %}
+		{% endfor %}
+		{% endblock %}
+	</script>
+</body>
+</html>

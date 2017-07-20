@@ -5,13 +5,11 @@ namespace StagBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-class DefaultController extends Controller
-{
+class DefaultController extends Controller {
     /**
-     * @Route("/")
+     * @Route("/", name="default_index")
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         return $this->render('StagBundle:Default:index.html.twig');
     }
 }
