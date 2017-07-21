@@ -17,7 +17,7 @@ class CourseControllerTest extends WebTestCase {
 		"teacher" => "ucitel",
 		"place" => "masala",
 		"capacity" => 10,
-		"pair" => False,
+		"pair" => true,
 		"priceSingle" => 130,
 		"pricePair" => 200,
 		"lessons" => ["l1","l2"]	
@@ -25,7 +25,7 @@ class CourseControllerTest extends WebTestCase {
 	
 	protected function setUp() {
 		$this->client = static::createClient();
-		$this->em = $this->client->getContainer()->get("doctrine")->getManager();
+		$this->em = static::$kernel->getContainer()->get("doctrine")->getManager();
 		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 	}
 	
@@ -39,6 +39,8 @@ class CourseControllerTest extends WebTestCase {
 
 
 	public function testAddAction() {
+		$this->testCourse["name"] = $this->testCourse["name"]." add ".mt_rand();
+						
 		$crawler = $this->client->request("GET", "/course/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[name]' => $this->testCourse["name"],
@@ -66,6 +68,8 @@ class CourseControllerTest extends WebTestCase {
 
 
     	public function testEditAction() {
+		$this->testCourse["name"] = $this->testCourse["name"]." edit ".mt_rand(); 		
+    		
         	$course = new Course();
         	$course->setName($this->testCourse["name"]);
 		$course->setDescription($this->testCourse["description"]);
@@ -79,19 +83,24 @@ class CourseControllerTest extends WebTestCase {
 		$this->em->persist($course);
 		$this->em->flush();
 		
-		$crawler = $this->client->request("GET", "/course/edit/{$course->getID()}");
+		$crawler = $this->client->request("GET", "/course/edit/{$course->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
-            		'course[description]' => "new description",
-            		'course[lessons]' => $this->testCourse["lessons"] + ["l3"],
-        	]);
+            		'course[description]' => "edited description",
+			'course[teacher]' => "edited teacher",
+           		'course[pair]' => false,
+            	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        	$this->em->refresh($course); //must refresh on change without em
 
+		//TODO: not sure why this does not work here as expected based on correo project		
+		//$this->em->refresh($course); //must refresh on change without em        	
+        	
 		# check general attributes change
-		//$course = $this->courseRepo->findOneByName($this->testCourse["name"]);		
-        	//$this->assertNotNull($course);
-        	//$this->assertSame("new description", $course->getDescription());
+		$course = $this->courseRepo->findOneById($course->getID());
+        	$this->assertNotNull($course);
+        	$this->assertSame("edited description", $course->getDescription());
+        	$this->assertSame("edited teacher", $course->getTeacher());
+		$this->assertSame(false, $course->getpair());
 		
 		$this->em->remove($course);
 		$this->em->flush();
@@ -99,28 +108,31 @@ class CourseControllerTest extends WebTestCase {
 
 
 
-/*
+
 	public function testDeleteAction() {
-		$this->logIn();
+		$this->testCourse["name"] = $this->testCourse["name"]." delete ".mt_rand();    		
+    		
+        	$course = new Course();
+        	$course->setName($this->testCourse["name"]);
+		$course->setDescription($this->testCourse["description"]);
+		$course->setTeacher($this->testCourse["teacher"]);
+		$course->setPlace($this->testCourse["place"]);
+		$course->setCapacity($this->testCourse["capacity"]);
+		$course->setPair($this->testCourse["pair"]);
+		$course->setPriceSingle($this->testCourse["priceSingle"]);
+		$course->setPricePair($this->testCourse["pricePair"]); 
+		$course->setLessons($this->testCourse["lessons"]); 
+		$this->em->persist($course);
+		$this->em->flush();		
 
-		$username = 'testuser_'.mt_rand();
-		$email = "{$username}@gc-system.cz";
-		$user = new User();
-		$user->setUsername($username);
-		$user->setEmail($email);
-		$user->setPassword(User::generatePassword()); //forgettable at first
-		$user->setActive(false);
-		$this->em->persist($user);
-		$this->em->flush();
-
-		$crawler = $this->client->request("GET", "/user/delete/{$user->getID()}");
+		$crawler = $this->client->request("GET", "/course/delete/{$course->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$user = $this->userRepo->findOneByUsername($username);
-		$this->assertNull($user);
-	}*/
+		$course = $this->courseRepo->findOneByName($this->testCourse["name"]);
+		$this->assertNull($course);
+	}
 }
 
 ?>
