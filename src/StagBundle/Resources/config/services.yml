@@ -1,4 +1,19 @@
 services:
-#    stag.example:
-#        class: StagBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    StagBundle\:
+        resource: '../../*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../../{Entity,Repository,Tests}'
+
+    # controllers are imported separately to make sure they're public
+    # and have a tag that allows actions to type-hint services
+    StagBundle\Controller\:
+        resource: '../../Controller'
+        public: true
+        tags: ['controller.service_arguments']
+

@@ -1,0 +1,48 @@
+{% extends '@StagBundle/base.html.twig' %}
+
+{% block title %}StagBundle:Course:index{% endblock %}
+
+{% block body %}
+<div class="courses">
+	<h1>Kurzy</h1>
+	<a class="btn btn-success" href="{{ path('course_add') }}">Add</a>
+	<table class="table table-responsive">
+	<thead>
+		<tr>
+			<th>name</th>
+			<th>description</th>
+			<th>teacher</th>
+			<th>place</th>
+			<th>capacity</th>
+			<th>pair</th>
+			<th>priceSingle</th>
+			<th>pricePair</th>
+			<th>lessons</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for course in courses %}
+                <tr>
+			<td>{{ course.name }}</td>
+			<td>{{ course.description }}</td>
+			<td>{{ course.teacher }}</td>
+			<td>{{ course.place }}</td>
+			<td>{{ course.capacity }}</td>
+			<td>{{ course.pair }}</td>
+			<td>{{ course.priceSingle }}</td>
+			<td>{{ course.pricePair }}</td>
+			<td>{{ course.lessons|join(' ') }}</td>
+			<td>
+				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
+			</td>
+		</tr>
+    		{% endfor %}
+	</tbody>
+	</table>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
