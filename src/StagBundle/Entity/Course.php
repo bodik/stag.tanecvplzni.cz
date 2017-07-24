@@ -44,7 +44,7 @@ class Course {
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="place", type="string", length=1024)
+	 * @ORM\Column(name="place", type="string", length=255)
 	 */
 	private $place;
 
@@ -85,6 +85,7 @@ class Course {
 
 	public function __construct() {
 		$this->pair = false;
+		$this->lessons = [];
 	}
 
 
@@ -116,5 +117,4 @@ class Course {
 
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }
-
 }

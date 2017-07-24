@@ -2,23 +2,21 @@
 
 namespace StagBundle\Controller;
 
-use StagBundle\Entity\Course;
-use StagBundle\Form\CourseType;
-use StagBundle\Form\DeleteButtonType;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use StagBundle\Entity\Course;
+use StagBundle\Form\CourseType;
+use StagBundle\Form\DeleteButtonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class CourseController extends Controller {
 	private $em;
-	private $log;
 
 
-	public function __construct(EntityManagerInterface $em, LoggerInterface $log) {
+	public function __construct(EntityManagerInterface $em) {
 		$this->em = $em;
-		$this->log = $log;
 	}
 
 

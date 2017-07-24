@@ -3,10 +3,32 @@
 {% block body %}
 <div class="courses">
 	<h1>Course add</h1>
+	<a class="btn btn-success" href="#" id="add-lesson">Add lesson</a>
 	{{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_widget(form) }}	
         {{ form_end(form) }}
+	
 </div>
+
+
+<script type="text/javascript">
+    var lessonsCount = '{{ form.lessons|length }}';
+
+    jQuery(document).ready(function() {
+        jQuery('#add-lesson').click(function(e) {
+            e.preventDefault();
+
+            var lessonsList = jQuery('#course_lessons');
+            var newWidget = lessonsList.attr('data-prototype');
+            newWidget = newWidget.replace(/__name__/g, lessonsCount);
+            lessonsCount++;
+            console.log(newWidget);
+            var newLi = jQuery('<div></div>').html(newWidget);
+            newLi.appendTo(lessonsList);
+        });
+    });
+</script>
+
 {% endblock %}
 
 {% block stylesheets %}

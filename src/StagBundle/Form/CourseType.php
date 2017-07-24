@@ -4,7 +4,9 @@ namespace StagBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class CourseType extends AbstractType {
@@ -18,7 +20,14 @@ class CourseType extends AbstractType {
 			->add('pair', CheckboxType::class, ['required' => false,])
 			->add('priceSingle')
 			->add('pricePair')
-			->add('lessons')
+			->add('lessons', CollectionType::class, [
+				'entry_type' => TextType::class,
+				'allow_add' => true,
+				'allow_delete' => true,
+				'delete_empty' => true,
+				'required' => false,
+				'prototype' => true,
+			])
 			->add('save', SubmitType::class);
 	}
 }

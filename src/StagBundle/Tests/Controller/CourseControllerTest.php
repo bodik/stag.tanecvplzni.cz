@@ -11,7 +11,7 @@ class CourseControllerTest extends WebTestCase {
 	private $em;
 	private $courseRepo;
 
-	private $testCourse = [
+	public $testCourse = [
 		"name" => "kurz test",
 		"description" => "kurz test popis",
 		"teacher" => "ucitel",
@@ -100,7 +100,7 @@ class CourseControllerTest extends WebTestCase {
         	$this->assertNotNull($course);
         	$this->assertSame("edited description", $course->getDescription());
         	$this->assertSame("edited teacher", $course->getTeacher());
-		$this->assertSame(false, $course->getpair());
+		$this->assertSame(false, $course->getPair());
 		
 		$this->em->remove($course);
 		$this->em->flush();
