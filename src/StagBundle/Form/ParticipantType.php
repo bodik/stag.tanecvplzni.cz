@@ -28,7 +28,7 @@ class ParticipantType extends AbstractType {
 			'choice_label' => function ($value, $key, $index) { return $key; },
 			'expanded' => true,
 			));
-		$builder->add('partner');
+		$builder->add('partner', TextType::class, ['required' => false,]);
 		$builder->add('reference', TextType::class, ['required' => false,]);
 		$builder->add('note', TextType::class, ['required' => false,]);
 		

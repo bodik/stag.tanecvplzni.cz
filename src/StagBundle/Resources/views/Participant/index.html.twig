@@ -43,7 +43,7 @@
 			<td>{{ participant.modified|date('c') }}</td>
 			<td>
 				<a class="btn btn-xs btn-primary" href="{{ path('participant_edit', {'id': participant.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-				-{{ render(controller("StagBundle:Participant:delete", {'id': participant.id})) }}
+				{{ render(controller("StagBundle:Participant:delete", {'id': participant.id})) }}
 			</td>
 		</tr>
     		{% endfor %}

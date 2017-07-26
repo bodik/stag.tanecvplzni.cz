@@ -10,6 +10,7 @@ use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CourseController extends Controller {
 	private $em;
@@ -101,4 +102,19 @@ class CourseController extends Controller {
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
 	}
 
+
+
+	/**
+	 * @Route("/course/price/{id}/{paired}", name="course_price")
+	 */
+	public function priceAction(Request $request, $id, $paired) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		if ( $paired == "single" ) {
+			return new Response("{$course->getPriceSingle()},-");
+		} elseif ($paired == "pair") {
+			return new Response("{$course->getPricePair()},-");
+		} else {
+			return new Response("error");
+		}
+	}
 }

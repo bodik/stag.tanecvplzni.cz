@@ -1,12 +1,52 @@
 {% extends '@StagBundle/base.html.twig' %}
 
 {% block body %}
-<div class="participants">
-	<h1>Přihláška na kurzy tanecvplzni.cz</h1>
+<div class="participants container-fluid">
+	<h1 class="text-center">Přihláška na kurzy tanecvplzni.cz</h1>   
 	{{ form_start(form) }}
-        {{ form_widget(form) }}	
-        {{ form_end(form) }}
+
+	{{ form_row(form.courseRef) }}
+	{{ form_row(form.gn) }}
+	{{ form_row(form.sn) }}
+	{{ form_row(form.email) }}
+	{{ form_row(form.phoneNumber) }}
+	{{ form_row(form.gender) }}
+
+	{{ form_row(form.paired) }}
+	{{ form_row(form.partner) }}
+	<div class="bg-warning form-group">
+		<label class="col-sm-2 control-label price">Cena:</label>
+		<label id="priceval" class="col-sm-10 price"><span class="warning">Zvolte typ přihlášky</span></label>
+	</div>
+
+	{{ form_row(form.reference) }}
+	{{ form_row(form.note) }}
+
+	{{ form_end(form) }}
 </div>
+
+
+<script type="text/javascript">
+	function updatePrice() {
+		baseUrl = "{{ app.request.getBaseURL() }}"
+		if ( $("#participant_application_paired_0").is(":checked") ) {
+			$("#priceval").load( baseUrl +"/course/price/" +$("#participant_application_courseRef").val()+ "/" +$("#participant_application_paired_0").val() );
+		}
+		if ( $("#participant_application_paired_1").is(":checked") ) {
+			$("#priceval").load( baseUrl +"/course/price/" +$("#participant_application_courseRef").val()+ "/" +$("#participant_application_paired_1").val() );
+		}
+	}
+	$(document).ready(updatePrice);
+	$("#participant_application_courseRef").change(updatePrice);
+	$("#participant_application_paired_0").change(updatePrice);
+	$("#participant_application_paired_1").change(updatePrice);
+	console.log("{{ app.request.getBaseURL() }}");
+</script>
+<style>
+	.price { font-size: x-large; padding-top: 7px; margin-bottom: 0;}
+	.participants { width: 70%; }
+<style>
+
 
 {% endblock %}
 

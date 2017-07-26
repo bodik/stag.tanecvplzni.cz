@@ -114,7 +114,6 @@ class ParticipantController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$participant = $form->getData();
-			
 			$this->em->persist($participant);
 			$this->em->flush();
 

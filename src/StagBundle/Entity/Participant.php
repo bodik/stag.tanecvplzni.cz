@@ -101,7 +101,7 @@ class Participant {
 	
 	public function getPhoneNumber() { return $this->phoneNumber; }
 	public function setPhoneNumber($phoneNumber) { $this->phoneNumber = $phoneNumber; return $this; }
-	
+
 	public function getGender() { return $this->gender; }
 	public function setGender($gender) { $this->gender = $gender; return $this; }
 
