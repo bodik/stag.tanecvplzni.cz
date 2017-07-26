@@ -23,11 +23,31 @@ class CourseControllerTest extends WebTestCase {
 		"lessons" => ["l1","l2"]	
 	];
 	
+	public function createTestCourse($data) {
+		$tmp = new Course();
+        	$tmp->setName($data["name"]);
+		$tmp->setDescription($data["description"]);
+		$tmp->setTeacher($data["teacher"]);
+		$tmp->setPlace($data["place"]);
+		$tmp->setCapacity($data["capacity"]);
+		$tmp->setPair($data["pair"]);
+		$tmp->setPriceSingle($data["priceSingle"]);
+		$tmp->setPricePair($data["pricePair"]); 
+		$tmp->setLessons($data["lessons"]);
+		return $tmp;
+	}
+	
+	
+	
+	
+	
 	protected function setUp() {
 		$this->client = static::createClient();
 		$this->em = static::$kernel->getContainer()->get("doctrine")->getManager();
 		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 	}
+	
+	
 	
 	
     
@@ -68,20 +88,11 @@ class CourseControllerTest extends WebTestCase {
 
 
     	public function testEditAction() {
-		$this->testCourse["name"] = $this->testCourse["name"]." edit ".mt_rand(); 		
-    		
-        	$course = new Course();
-        	$course->setName($this->testCourse["name"]);
-		$course->setDescription($this->testCourse["description"]);
-		$course->setTeacher($this->testCourse["teacher"]);
-		$course->setPlace($this->testCourse["place"]);
-		$course->setCapacity($this->testCourse["capacity"]);
-		$course->setPair($this->testCourse["pair"]);
-		$course->setPriceSingle($this->testCourse["priceSingle"]);
-		$course->setPricePair($this->testCourse["pricePair"]); 
-		$course->setLessons($this->testCourse["lessons"]); 
+		$this->testCourse["name"] = $this->testCourse["name"]." edit ".mt_rand();
+		$course = $this->createTestCourse($this->testCourse);
 		$this->em->persist($course);
 		$this->em->flush();
+    		
 		
 		$crawler = $this->client->request("GET", "/course/edit/{$course->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
@@ -110,21 +121,12 @@ class CourseControllerTest extends WebTestCase {
 
 
 	public function testDeleteAction() {
-		$this->testCourse["name"] = $this->testCourse["name"]." delete ".mt_rand();    		
-    		
-        	$course = new Course();
-        	$course->setName($this->testCourse["name"]);
-		$course->setDescription($this->testCourse["description"]);
-		$course->setTeacher($this->testCourse["teacher"]);
-		$course->setPlace($this->testCourse["place"]);
-		$course->setCapacity($this->testCourse["capacity"]);
-		$course->setPair($this->testCourse["pair"]);
-		$course->setPriceSingle($this->testCourse["priceSingle"]);
-		$course->setPricePair($this->testCourse["pricePair"]); 
-		$course->setLessons($this->testCourse["lessons"]); 
+		$this->testCourse["name"] = $this->testCourse["name"]." delete ".mt_rand();   
+		$course = $this->createTestCourse($this->testCourse);
 		$this->em->persist($course);
-		$this->em->flush();		
-
+		$this->em->flush();
+		    		
+    		
 		$crawler = $this->client->request("GET", "/course/delete/{$course->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);

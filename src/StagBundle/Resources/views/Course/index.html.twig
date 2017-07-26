@@ -9,6 +9,7 @@
 	<table class="table table-responsive">
 	<thead>
 		<tr>
+			<th>id</th>
 			<th>name</th>
 			<th>description</th>
 			<th>teacher</th>
@@ -24,6 +25,7 @@
 	<tbody>
 		{% for course in courses %}
                 <tr>
+                	<td>{{ course.id }}</td>
 			<td>{{ course.name }}</td>
 			<td>{{ course.description }}</td>
 			<td>{{ course.teacher }}</td>
@@ -34,6 +36,7 @@
 			<td>{{ course.pricePair }}</td>
 			<td>{{ course.lessons|join(' ') }}</td>
 			<td>
+				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>
 				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
 				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
 			</td>

@@ -33,6 +33,9 @@
 				<li {% if app.request.attributes.get('_route') starts with 'participant_' %}class="active"{% endif %}>
 					<a href="{{ path('participant_list') }}">Účastníci</a>
 				</li>
+				<li>
+					<a href="{{ path('participant_application') }}">Přihláška</a>
+				</li>
 			</ul>
 
 			{% if is_granted('IS_AUTHENTICATED_FULLY') %}

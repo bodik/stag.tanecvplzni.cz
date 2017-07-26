@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class ParticipantType extends AbstractType {
+class ParticipantApplicationType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('courseRef', EntityType::class, array(
 			'class' => 'StagBundle:Course',
@@ -32,7 +32,6 @@ class ParticipantType extends AbstractType {
 		$builder->add('reference', TextType::class, ['required' => false,]);
 		$builder->add('note', TextType::class, ['required' => false,]);
 		
-		$builder->add('paid', CheckboxType::class, ['required' => false,]);
 		$builder->add('save', SubmitType::class);
 	}
 }

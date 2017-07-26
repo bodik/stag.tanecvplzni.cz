@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use StagBundle\Entity\Participant;
 use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\ParticipantType;
+use StagBundle\Form\ParticipantApplicationType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -44,7 +45,7 @@ class ParticipantController extends Controller {
 			$this->em->persist($participant);
 			$this->em->flush();
 
-			$this->addFlash("success","Participant {$participant->getName()} was created");
+			$this->addFlash("success","Participant {$participant->getSn()} was created");
 			return $this->redirectToRoute("participant_list");
 		}
 
@@ -65,7 +66,7 @@ class ParticipantController extends Controller {
 			$participant = $form->getData();
 			$this->em->flush();
 
-			$this->addFlash("success","Participant {$participant->getName()} was saved");
+			$this->addFlash("success","Participant {$participant->getSn()} was saved");
             		return $this->redirectToRoute("participant_list");
 		}
 
@@ -89,7 +90,7 @@ class ParticipantController extends Controller {
 				$this->em->remove($participant);
 				$this->em->flush();
 
-				$this->addFlash("success","Participant {$participant->getName()} was deleted");
+				$this->addFlash("success","Participant {$participant->getSn()} was deleted");
 			} else {
 				$this->addFlash("error","Participant with ID {$id} does not exits");
 			}
@@ -97,6 +98,31 @@ class ParticipantController extends Controller {
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
+	}
+	
+	
+	
+	
+	/**
+	 * @Route("/participant/application/{course_id}", name="participant_application", defaults={"course_id" = null})
+	 */
+	public function applicationAction(Request $request, $course_id) {
+		$participant = new Participant();
+		$participant->setCourseRef($this->em->getRepository("StagBundle:Course")->findOneById($course_id));
+		$form = $this->createForm(ParticipantApplicationType::class, $participant);
+		
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			$participant = $form->getData();
+			
+			$this->em->persist($participant);
+			$this->em->flush();
+
+			$this->addFlash("success", "Vaše přihláška byla přijata");
+			return $this->redirectToRoute("default_index");
+		}
+
+		return $this->render("StagBundle:Participant:application.html.twig", array("form" => $form->createView(),));
 	}
 
 }
