@@ -20,6 +20,7 @@ class CourseType extends AbstractType {
 			->add('pair', CheckboxType::class, ['required' => false,])
 			->add('priceSingle')
 			->add('pricePair')
+			->add('lessonMinutes')
 			->add('lessons', CollectionType::class, [
 				'entry_type' => TextType::class,
 				'allow_add' => true,

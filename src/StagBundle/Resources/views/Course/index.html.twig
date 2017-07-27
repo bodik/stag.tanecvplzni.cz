@@ -18,6 +18,7 @@
 			<th>pair</th>
 			<th>priceSingle</th>
 			<th>pricePair</th>
+			<th>lessonMinutes</th>
 			<th>lessons</th>
 			<th></th>
 		</tr>
@@ -34,6 +35,7 @@
 			<td>{{ course.pair }}</td>
 			<td>{{ course.priceSingle }}</td>
 			<td>{{ course.pricePair }}</td>
+			<td>{{ course.lessonMinutes }}</td>
 			<td>{{ course.lessons|join(' ') }}</td>
 			<td>
 				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>

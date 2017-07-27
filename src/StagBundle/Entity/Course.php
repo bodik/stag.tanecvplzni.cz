@@ -12,8 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Course {
 	/**
-	 * @var int
-	 *
 	 * @ORM\Column(name="id", type="integer")
 	 * @ORM\Id
 	 * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,36 +19,26 @@ class Course {
 	private $id;
 
 	/**
-	 * @var string
-	 *
 	 * @ORM\Column(name="name", type="string", length=255)
 	 */
 	private $name;
 
 	/**
-	 * @var string
-	 *
 	 * @ORM\Column(name="description", type="string", length=65535, nullable=true)
 	 */
 	private $description;
 
 	/**
-	 * @var string
-	 *
 	 * @ORM\Column(name="teacher", type="string", length=255)
 	 */
 	private $teacher;
 
 	/**
-	 * @var string
-	 *
 	 * @ORM\Column(name="place", type="string", length=255)
 	 */
 	private $place;
 
 	/**
-	 * @var int
-	 *
 	 * @ORM\Column(name="capacity", type="integer")
 	 */
 	private $capacity;
@@ -63,22 +51,21 @@ class Course {
 	private $pair;
 
 	/**
-	 * @var int
-	 *
 	 * @ORM\Column(name="price_single", type="integer")
 	 */
 	private $priceSingle;
 
 	/**
-	 * @var int
-	 *
 	 * @ORM\Column(name="price_pair", type="integer")
 	 */
 	private $pricePair;
+	
+	/**
+	 * @ORM\Column(name="lesson_minutes", type="integer")
+	 */
+	private $lessonMinutes;
 
 	/**
-	 * @var array
-	 *
 	 * @ORM\Column(name="lessons", type="array")
 	 */
 	private $lessons;
@@ -114,6 +101,9 @@ class Course {
 
 	public function getPricePair() { return $this->pricePair; }
 	public function setPricePair($pricePair) { $this->pricePair = $pricePair; return $this; }
+	
+	public function getLessonMinutes() { return $this->lessonMinutes; }
+	public function setLessonMinutes($lessonMinutes) { $this->lessonMinutes = $lessonMinutes; return $this; }
 
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }

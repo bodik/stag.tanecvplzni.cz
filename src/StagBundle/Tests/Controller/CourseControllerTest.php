@@ -20,6 +20,7 @@ class CourseControllerTest extends WebTestCase {
 		"pair" => true,
 		"priceSingle" => 130,
 		"pricePair" => 200,
+		"lessonMinutes" => 45,
 		"lessons" => ["l1","l2"]	
 	];
 	
@@ -32,7 +33,8 @@ class CourseControllerTest extends WebTestCase {
 		$tmp->setCapacity($data["capacity"]);
 		$tmp->setPair($data["pair"]);
 		$tmp->setPriceSingle($data["priceSingle"]);
-		$tmp->setPricePair($data["pricePair"]); 
+		$tmp->setPricePair($data["pricePair"]);
+		$tmp->setLessonMinutes($data["lessonMinutes"]);
 		$tmp->setLessons($data["lessons"]);
 		return $tmp;
 	}
@@ -71,6 +73,7 @@ class CourseControllerTest extends WebTestCase {
             		'course[pair]' => $this->testCourse["pair"],
             		'course[priceSingle]' => $this->testCourse["priceSingle"],
             		'course[pricePair]' => $this->testCourse["pricePair"],
+            		'course[lessonMinutes]' => $this->testCourse["lessonMinutes"],
             		#'course[lessons]' => $this->testCourse["lessons"],
         	]);
         	$this->client->submit($form);
