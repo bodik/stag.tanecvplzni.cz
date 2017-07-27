@@ -18,7 +18,8 @@ class ParticipantControllerTest extends WebTestCase {
 		"gn" => "Josef",
 		"email" => "josef.tanecnik@tanecvplzni.cz",
 		"phoneNumber" => "+420123456789",
-		"gender" => Participant::ALL_GENDERS["MALE"],
+		"gender" => Participant::ALL_GENDERS["muž"],
+		"paired" => Participant::ALL_PAIRS["v páru"],
 		"partner" => "marie.tanecnice@tanecvplzni.cz",
 		"reference" => "facebook",
 		"note" => "poznamka k prihlascce",
@@ -34,6 +35,7 @@ class ParticipantControllerTest extends WebTestCase {
 		$tmp->setEmail($data["email"]);
 		$tmp->setPhoneNumber($data["phoneNumber"]);
 		$tmp->setGender($data["gender"]);
+		$tmp->setPaired($data["paired"]);
 		$tmp->setPartner($data["partner"]);
 		$tmp->setReference($data["reference"]);
 		$tmp->setNote($data["note"]);
@@ -76,6 +78,7 @@ class ParticipantControllerTest extends WebTestCase {
 		        'participant[sn]' => $this->testParticipant["sn"],
 		        'participant[gn]' => $this->testParticipant["gn"],
             		'participant[email]' => $this->testParticipant["email"],
+			'participant[paired]' => $this->testParticipant["paired"],
             		'participant[partner]' => $this->testParticipant["partner"],
             		'participant[phoneNumber]' => $this->testParticipant["phoneNumber"],
             		'participant[gender]' => $this->testParticipant["gender"],
@@ -106,7 +109,7 @@ class ParticipantControllerTest extends WebTestCase {
 		$crawler = $this->client->request("GET", "/participant/edit/{$participant->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'participant[email]' => "edited email",
-			'participant[gender]' => Participant::ALL_GENDERS["FEMALE"],
+			'participant[gender]' => Participant::ALL_GENDERS["žena"],
            		'participant[paid]' => true,
             	]);
         	$this->client->submit($form);
@@ -117,7 +120,7 @@ class ParticipantControllerTest extends WebTestCase {
 		$participant = $this->participantRepo->findOneById($participant->getID());
         	$this->assertNotNull($participant);
         	$this->assertSame("edited email", $participant->getEmail());
-        	$this->assertSame(Participant::ALL_GENDERS["FEMALE"], $participant->getGender());
+		$this->assertSame(Participant::ALL_GENDERS["žena"], $participant->getGender());
 		$this->assertSame(true, $participant->getPaid());
 		
 		$this->em->remove($participant);

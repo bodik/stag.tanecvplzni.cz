@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\HasLifecycleCallbacks
  */
 class Participant {
-	const ALL_GENDERS = ["MALE" => 0, "FEMALE" => 1];	
+	const ALL_GENDERS = ["muž" => "male", "žena" => "female"];
+	const ALL_PAIRS = ["samostatně" => "single", "v páru" => "pair"];
 	
 	/**
 	 * @ORM\Column(name="id", type="integer")
@@ -42,10 +43,15 @@ class Participant {
 	private $phoneNumber;
 
 	/**
-	 * @ORM\Column(name="gender", type="integer")
+	 * @ORM\Column(name="gender", type="string", length=255)
 	 */
 	private $gender;
 	
+	/**
+	 * @ORM\Column(name="paired", type="string", length=255)
+	 */
+	private $paired;
+
 	/**
 	 * @ORM\Column(name="partner", type="string", length=255, nullable=true)
 	 */
@@ -104,6 +110,9 @@ class Participant {
 
 	public function getGender() { return $this->gender; }
 	public function setGender($gender) { $this->gender = $gender; return $this; }
+
+	public function getPaired() { return $this->paired; }
+	public function setPaired($paired) { $this->paired = $paired; return $this; }
 
 	public function getPartner() { return $this->partner; }
 	public function setPartner($partner) { $this->partner = $partner; return $this; }
