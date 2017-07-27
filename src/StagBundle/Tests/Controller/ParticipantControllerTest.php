@@ -142,6 +142,38 @@ class ParticipantControllerTest extends WebTestCase {
 		$participant = $this->participantRepo->findOneBySn($this->testParticipant["sn"]);
 		$this->assertNull($participant);
 	}
+	
+	
+	
+	public function testApplicationAction() {
+		$this->testParticipant["sn"] = $this->testParticipant["sn"]." application ".mt_rand();
+						
+		$crawler = $this->client->request("GET", "/participant/application/".$this->testCourse->getId());
+		$form = $crawler->filter('button[type="submit"]')->form([
+		        'participant_application[sn]' => $this->testParticipant["sn"],
+		        'participant_application[gn]' => $this->testParticipant["gn"],
+            		'participant_application[email]' => $this->testParticipant["email"],
+			'participant_application[paired]' => $this->testParticipant["paired"],
+            		'participant_application[partner]' => $this->testParticipant["partner"],
+            		'participant_application[phoneNumber]' => $this->testParticipant["phoneNumber"],
+            		'participant_application[gender]' => $this->testParticipant["gender"],
+            		'participant_application[reference]' => $this->testParticipant["reference"],
+			'participant_application[note]' => $this->testParticipant["note"],
+			'participant_application[tosagreed]' => 1,
+        	]);
+        	$this->client->submit($form);
+        	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        	
+        	$participant = $this->participantRepo->findOneBySn($this->testParticipant["sn"]);
+        	$this->assertNotNull($participant);
+        	$this->assertSame($this->testParticipant["sn"], $participant->getSn());
+        	$this->assertSame($this->testParticipant["paired"], $participant->getPaired());
+
+		$this->em->remove($participant);
+		$this->em->flush();
+    	}
+	
+	
 
 }
 

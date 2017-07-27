@@ -113,12 +113,16 @@ class ParticipantController extends Controller {
 		
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			$participant = $form->getData();
-			$this->em->persist($participant);
-			$this->em->flush();
+			if ($form->get('tosagreed')->getData() == 1) {
+				$participant = $form->getData();
+				$this->em->persist($participant);
+				$this->em->flush();
 
-			$this->addFlash("success", "Vaše přihláška byla přijata");
-			return $this->redirectToRoute("default_index");
+				$this->addFlash("success", "Vaše přihláška byla přijata");
+				return $this->redirectToRoute("default_index");
+			} else {
+				$this->addFlash("success", "Musíte souhlasit ...");
+			}
 		}
 
 		return $this->render("StagBundle:Participant:application.html.twig", array("form" => $form->createView(),));
