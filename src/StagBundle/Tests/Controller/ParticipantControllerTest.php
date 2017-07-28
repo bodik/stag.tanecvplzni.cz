@@ -168,6 +168,7 @@ class ParticipantControllerTest extends WebTestCase {
         	$this->assertNotNull($participant);
         	$this->assertSame($this->testParticipant["sn"], $participant->getSn());
         	$this->assertSame($this->testParticipant["paired"], $participant->getPaired());
+        	$this->assertSame($this->testCourse, $participant->getCourseRef());
 
 		$this->em->remove($participant);
 		$this->em->flush();
