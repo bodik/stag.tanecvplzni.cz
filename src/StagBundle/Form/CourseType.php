@@ -20,15 +20,6 @@ class CourseType extends AbstractType {
 			->add('pair', CheckboxType::class, ['required' => false,])
 			->add('priceSingle')
 			->add('pricePair')
-			->add('lessonMinutes')
-			->add('lessons', CollectionType::class, [
-				'entry_type' => TextType::class,
-				'allow_add' => true,
-				'allow_delete' => true,
-				'delete_empty' => true,
-				'required' => false,
-				'prototype' => true,
-			])
 			->add('save', SubmitType::class);
 	}
 }

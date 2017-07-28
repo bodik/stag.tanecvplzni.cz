@@ -3,6 +3,7 @@
 namespace StagBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Course
@@ -61,20 +62,16 @@ class Course {
 	private $pricePair;
 	
 	/**
-	 * @ORM\Column(name="lesson_minutes", type="integer")
-	 */
-	private $lessonMinutes;
-
-	/**
-	 * @ORM\Column(name="lessons", type="array")
+	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
 
+
+
 	public function __construct() {
 		$this->pair = false;
-		$this->lessons = [];
+		$this->lessons = new ArrayCollection();
 	}
-
 
 	public function getId() { return $this->id; }
 
@@ -102,9 +99,7 @@ class Course {
 	public function getPricePair() { return $this->pricePair; }
 	public function setPricePair($pricePair) { $this->pricePair = $pricePair; return $this; }
 	
-	public function getLessonMinutes() { return $this->lessonMinutes; }
-	public function setLessonMinutes($lessonMinutes) { $this->lessonMinutes = $lessonMinutes; return $this; }
-
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }
+	
 }

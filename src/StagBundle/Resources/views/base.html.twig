@@ -30,6 +30,9 @@
 				<li {% if app.request.attributes.get('_route') starts with 'course_' %}class="active"{% endif %}>
 					<a href="{{ path('course_list') }}">Kurzy</a>
 				</li>
+				<li {% if app.request.attributes.get('_route') starts with 'lesson_' %}class="active"{% endif %}>
+					<a href="{{ path('lesson_list') }}">Lekce</a>
+				</li>
 				<li {% if app.request.attributes.get('_route') starts with 'participant_' %}class="active"{% endif %}>
 					<a href="{{ path('participant_list') }}">Účastníci</a>
 				</li>

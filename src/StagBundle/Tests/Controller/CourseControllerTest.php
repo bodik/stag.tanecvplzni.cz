@@ -19,9 +19,7 @@ class CourseControllerTest extends WebTestCase {
 		"capacity" => 10,
 		"pair" => true,
 		"priceSingle" => 130,
-		"pricePair" => 200,
-		"lessonMinutes" => 45,
-		"lessons" => ["l1","l2"]	
+		"pricePair" => 200
 	];
 	
 	public function createTestCourse($data) {
@@ -34,8 +32,6 @@ class CourseControllerTest extends WebTestCase {
 		$tmp->setPair($data["pair"]);
 		$tmp->setPriceSingle($data["priceSingle"]);
 		$tmp->setPricePair($data["pricePair"]);
-		$tmp->setLessonMinutes($data["lessonMinutes"]);
-		$tmp->setLessons($data["lessons"]);
 		return $tmp;
 	}
 	
@@ -72,9 +68,7 @@ class CourseControllerTest extends WebTestCase {
             		'course[capacity]' => $this->testCourse["capacity"],
             		'course[pair]' => $this->testCourse["pair"],
             		'course[priceSingle]' => $this->testCourse["priceSingle"],
-            		'course[pricePair]' => $this->testCourse["pricePair"],
-            		'course[lessonMinutes]' => $this->testCourse["lessonMinutes"],
-            		#'course[lessons]' => $this->testCourse["lessons"],
+            		'course[pricePair]' => $this->testCourse["pricePair"]
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());

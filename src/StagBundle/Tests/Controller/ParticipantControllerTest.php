@@ -64,7 +64,7 @@ class ParticipantControllerTest extends WebTestCase {
     
 	public function testList() {
         	$crawler = $this->client->request('GET', '/participant');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Účastníci")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Participants")')->count());
 	}
 
 
@@ -128,7 +128,7 @@ class ParticipantControllerTest extends WebTestCase {
     	}
 
 	public function testDeleteAction() {
-		$this->testParticipant["sn"] = $this->testParticipant["sn"]." edit ".mt_rand();
+		$this->testParticipant["sn"] = $this->testParticipant["sn"]." delete ".mt_rand();
 		$participant = $this->createTestParticipant($this->testParticipant);
 		$this->em->persist($participant);
 		$this->em->flush();
