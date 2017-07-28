@@ -3,8 +3,10 @@
 
 <head>
 	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>{% block title %}stag.tanecvplzni.cz{% endblock %}</title>
-	{% block stylesheets %}{% endblock %}
+
 	<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 	
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
@@ -12,6 +14,8 @@
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
 	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('js/toastr.min.js') }}"></script>
+	
+	{% block stylesheets %}{% endblock %}
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -35,6 +39,9 @@
 				</li>
 				<li {% if app.request.attributes.get('_route') starts with 'participant_' %}class="active"{% endif %}>
 					<a href="{{ path('participant_list') }}">Účastníci</a>
+				</li>
+				<li>
+					<a href="{{ path('lesson_calendar') }}">Rozvrh</a>
 				</li>
 				<li>
 					<a href="{{ path('participant_application') }}">Přihláška</a>

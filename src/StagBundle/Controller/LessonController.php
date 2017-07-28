@@ -8,7 +8,10 @@ use StagBundle\Entity\Lesson;
 use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\LessonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+#use Symfony\Component\HttpFoundation\Response;
+
 
 class LessonController extends Controller {
 	private $em;
@@ -99,5 +102,34 @@ class LessonController extends Controller {
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
 	}
+	
+	
+	
+	
+	/**
+	 * @Route("/lesson/calendar", name="lesson_calendar")
+	 */
+	public function calendarAction(Request $request) {
+		return $this->render("StagBundle:Lesson:calendar.html.twig");
+	}
+	/**
+	 * @Route("/lesson/events", name="lesson_events")
+	 */
+	public function eventsAction(Request $request) {
+		$data = [];
+		$lessons = $this->em->getRepository("StagBundle:Lesson")->findAll();
+		foreach ($lessons as $tmp) {
+			#{'title': 'Meeting','start': '2017-05-12T14:30:00'}
+			$data[] = [
+				"title" => $tmp->getCourseRef()->getName(),
+				"start" => $tmp->getTime()->format('c'),
+				"end" => $tmp->getTime()->add(new \DateInterval("PT".$tmp->getLength()."M"))->format('c'),
+			];
+		}
+
+		return new JsonResponse($data);
+	}
+	
+	
 
 }

@@ -1,0 +1,49 @@
+{% extends '@StagBundle/base.html.twig' %}
+
+{% block title %}StagBundle:Lesson:calendar{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('fullcalendar/fullcalendar.min.css') }}" />
+	<link rel="stylesheet" media="print" href="{{ asset('fullcalendar/fullcalendar.print.min.css') }}" />
+	<script src="{{ asset('fullcalendar/moment.min.js') }}"></script>
+	<script src="{{ asset('fullcalendar/fullcalendar.min.js') }}"></script>
+	<script src="{{ asset('fullcalendar/cs.js') }}"></script>
+<style>	
+#calendar {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+</style>
+<script>
+$(document).ready(function() {
+	
+	$('#calendar').fullCalendar({
+		height: "auto",
+		
+		locale: "cs",
+		header: {
+			left: 'prev,next today',
+			center: 'title',
+			right: 'month,agendaWeek'
+		},
+		defaultView: "agendaWeek",
+		allDaySlot: false,
+		minTime: "13:00",
+		//eventLimit: false,
+		
+		timeFormat: "HH:mm",
+		slotLabelFormat: ['MMMM YYYY', 'HH:mm'],
+
+		events: "{{ path('lesson_events') }}"
+	});
+	
+});
+
+</script>
+	
+{% endblock %}
+
+{% block body %}
+<div id='calendar'></div>
+{% endblock %}
+
