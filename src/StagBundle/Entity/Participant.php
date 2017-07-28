@@ -73,7 +73,7 @@ class Participant {
 	private $paid;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="Course")
+	 * @ORM\ManyToOne(targetEntity="Course", inversedBy="participants")
 	 * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=false)
 	 */
 	private $courseRef;

@@ -10,9 +10,11 @@ COURSE_ID=$(mysql -NBe "select id from course where name='kurz init 1'" stagtvp)
 for all in "$(date --date="monday 18:00" "${FORMAT}")" "$(date --date="monday +7 days 18:00" "${FORMAT}")" "$(date --date="monday +14 days 18:00" "${FORMAT}")"; do
 	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" stagtvp
 done
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single',NULL,0)" stagtvp
 
 COURSE_ID=$(mysql -NBe "select id from course where name='kurz init 2'" stagtvp)
 for all in "$(date --date="monday 19:00" "${FORMAT}")" "$(date --date="monday +7 days 19:00" "${FORMAT}")" "$(date --date="monday +14 days 19:00" "${FORMAT}")"; do
 	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 60)" stagtvp
 done
 
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz','female','pair','alois netanecnik',1)" stagtvp

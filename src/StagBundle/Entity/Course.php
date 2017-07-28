@@ -66,11 +66,17 @@ class Course {
 	 */
 	private $lessons;
 
+	/**
+	 * @ORM\OneToMany(targetEntity="Participant", mappedBy="courseRef")
+	 */
+	private $participants;
+
 
 
 	public function __construct() {
 		$this->pair = false;
 		$this->lessons = new ArrayCollection();
+		$this->participants = new ArrayCollection();
 	}
 
 	public function getId() { return $this->id; }
@@ -101,5 +107,8 @@ class Course {
 	
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }
+	
+	public function getParticipants() { return $this->participants; }
+	public function setparticipants($participants) { $this->participants = $participants; return $this; }
 	
 }
