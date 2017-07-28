@@ -31,21 +31,11 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li {% if app.request.attributes.get('_route') starts with 'course_' %}class="active"{% endif %}>
-					<a href="{{ path('course_list') }}">Kurzy</a>
-				</li>
-				<li {% if app.request.attributes.get('_route') starts with 'lesson_' %}class="active"{% endif %}>
-					<a href="{{ path('lesson_list') }}">Lekce</a>
-				</li>
-				<li {% if app.request.attributes.get('_route') starts with 'participant_' %}class="active"{% endif %}>
-					<a href="{{ path('participant_list') }}">Účastníci</a>
-				</li>
-				<li>
-					<a href="{{ path('lesson_calendar') }}">Rozvrh</a>
-				</li>
-				<li>
-					<a href="{{ path('participant_application') }}">Přihláška</a>
-				</li>
+				<li><a href="{{ path('course_list') }}">Kurzy</a></li>
+				<li><a href="{{ path('lesson_list') }}">Lekce</a></li>
+				<li><a href="{{ path('participant_list') }}">Účastníci</a></li>
+				<li><a href="{{ path('lesson_calendar') }}">Rozvrh</a></li>
+				<li><a href="{{ path('participant_application') }}">Přihláška</a></li>
 			</ul>
 
 			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
