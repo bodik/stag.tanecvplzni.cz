@@ -51,7 +51,7 @@ class CourseControllerTest extends WebTestCase {
     
 	public function testList() {
         	$crawler = $this->client->request('GET', '/course');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kurzy")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Courses")')->count());
 	}
 
 
