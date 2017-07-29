@@ -28,7 +28,7 @@ class Course {
 	 * @ORM\Column(name="description", type="string", length=65535, nullable=true)
 	 */
 	private $description;
-
+	
 	/**
 	 * @ORM\Column(name="teacher", type="string", length=255)
 	 */
@@ -45,8 +45,6 @@ class Course {
 	private $capacity;
 
 	/**
-	 * @var bool
-	 *
 	 * @ORM\Column(name="pair", type="boolean")
 	 */
 	private $pair;
@@ -62,6 +60,11 @@ class Course {
 	private $pricePair;
 	
 	/**
+	 * @ORM\Column(name="color", type="string", length=255)
+	 */
+	private $color;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
@@ -75,6 +78,7 @@ class Course {
 
 	public function __construct() {
 		$this->pair = false;
+		$this->color = '#cccccc';
 		$this->lessons = new ArrayCollection();
 		$this->participants = new ArrayCollection();
 	}
@@ -104,6 +108,9 @@ class Course {
 
 	public function getPricePair() { return $this->pricePair; }
 	public function setPricePair($pricePair) { $this->pricePair = $pricePair; return $this; }
+		
+	public function getColor() { return $this->color; }
+	public function setColor($color) { $this->color = $color; return $this; }
 	
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }

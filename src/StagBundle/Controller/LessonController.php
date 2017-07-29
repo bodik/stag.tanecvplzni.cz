@@ -43,7 +43,6 @@ class LessonController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$lesson = $form->getData();
-			//$participant->setDomain($participant->getCourseRef()->getCourse());
 			
 			$this->em->persist($lesson);
 			$this->em->flush();
@@ -124,6 +123,8 @@ class LessonController extends Controller {
 				"title" => $tmp->getCourseRef()->getName(),
 				"start" => $tmp->getTime()->format('c'),
 				"end" => $tmp->getTime()->add(new \DateInterval("PT".$tmp->getLength()."M"))->format('c'),
+				"color" => $tmp->getCourseRef()->getColor(),
+				"url" => $this->generateUrl('course_show', ["id" => $tmp->getCourseRef()->getId()]),
 			];
 		}
 

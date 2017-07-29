@@ -1,0 +1,31 @@
+{% extends '@StagBundle/base.html.twig' %}
+
+{% block title %}StagBundle:Course:show{% endblock %}
+
+{% block body %}
+<div class="courses">
+	<h1>Kurz {{course.name}}</h1>
+
+	<div>
+	{{course.description}}
+	</div>
+	
+	
+	 <dl>
+		<dt>Místo</dt>
+		<dd>{{course.place}}</dd>
+		<dt>Kapacita</dt>
+		<dd>{{course.capacity}}</dd>
+	</dl> 
+	
+	<h2>Seznam lekcí</h2>
+	<ul>
+	{% for lesson in course.lessons %}
+		<li>{{lesson.time|date('c')}}</li>
+	{% endfor %}
+	</ul>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}

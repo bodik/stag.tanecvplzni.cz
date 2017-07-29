@@ -8,12 +8,6 @@
 	<script src="{{ asset('bundles/stag/fullcalendar/moment.min.js') }}"></script>
 	<script src="{{ asset('bundles/stag/fullcalendar/fullcalendar.min.js') }}"></script>
 	<script src="{{ asset('bundles/stag/fullcalendar/cs.js') }}"></script>
-<style>	
-#calendar {
-	max-width: 1000px;
-	margin: 0 auto;
-}
-</style>
 <script>
 $(document).ready(function() {
 	
@@ -26,13 +20,15 @@ $(document).ready(function() {
 			center: 'title',
 			right: 'month,agendaWeek'
 		},
+		
 		defaultView: "agendaWeek",
 		allDaySlot: false,
 		minTime: "13:00",
-		//eventLimit: false,
+		hiddenDays: [0,6],
 		
 		timeFormat: "HH:mm",
 		slotLabelFormat: ['MMMM YYYY', 'HH:mm'],
+		slotEventOverlap: false,
 
 		events: "{{ path('lesson_events') }}"
 	});

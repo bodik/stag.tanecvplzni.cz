@@ -19,7 +19,8 @@ class CourseControllerTest extends WebTestCase {
 		"capacity" => 10,
 		"pair" => true,
 		"priceSingle" => 130,
-		"pricePair" => 200
+		"pricePair" => 200,
+		"color" => "#eeffee",
 	];
 	
 	public function createTestCourse($data) {
@@ -32,6 +33,7 @@ class CourseControllerTest extends WebTestCase {
 		$tmp->setPair($data["pair"]);
 		$tmp->setPriceSingle($data["priceSingle"]);
 		$tmp->setPricePair($data["pricePair"]);
+		$tmp->setColor($data["color"]);
 		return $tmp;
 	}
 	
@@ -68,7 +70,8 @@ class CourseControllerTest extends WebTestCase {
             		'course[capacity]' => $this->testCourse["capacity"],
             		'course[pair]' => $this->testCourse["pair"],
             		'course[priceSingle]' => $this->testCourse["priceSingle"],
-            		'course[pricePair]' => $this->testCourse["pricePair"]
+            		'course[pricePair]' => $this->testCourse["pricePair"],
+			'course[color]' => $this->testCourse["color"]
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -131,6 +134,23 @@ class CourseControllerTest extends WebTestCase {
 
 		$course = $this->courseRepo->findOneByName($this->testCourse["name"]);
 		$this->assertNull($course);
+	}
+	
+	
+	public function testShowAction() {
+		$this->testCourse["name"] = $this->testCourse["name"]." show ".mt_rand();   
+		$course = $this->createTestCourse($this->testCourse);
+		$this->em->persist($course);
+		$this->em->flush();
+		    		
+    		
+		$crawler = $this->client->request("GET", "/course/show/{$course->getID()}");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+		$this->assertGreaterThan(0, $crawler->filter('html:contains("'.$this->testCourse["name"].'")')->count());
+		
+		$this->em->remove($course);
+		$this->em->flush();
 	}
 }
 

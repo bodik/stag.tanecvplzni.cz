@@ -117,4 +117,14 @@ class CourseController extends Controller {
 			return new Response("error");
 		}
 	}
+	
+	
+	/**
+	 * @Route("/course/show/{id}", name="course_show")
+	 */
+	public function showAction(Request $request, $id) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+	}
+	
 }

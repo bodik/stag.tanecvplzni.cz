@@ -115,8 +115,25 @@ class LessonControllerTest extends WebTestCase {
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		//$lesson = $this->lessonRepo->findOneByNote($this->testLesson["note"]);
-		//$this->assertNull($lesson);
+		$lesson = $this->lessonRepo->findOneByNote($this->testLesson["note"]);
+		$this->assertNull($lesson);
+	}
+	
+	
+	public function testEventsAction() {
+		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
+		$lesson = $this->createTestLesson($this->testLesson);
+		$this->em->persist($lesson);
+		$this->em->flush();
+    		
+		$crawler = $this->client->request("GET", "/lesson/events");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+		$events = json_decode($this->client->getResponse()->getContent());
+		$this->assertNotNull($events);
+		
+		$this->em->remove($lesson);
+		$this->em->flush();
 	}
 	
 }
