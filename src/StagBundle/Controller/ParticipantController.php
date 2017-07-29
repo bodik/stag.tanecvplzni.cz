@@ -21,7 +21,7 @@ class ParticipantController extends Controller {
 
 
 	/**
-	 * @Route("/participant", name="participant_list")
+	 * @Route("/participant/list", name="participant_list")
 	 */
 	public function listAction(Request $request) {
         	$participants = $this->em->getRepository("StagBundle:Participant")->findAll();

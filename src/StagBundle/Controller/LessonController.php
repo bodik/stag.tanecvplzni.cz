@@ -23,7 +23,7 @@ class LessonController extends Controller {
 
 
 	/**
-	 * @Route("/lesson", name="lesson_list")
+	 * @Route("/lesson/list", name="lesson_list")
 	 */
 	public function listAction(Request $request) {
         	$lessons = $this->em->getRepository("StagBundle:Lesson")->findAll();

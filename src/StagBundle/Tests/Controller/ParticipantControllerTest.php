@@ -63,7 +63,7 @@ class ParticipantControllerTest extends WebTestCase {
 	}
     
 	public function testList() {
-        	$crawler = $this->client->request('GET', '/participant');
+        	$crawler = $this->client->request('GET', '/participant/list');
 	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Participants")')->count());
 	}
 
