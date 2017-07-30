@@ -1,7 +1,6 @@
 stag:
     resource: "@StagBundle/Controller/"
     type:     annotation
-    prefix:   /
 
 guser:
     resource: '@GuserBundle/Controller/'
