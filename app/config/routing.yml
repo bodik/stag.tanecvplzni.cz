@@ -3,6 +3,10 @@ stag:
     type:     annotation
     prefix:   /
 
+guser:
+    resource: '@GuserBundle/Controller/'
+    type: annotation
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation
