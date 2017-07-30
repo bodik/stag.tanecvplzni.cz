@@ -27,7 +27,7 @@ class CourseController extends Controller {
 	 */
 	public function listAction(Request $request) {
         	$courses = $this->em->getRepository("StagBundle:Course")->findAll();
-		return $this->render("StagBundle:Course:index.html.twig", [ "courses" => $courses ] );
+		return $this->render("StagBundle:Course:list.html.twig", [ "courses" => $courses ] );
 	}
 
 
