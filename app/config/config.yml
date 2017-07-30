@@ -38,9 +38,6 @@ framework:
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
-    #TODO: should go to bundle 
-    paths:
-        '%kernel.project_dir%/src/StagBundle/Resources/views': StagBundle
     form_themes:
             - 'bootstrap_3_horizontal_layout.html.twig'
 
