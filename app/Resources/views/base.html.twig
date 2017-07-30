@@ -31,11 +31,11 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
+				<li><a href="{{ path('lesson_calendar') }}">Rozvrh</a></li>
+				<li><a href="{{ path('participant_application') }}">Přihláška</a></li>
 				<li><a href="{{ path('course_list') }}">Courses</a></li>
 				<li><a href="{{ path('lesson_list') }}">Lessons</a></li>
 				<li><a href="{{ path('participant_list') }}">Participants</a></li>
-				<li><a href="{{ path('lesson_calendar') }}">Rozvrh</a></li>
-				<li><a href="{{ path('participant_application') }}">Přihláška</a></li>
 				<li><a href="{{ path('user_list') }}">Users</a></li>
 			</ul>
 
@@ -52,6 +52,10 @@
 						<li><a href="{{ path('logout') }}">Logout</a></li>
 					</ul>
 				</li>
+			</ul>
+			{% else %}
+			<ul class="nav navbar-nav navbar-right">
+				<li><a href="{{ path('login') }}">Login</a></li>
 			</ul>
 			{% endif %}
 
