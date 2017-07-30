@@ -1,0 +1,7 @@
+{{ form_start(form, {"attr": {"style": "display:inline;"}}) }}
+
+{# templating just parts of the form does not worked, #}
+<button type="submit" class="btn btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+{% do form.delete.setRendered %}
+
+{{ form_end(form) }}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="users">
+	<h1>User list</h1>
+	<a class="btn btn-success" href="{{ path('user_add') }}">Add</a>
+	
+	<table class="table table-responsive">
+	<thead>
+		<tr>
+			<th>id</th>
+			<th>username</th>
+			<th>email</th>
+			<th>password</th>
+			<th>last password change</th>
+			<th>created</th>
+			<th>modified</th>
+			<th>active</th>
+			<th>roles</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for user in users %}
+                <tr>
+                	<td>{{ user.id }}</td>
+			<td>{{ user.username }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.password[0:30] }}</td>
+			<td>{{ user.lastpasswordchange|date("c") }}</td>
+			<td>{{ user.created|date("c") }}</td>
+			<td>{{ user.modified|date("c") }}</td>
+			<td><span class="glyphicon {% if user.active == true %}glyphicon-ok{% else %}glyphicon-remove{% endif %}"></span></td>
+			<td>{{ user.roles|join(' ') }}</td>
+
+			<td>
+				<a class="btn btn-xs btn-primary" href="{{ path('user_edit', {'id': user.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				{{ render(controller("GuserBundle:User:delete", {'id': user.id})) }}
+			</td>
+		</tr>
+    		{% endfor %}
+	</tbody>
+	</table>
+	
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
