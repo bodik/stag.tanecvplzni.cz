@@ -15,7 +15,7 @@ class CourseControllerTest extends WebTestCase {
 		"name" => "kurz test",
 		"description" => "kurz test popis",
 		"teacher" => "ucitel",
-		"place" => "masala",
+		"place" => "tanecni sal",
 		"capacity" => 10,
 		"pair" => true,
 		"priceSingle" => 130,

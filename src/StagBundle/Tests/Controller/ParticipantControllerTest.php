@@ -16,11 +16,11 @@ class ParticipantControllerTest extends WebTestCase {
 	public $testParticipant = [
 		"sn" => "Tanečník",
 		"gn" => "Josef",
-		"email" => "josef.tanecnik@tanecvplzni.cz",
+		"email" => "josef.tanecnik@localhost",
 		"phoneNumber" => "+420123456789",
 		"gender" => Participant::ALL_GENDERS["muž"],
 		"paired" => Participant::ALL_PAIRS["v páru"],
-		"partner" => "marie.tanecnice@tanecvplzni.cz",
+		"partner" => "marie.tanecnice@localhost",
 		"reference" => "facebook",
 		"note" => "poznamka k prihlascce",
 		"paid" => false,
