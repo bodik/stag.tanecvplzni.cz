@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  */
 class User implements AdvancedUserInterface, \Serializable {
 	const ALL_ROLES = ["ROLE_OPERATOR", "ROLE_ADMIN"];
+	const LOST_PASSWORD_TOKEN_EXPIRATION = 3600*3;
 	
 	/**
 	 * @ORM\Column(name="id", type="integer")
@@ -31,16 +32,11 @@ class User implements AdvancedUserInterface, \Serializable {
 	 * @ORM\Column(name="password", type="string", length=255)
 	 */
 	private $password;
-
-	/**
-	 * @ORM\Column(name="created", type="datetime")
-	 */
-	private $created;
 	
 	/**
-	 * @ORM\Column(name="modified", type="datetime")
+	 * @ORM\Column(name="email", type="string", length=255, unique=true)
 	 */
-	private $modified;
+	private $email;
 
 	/**
 	 * @ORM\Column(name="active", type="boolean")
@@ -53,14 +49,32 @@ class User implements AdvancedUserInterface, \Serializable {
 	private $roles;
 	
 	/**
-	 * @ORM\Column(name="lastpasswordchange", type="datetime", nullable=true)
+	 * @ORM\Column(name="last_password_change", type="datetime", nullable=true)
 	 */
-	private $lastpasswordchange;
-
+	private $lastPasswordChange;
+	
+	
+	
 	/**
-	 * @ORM\Column(name="email", type="string", length=255)
+	 * @ORM\Column(name="lost_password_token", type="string", nullable=true)
 	 */
-	private $email;
+	private $lostPasswordToken;
+	/**
+	 * @ORM\Column(name="lost_password_token_expiration", type="datetime", nullable=true)
+	 */
+	private $lostPasswordTokenExpiration;
+	
+	
+	
+	/**
+	 * @ORM\Column(name="created", type="datetime")
+	 */
+	private $created;
+	
+	/**
+	 * @ORM\Column(name="modified", type="datetime")
+	 */
+	private $modified;
 
 
 	public function __construct() {
@@ -72,6 +86,8 @@ class User implements AdvancedUserInterface, \Serializable {
 	
 	
 	
+	
+	
 	/* userInterface */
 	public function getUsername() { return $this->username; }
 	public function setUsername($username) { $this->username = $username; return $this; }
@@ -80,11 +96,11 @@ class User implements AdvancedUserInterface, \Serializable {
 	public function setPassword($password, $forceValue = false) {
 		if($forceValue) {
 			$this->password = $password;
-			$this->lastpasswordchange = new \Datetime();
+			$this->lastPasswordChange = new \Datetime();
 		} else {
 			if(!empty($password)) {
 				$this->password = $this->getPasswordEncoder()->encodePassword($password, null);
-				$this->lastpasswordchange = new \Datetime();
+				$this->lastPasswordChange = new \Datetime();
 			}
 		}
 		return $this;
@@ -103,7 +119,7 @@ class User implements AdvancedUserInterface, \Serializable {
 
 
 	/* AdvancedUserInterface */
-	public function isEnabled() { return $this->active; }
+	public function isEnabled() { return (bool) $this->active; }
 	public function isAccountNonExpired() { return true; }
 	public function isAccountNonLocked() { return true; }
 	public function isCredentialsNonExpired() { return true; }	
@@ -123,13 +139,23 @@ class User implements AdvancedUserInterface, \Serializable {
 
 	/* other entity accessors */
 	public function getId() { return $this->id; }
-	public function getCreated() { return $this->created; }
-	public function getModified() {	return $this->modified;	}
-	public function getActive() { return (bool) $this->active; }
-	public function setActive($active) { $this->active = $active; return $this; }
-	public function getLastPasswordChange() { return $this->lastpasswordchange; }
+	
 	public function getEmail() { return $this->email; }
 	public function setEmail($email) { $this->email = $email; return $this; }
+	
+	public function getActive() { return (bool) $this->active; }
+	public function setActive($active) { $this->active = $active; return $this; }
+	
+	public function getLastPasswordChange() { return $this->lastPasswordChange; }
+	
+	public function getLostPasswordToken() { return $this->lostPasswordToken; }
+	public function setLostPasswordToken($lostPasswordToken) { $this->lostPasswordToken = $lostPasswordToken; return $this; }
+	
+	public function getLostPasswordTokenExpiration() { return $this->lostPasswordTokenExpiration; }
+	public function setLostPasswordTokenExpiration($lostPasswordTokenExpiration) { $this->lostPasswordTokenExpiration = $lostPasswordTokenExpiration; return $this; }
+
+
+
 
 	/* other custom functions */
 		
@@ -144,6 +170,9 @@ class User implements AdvancedUserInterface, \Serializable {
 
 
 	/* lifecycle hooks */
+	
+	public function getCreated() { return $this->created; }
+	public function getModified() {	return $this->modified;	}
 	
 	/** @ORM\PrePersist */
 	public function macTimesOnPrePersist() {

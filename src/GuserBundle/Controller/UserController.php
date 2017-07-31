@@ -5,14 +5,18 @@ namespace GuserBundle\Controller;
 use GuserBundle\CryptPasswordEncoder;
 use GuserBundle\Entity\User;
 use GuserBundle\Form\DeleteButtonType;
-use GuserBundle\Form\UserChangePasswordType;
+use GuserBundle\Form\LostPasswordType;
+use GuserBundle\Form\SetPasswordType;
+use GuserBundle\Form\ChangePasswordType;
 use GuserBundle\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
 
 class UserController extends Controller {
 	private $em;
@@ -29,7 +33,7 @@ class UserController extends Controller {
 	 */
 	public function listAction(Request $request) {
 		$users = $this->em->getRepository("GuserBundle:User")->findAll();
-		return $this->render("GuserBundle:User:list.html.twig", array("users" => $users) );
+		return $this->render("GuserBundle:User:list.html.twig", ["users" => $users] );
 	}
 
 
@@ -51,10 +55,10 @@ class UserController extends Controller {
 			$this->em->flush();
 
 			$this->addFlash("success","User {$user->getUsername()} was created");
-			return $this->redirectToRoute("user_index");
+			return $this->redirectToRoute("user_list");
 		}
 
-		return $this->render("GuserBundle:User:/addedit.html.twig", array("form" => $form->createView(),));
+		return $this->render("GuserBundle:User:addedit.html.twig", ["form" => $form->createView()]);
 	}
 	
 	
@@ -73,12 +77,11 @@ class UserController extends Controller {
 			$user = $form->getData();
 			$this->em->flush();
 
-
 			$this->addFlash("success","User {$user->getUsername()} was saved");
-            		return $this->redirectToRoute("user_index");
+            		return $this->redirectToRoute("user_list");
 		}
 
-		return $this->render("GuserBundle:User:addedit.html.twig", array("form" => $form->createView(),));
+		return $this->render("GuserBundle:User:addedit.html.twig", ["form" => $form->createView()]);
 	}	
 	
 	
@@ -95,7 +98,7 @@ class UserController extends Controller {
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			if (!empty($user)) {
+			if ($user) {
 				$this->em->remove($user);
 				$this->em->flush();
 
@@ -103,11 +106,14 @@ class UserController extends Controller {
 			} else {
 				$this->addFlash("error","User with ID {$id} does not exits");
 			}
-			return $this->redirectToRoute("user_index");
+			return $this->redirectToRoute("user_list");
 		}
 
-		return $this->render("GuserBundle::deletebutton.html.twig", array("form" => $form->createView(),));
+		return $this->render("GuserBundle::deletebutton.html.twig", ["form" => $form->createView()]);
 	}
+
+
+
 
 
 
@@ -116,9 +122,7 @@ class UserController extends Controller {
 	 * @Security("is_granted('IS_AUTHENTICATED_FULLY')")
 	 */
 	public function changePasswordAction(Request $request) {
-		$passwordValid = False;
-		$passwordStrength = False;
-		$form = $this->createForm(UserChangePasswordType::class);
+		$form = $this->createForm(ChangePasswordType::class);
 		
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -126,39 +130,153 @@ class UserController extends Controller {
 			$user = $this->em->getRepository("GuserBundle:User")->findOneByUsername(
 					$this->container->get("security.token_storage")->getToken()->getUser()->getUsername()
 				);
-        		$encoder = $this->container->get("security.encoder_factory")->getEncoder($user);
-			
-			# reauth
-			$reauth = $encoder->isPasswordValid($user->getPassword(), $data["current_password"], $user->getSalt());
-			#check typos
-			$newPasswordsMatch = ($data["new_password1"] == $data["new_password2"] ? True : False);
-			# strength
-			$passwordStrength = $encoder->isPasswordStrength($user->getUsername(), $data["new_password2"]);
-			
-			if ($reauth) {
-				if ($newPasswordsMatch) {
-					switch ($passwordStrength) {
-						case CryptPasswordEncoder::PASSWORD_RET_LENGTH:	$this->addFlash("error","Password minimal length is " . CryptPasswordEncoder::PASSWORD_MIN_LENGTH); break;
-						case CryptPasswordEncoder::PASSWORD_RET_CLASSES: $this->addFlash("error","Password must contain at least " . CryptPasswordEncoder::PASSWORD_MIN_CLASSES . "character classes"); break;
-						case CryptPasswordEncoder::PASSWORD_RET_INCLUDESUSERNAME: $this->addFlash("error","Password must not be based on username"); break;
 
-						case CryptPasswordEncoder::PASSWORD_RET_OK:
-							$user->setPassword($data["new_password2"]);
-							$this->em->persist($user);
-							$this->em->flush();
-							$this->addFlash("success","Password changed.");
-							break;
-					}
-				} else {
-					$this->addFlash("error","New passwords does not match. Password not changed.");
-				}
+			# reauth
+			$encoder = $this->container->get("security.encoder_factory")->getEncoder($user);
+			$reauth = $encoder->isPasswordValid($user->getPassword(), $data["current_password"], $user->getSalt());
+			if ($reauth) {
+				$this->_changePassword($user, $data["new_password1"], $data["new_password2"]);
 			} else {
 				$this->addFlash("error","Reauthentication failed. Password not changed.");
 			}
 		}
 
-		return $this->render("GuserBundle:User:changepassword.html.twig", array("form" => $form->createView(),));
+		return $this->render("GuserBundle:User:changepassword.html.twig", ["form" => $form->createView()]);
 	}
+	
+	
+	
+	public function _changePassword($user, $new_password1, $new_password2) {
+		#check typos
+		$newPasswordsMatch = ($new_password1 == $new_password2 ? True : False);
+		# strength
+		$encoder = $this->container->get("security.encoder_factory")->getEncoder($user);
+		$passwordStrength = $encoder->isPasswordStrength($user->getUsername(), $new_password2);
+		
+		if ($newPasswordsMatch) {
+			switch ($passwordStrength) {
+				case CryptPasswordEncoder::PASSWORD_RET_LENGTH:	$this->addFlash("error","Password minimal length is " . CryptPasswordEncoder::PASSWORD_MIN_LENGTH); break;
+				case CryptPasswordEncoder::PASSWORD_RET_CLASSES: $this->addFlash("error","Password must contain at least " . CryptPasswordEncoder::PASSWORD_MIN_CLASSES . "character classes"); break;
+				case CryptPasswordEncoder::PASSWORD_RET_INCLUDESUSERNAME: $this->addFlash("error","Password must not be based on username"); break;
+
+				case CryptPasswordEncoder::PASSWORD_RET_OK:
+					$user->setPassword($new_password2);
+					$this->em->persist($user);
+					$this->em->flush();
+					
+					$this->_sendPasswordChangedEmail($user);
+					$this->addFlash("success","Password changed.");
+					break;
+			}
+		} else {
+			$this->addFlash("error","New passwords does not match. Password not changed.");
+		}
+		
+		return;
+	}
+	
+	
+	
+	public function _sendPasswordChangedEmail($user){
+		# send email
+		$message = (new \Swift_Message("{$this->container->getParameter('guser.appname')} password changed"));
+		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message->setTo($user->getEmail());
+		$message->setBody(
+			$this->renderView("GuserBundle:User:passwordchangedemail.html.twig", [
+				"appname" => $this->container->getParameter("guser.appname"),
+				"username" => $user->getUsername(),
+				"email" => $user->getEmail(),
+				"url" => $this->generateUrl("user_lostpassword", [], UrlGeneratorInterface::ABSOLUTE_URL)
+				]),
+			"text/plain"
+		);
+		
+		$this->get("mailer")->send($message);
+
+		return;
+	}
+
+
+
+
+
+
+	/**
+	 * @Route("/user/lostpassword/{token}", name="user_lostpassword", defaults={"token" = null})
+	 */
+	public function lostPasswordAction(Request $request, $token) {
+		if ($token == null) {
+			
+			# lost password form
+			$form = $this->createForm(LostPasswordType::class);
+			$form->handleRequest($request);
+			if ($form->isSubmitted() && $form->isValid()) {
+				$data = $form->getData();
+				$user = $this->em->getRepository("GuserBundle:User")->findOneByEmail($data["email"]);
+				
+				if ($user) { $this->_sendLostPasswordEmail($user); }
+				sleep(rand(1,5)); # anti information gathering time gap
+				
+				$this->addFlash("info","Lost password reset information was sent on registered email.");
+			}
+			return $this->render("GuserBundle:User:lostpassword.html.twig", ["form" => $form->createView()]);
+			
+		} else {
+			
+			# set password form
+			$user = $this->em->getRepository("GuserBundle:User")->findOneByLostPasswordToken($token);
+			$now = new \Datetime();
+			if ( ($user) && ($now < $user->getLostPasswordTokenExpiration())) {
+				$form = $this->createForm(SetPasswordType::class);
+				$form->handleRequest($request);
+				if ($form->isSubmitted() && $form->isValid()) {
+					$data = $form->getData(); 
+					$this->_changePassword($user, $data["new_password1"], $data["new_password2"]);
+					$user->setLostPasswordToken(null);
+					$user->setLostPasswordTokenExpiration(null);
+					$this->em->persist($user);
+					$this->em->flush();
+					
+					return $this->redirectToRoute("user_lostpassword");
+				}
+				return $this->render("GuserBundle:User:setpassword.html.twig", ["form" => $form->createView()]);
+				
+			} else {
+				$this->addFlash("error","Invalid lost password token.");
+				return $this->redirectToRoute("user_lostpassword");
+			}
+		}
+	}
+	
+	
+	
+	public function _sendLostPasswordEmail($user){
+		# gen token
+		$user->setLostPasswordToken(hash('sha256', random_bytes(100)));
+		$expire = new \Datetime();
+		$expire->setTimestamp( $expire->getTimestamp() + User::LOST_PASSWORD_TOKEN_EXPIRATION );
+		$user->setLostPasswordTokenExpiration($expire);
+		$this->em->persist($user);
+		$this->em->flush();		
+		
+		# send email
+		$message = (new \Swift_Message("{$this->container->getParameter('guser.appname')} password reset"));
+		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message->setTo($user->getEmail());
+		$message->setBody(
+			$this->renderView("GuserBundle:User:lostpasswordemail.html.twig", [
+				"appname" => $this->container->getParameter("guser.appname"),
+				"url" => $this->generateUrl("user_lostpassword", ["token" => $user->getLostPasswordToken()], UrlGeneratorInterface::ABSOLUTE_URL)
+				]),
+			"text/plain"
+		);
+		$res = $this->get("mailer")->send($message);
+		return;
+	}
+
+
+
 
 
 
@@ -174,15 +292,15 @@ class UserController extends Controller {
 		// last username entered by the user
 		$lastUsername = $authUtils->getLastUsername();
 
-		return $this->render("GuserBundle:User:login.html.twig", array(
+		return $this->render("GuserBundle:User:login.html.twig", [
 			"last_username" => $lastUsername,
 			"error" => $error,
-		));
+		]);
 	}
 	/**
 	 * @Route("/logout", name="logout")
 	 */
     	public function logoutAction() {
-        	return $this->redirectToRoute('/');
+        	return $this->redirectToRoute("/");
 	}
 }

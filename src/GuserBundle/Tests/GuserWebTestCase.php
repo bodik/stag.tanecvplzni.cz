@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\GuserBundle;
+namespace GuserBundle\Tests;
 
 use GuserBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,7 +13,7 @@ class GuserWebTestCase extends WebTestCase {
 	protected $userRepo;
 	
 	protected $autotestAdminUsername = "autotestadmin";
-	protected $autotestAdminEmail = "autotestadmin@gc-system.cz";
+	protected $autotestAdminEmail = "autotestadmin@localhost";
 	protected $autotestAdminPassword;
 	protected $autotestAdminRoles = ["ROLE_ADMIN"];
 	
