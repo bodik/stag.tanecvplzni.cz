@@ -11,19 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 class UserControllerTest extends GuserWebTestCase {
 
 
-	public $testUser = [
-		"username" => "testuser",
-		#"password" => "placeholder",
-		"email" => "testuser@localhost",
-		"active" => true,
-	];
-
-	public function createTestUser($data) {
+	public function createTestUser() {
 		$tmp = new User();
-        	$tmp->setUsername($data["username"]);
+        	$tmp->setUsername("testuser");
 		$tmp->setPassword(User::generatePassword());
-		$tmp->setEmail($data["email"]);
-		$tmp->setActive($data["active"]);
+		$tmp->setEmail("testuser@localhost");
+		$tmp->setActive(true);
 		return $tmp;
 	}
 
@@ -57,29 +50,30 @@ class UserControllerTest extends GuserWebTestCase {
 	public function testAddAction() {
 		$this->logIn();
 
-		$this->testUser["username"] = $this->testUser["username"]." add ".mt_rand();
-		$this->testUser["email"] = "add_".mt_rand()."_".$this->testUser["email"];
-		$this->testUser["password"] = User::generatePassword();
+		$testUser = $this->createTestUser();
+		$testUser->setUsername($testUser->getUsername()." add ".mt_rand());
+		$testUser->setEmail("add_".mt_rand()."_".$testUser->getEmail());
+		$tmpPassword = User::generatePassword();
+
 		
 		$crawler = $this->client->request("GET", "/user/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
-            		'user[username]' => $this->testUser["username"],
-			'user[email]' => $this->testUser["email"],
-			'user[password]' => $this->testUser["password"],
+            		'user[username]' => $testUser->getUsername(),
+			'user[email]' => $testUser->getEmail(),
+			'user[password]' => $tmpPassword,
             		'user[active]' => false,
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
         	
-        	$user = $this->userRepo->findOneByUsername($this->testUser["username"]);
+        	$user = $this->userRepo->findOneByUsername($testUser->getUsername());
         	$this->assertNotNull($user);
-        	$this->assertSame($this->testUser["username"], $user->getUsername());
+        	$this->assertSame($testUser->getUsername(), $user->getUsername());
 		$this->assertSame(false, $user->getActive());
 		
-        	$encoder = $this->client->getContainer()->get('security.encoder_factory')->getEncoder($user);
-		//$encoder = $user->getPasswordEncoder(); // should return the same as containers security.encoder_factory
-		$encodedPassword = $encoder->encodePassword($this->testUser["password"], $user->getSalt());
-        	$this->assertSame($encodedPassword, $user->getPassword());
+		$encoder = $this->client->getContainer()->get('security.encoder_factory')->getEncoder($user);
+		//$encoder = $user->getPasswordEncoder(); // should return the same
+        	$this->assertSame($encoder->encodePassword($tmpPassword, $user->getSalt()), $user->getPassword());
 		
 		$this->em->remove($user);
 		$this->em->flush();
@@ -91,36 +85,36 @@ class UserControllerTest extends GuserWebTestCase {
 		$this->logIn();
 
 		# create a test user
-		$this->testUser["username"] = $this->testUser["username"]." edit ".mt_rand();
-		$this->testUser["email"] = "edit_".mt_rand()."_".$this->testUser["email"];
-		$user = $this->createTestUser($this->testUser);
-		$this->em->persist($user);
+		$testUser = $this->createTestUser();
+		$testUser->setUsername($testUser->getUsername()." edit ".mt_rand());
+		$testUser->setEmail("edit_".mt_rand()."_".$testUser->getEmail());
+		$tmpPassword = User::generatePassword();
+		$this->em->persist($testUser);
 		$this->em->flush();
-		$this->testUser["password"] = User::generatePassword(); //new pasword
+		$this->em->clear();
+		
 		
 		# edit user
-		$crawler = $this->client->request("GET", "/user/edit/{$user->getID()}");
+		$crawler = $this->client->request("GET", "/user/edit/{$testUser->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
-            		'user[username]' => $this->testUser["username"],
-			'user[email]' => "edited_".$this->testUser["email"],
-			'user[password]' => $this->testUser["password"],     		
+            		'user[username]' => $testUser->getUsername(),
+			'user[email]' => "edited_".$testUser->getEmail(),
+			'user[password]' => $tmpPassword,     		
             		'user[active]' => false,
         	]);
         	$this->client->submit($form);
 		$changetime = new \Datetime();
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-        	$this->em->refresh($user); //must refresh on change without em
 
 		# check general attributes change
-		$user = $this->userRepo->findOneByUsername($this->testUser["username"]);		
+		$user = $this->userRepo->findOneByUsername($testUser->getUsername());
         	$this->assertNotNull($user);
-        	$this->assertSame("edited_".$this->testUser["email"], $user->getEmail());
+        	$this->assertSame("edited_".$testUser->getEmail(), $user->getEmail());
 		$this->assertSame(false, $user->getActive());
 		
 		# check proper password change and encoding 
 		$encoder = $this->client->getContainer()->get('security.encoder_factory')->getEncoder($user);
-		//$encoder = $user->getPasswordEncoder(); // should return the same
-        	$this->assertSame($encoder->encodePassword($this->testUser["password"], $user->getSalt()), $user->getPassword());
+        	$this->assertSame($encoder->encodePassword($tmpPassword, $user->getSalt()), $user->getPassword());
 
 		# check proper lastpasswordchange field update with epsilon < 2sec for request processing delays 
 		$this->assertLessThan(2, abs($changetime->getTimestamp() - $user->getLastPasswordChange()->getTimestamp()));
@@ -133,19 +127,21 @@ class UserControllerTest extends GuserWebTestCase {
 
 	public function testDeleteAction() {
 		$this->logIn();
-
-		$this->testUser["username"] = $this->testUser["username"]." delete ".mt_rand();
-		$this->testUser["email"] = "delete_".mt_rand()."_".$this->testUser["email"];		
-		$user = $this->createTestUser($this->testUser);
-		$this->em->persist($user);
+		
+		# create a test user
+		$testUser = $this->createTestUser();
+		$testUser->setUsername($testUser->getUsername()." delete ".mt_rand());
+		$testUser->setEmail("delete_".mt_rand()."_".$testUser->getEmail());
+		$this->em->persist($testUser);
 		$this->em->flush();
+	
 
-		$crawler = $this->client->request("GET", "/user/delete/{$user->getID()}");
+		$crawler = $this->client->request("GET", "/user/delete/{$testUser->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$user = $this->userRepo->findOneByUsername($this->testUser["username"]);
+		$user = $this->userRepo->findOneByUsername($testUser->getUsername());
 		$this->assertNull($user);
 	}
 	
@@ -193,7 +189,7 @@ class UserControllerTest extends GuserWebTestCase {
 		# not match
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->testAdmin["password"],
+			"change_password[current_password]" => $this->testAdminPassword,
 			"change_password[new_password1]" => "anything1",
 			"change_password[new_password2]" => "anything2",
 		]);
@@ -203,7 +199,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = str_repeat("a", CryptPasswordEncoder::PASSWORD_MIN_LENGTH - 1);
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->testAdmin["password"],
+			"change_password[current_password]" => $this->testAdminPassword,
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -215,7 +211,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = str_repeat("a", CryptPasswordEncoder::PASSWORD_MIN_LENGTH);
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->testAdmin["password"],
+			"change_password[current_password]" => $this->testAdminPassword,
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -226,9 +222,9 @@ class UserControllerTest extends GuserWebTestCase {
 		# includes
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->testAdmin["password"],
-			"change_password[new_password1]" => $this->testAdmin["username"]."ABC.123",
-			"change_password[new_password2]" => $this->testAdmin["username"]."ABC.123",
+			"change_password[current_password]" => $this->testAdminPassword,
+			"change_password[new_password1]" => $this->testAdminUsername."ABC.123",
+			"change_password[new_password2]" => $this->testAdminUsername."ABC.123",
 		]);
 		$this->client->submit($form);
 		$this->assertContains("must not be based on username", $this->client->getResponse()->getContent());
@@ -238,7 +234,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = User::generatePassword();
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->testAdmin["password"],
+			"change_password[current_password]" => $this->testAdminPassword,
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -247,7 +243,7 @@ class UserControllerTest extends GuserWebTestCase {
 		
 
 		# test change really works 
-		$this->testAdmin["password"] = $tmp;
+		$this->testAdminPassword = $tmp;
 		$this->logIn();
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("User change password")')->count());
@@ -258,21 +254,23 @@ class UserControllerTest extends GuserWebTestCase {
 	public function testLostPasswordAction() {
 
 		# create a test user
-		$this->testUser["username"] = $this->testUser["username"]." lostpassword ".mt_rand();
-		$this->testUser["email"] = "lostpassword_".mt_rand()."_".$this->testUser["email"];		
-		$user = $this->createTestUser($this->testUser);
-		$this->em->persist($user);
+		$testUser = $this->createTestUser();
+		$testUser->setUsername($testUser->getUsername()." lostpassword ".mt_rand());
+		$testUser->setEmail("lostpassword_".mt_rand()."_".$testUser->getEmail());
+		$this->em->persist($testUser);
 		$this->em->flush();
+		
 
 		# get the reset token
 		$crawler = $this->client->request("GET", "/user/lostpassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"lost_password[email]" => $this->testUser["email"],
+			"lost_password[email]" => $testUser->getEmail(),
 		]);
 		$this->client->submit($form);
 		$this->assertContains("Lost password reset information was sent", $this->client->getResponse()->getContent());
+		
 		//$this->em->refresh($user); //must refresh on change without em
-		$user = $this->userRepo->findOneByUsername($this->testUser["username"]);
+		$user = $this->userRepo->findOneByUsername($testUser->getUsername());
 		$this->assertNotNull($user);
 		
 		# use the reset token
@@ -280,10 +278,10 @@ class UserControllerTest extends GuserWebTestCase {
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("User Set Password")')->count());
 		
-		$this->testUser["password"] = User::generatePassword();
+		$tmpPassword = User::generatePassword();
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"set_password[new_password1]" => $this->testUser["password"],
-			"set_password[new_password2]" => $this->testUser["password"],
+			"set_password[new_password1]" => $tmpPassword,
+			"set_password[new_password2]" => $tmpPassword,
 		]);
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -291,8 +289,8 @@ class UserControllerTest extends GuserWebTestCase {
 		# test new password
 		$crawler = $this->client->request('GET', '/login');
 		$form = $crawler->filter('button[type="submit"]')->form([
-			'_username' => $this->testUser["password"],
-			'_password' => $this->testUser["password"],
+			'_username' => $user->getUsername(),
+			'_password' => $tmpPassword,
 		]);
 		$this->client->submit($form);
 		$this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());

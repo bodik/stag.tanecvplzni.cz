@@ -12,29 +12,17 @@ class CourseControllerTest extends StagWebTestCase {
 	protected $em = null;
 	protected $courseRepo = null;
 
-	public $testCourse = [
-		"name" => "kurz test",
-		"description" => "kurz test popis",
-		"teacher" => "ucitel",
-		"place" => "tanecni sal",
-		"capacity" => 10,
-		"pair" => true,
-		"priceSingle" => 130,
-		"pricePair" => 200,
-		"color" => "#eeffee",
-	];
-	
-	public static function createTestCourse($data) {
+	public function createTestCourse() {
 		$tmp = new Course();
-        	$tmp->setName($data["name"]);
-		$tmp->setDescription($data["description"]);
-		$tmp->setTeacher($data["teacher"]);
-		$tmp->setPlace($data["place"]);
-		$tmp->setCapacity($data["capacity"]);
-		$tmp->setPair($data["pair"]);
-		$tmp->setPriceSingle($data["priceSingle"]);
-		$tmp->setPricePair($data["pricePair"]);
-		$tmp->setColor($data["color"]);
+        	$tmp->setName("kurz test");
+		$tmp->setDescription("kurz test popis");
+		$tmp->setTeacher("ucitel");
+		$tmp->setPlace("tanecni sal");
+		$tmp->setCapacity(10);
+		$tmp->setPair(true);
+		$tmp->setPriceSingle(130);
+		$tmp->setPricePair(200);
+		$tmp->setColor("#eeffee");
 		return $tmp;
 	}
 	
@@ -69,27 +57,29 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testAddAction() {
 		$this->logIn();
 		
-		$this->testCourse["name"] = $this->testCourse["name"]." add ".mt_rand();
-						
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." add ".mt_rand());
+
+
 		$crawler = $this->client->request("GET", "/course/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
-            		'course[name]' => $this->testCourse["name"],
-            		'course[description]' => $this->testCourse["description"],
-            		'course[teacher]' => $this->testCourse["teacher"],
-            		'course[place]' => $this->testCourse["place"],
-            		'course[capacity]' => $this->testCourse["capacity"],
-            		'course[pair]' => $this->testCourse["pair"],
-            		'course[priceSingle]' => $this->testCourse["priceSingle"],
-            		'course[pricePair]' => $this->testCourse["pricePair"],
-			'course[color]' => $this->testCourse["color"]
+            		'course[name]' => $testCourse->getName(),
+            		'course[description]' => $testCourse->getDescription(),
+            		'course[teacher]' => $testCourse->getTeacher(),
+            		'course[place]' => $testCourse->getPlace(),
+            		'course[capacity]' => $testCourse->getCapacity(),
+            		'course[pair]' => $testCourse->getPair(),
+            		'course[priceSingle]' => $testCourse->getPriceSingle(),
+            		'course[pricePair]' => $testCourse->getPricePair(),
+			'course[color]' => $testCourse->getColor()
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
         	
-        	$course = $this->courseRepo->findOneByName($this->testCourse["name"]);
+        	$course = $this->courseRepo->findOneByName($testCourse->getName());
         	$this->assertNotNull($course);
-        	$this->assertSame($this->testCourse["name"], $course->getName());
-		$this->assertSame($this->testCourse["pair"], $course->getPair());
+        	$this->assertSame($testCourse->getDescription(), $course->getDescription());
+		$this->assertSame($testCourse->getPair(), $course->getPair());
 
 		$this->em->remove($course);
 		$this->em->flush();
@@ -100,13 +90,14 @@ class CourseControllerTest extends StagWebTestCase {
     	public function testEditAction() {
     		$this->logIn();
     		
-		$this->testCourse["name"] = $this->testCourse["name"]." edit ".mt_rand();
-		$course = $this->createTestCourse($this->testCourse);
-		$this->em->persist($course);
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." edit ".mt_rand());
+		$this->em->persist($testCourse);
 		$this->em->flush();
-    		
+		$this->em->clear();
 		
-		$crawler = $this->client->request("GET", "/course/edit/{$course->getId()}");
+		
+		$crawler = $this->client->request("GET", "/course/edit/{$testCourse->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[description]' => "edited description",
 			'course[teacher]' => "edited teacher",
@@ -114,12 +105,11 @@ class CourseControllerTest extends StagWebTestCase {
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-
-		//TODO: not sure why this does not work here as expected based on correo project		
-		$this->em->refresh($course); //must refresh on change without em        	
         	
+        	#$this->em->refresh($testCourse); //not sure why I have to refresh, doctrine magic
+
 		# check general attributes change
-		$course = $this->courseRepo->findOneById($course->getId());
+		$course = $this->courseRepo->findOneById($testCourse->getId());
         	$this->assertNotNull($course);
         	$this->assertSame("edited description", $course->getDescription());
         	$this->assertSame("edited teacher", $course->getTeacher());
@@ -135,18 +125,18 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testDeleteAction() {
 		$this->logIn();
 		
-		$this->testCourse["name"] = $this->testCourse["name"]." delete ".mt_rand();   
-		$course = $this->createTestCourse($this->testCourse);
-		$this->em->persist($course);
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." delete ".mt_rand());
+		$this->em->persist($testCourse);
 		$this->em->flush();
 		    		
     		
-		$crawler = $this->client->request("GET", "/course/delete/{$course->getID()}");
+		$crawler = $this->client->request("GET", "/course/delete/{$testCourse->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$course = $this->courseRepo->findOneByName($this->testCourse["name"]);
+		$course = $this->courseRepo->findOneByName($testCourse->getName());
 		$this->assertNull($course);
 	}
 
@@ -156,36 +146,36 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 	public function testPriceAction() {
-		$this->testCourse["name"] = $this->testCourse["name"]." price ".mt_rand();
-		$course = $this->createTestCourse($this->testCourse);
-		$this->em->persist($course);
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." price ".mt_rand());
+		$this->em->persist($testCourse);
 		$this->em->flush();
+		
 				
-		$crawler = $this->client->request("GET", "/course/price/{$course->getId()}/single");
+		$crawler = $this->client->request("GET", "/course/price/{$testCourse->getId()}/single");
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		
-		$this->em->remove($course);
+		$this->em->remove($testCourse);
 		$this->em->flush();
 	}
 
 
 
 	public function testShowAction() {
-		$this->testCourse["name"] = $this->testCourse["name"]." show ".mt_rand();   
-		$course = $this->createTestCourse($this->testCourse);
-		$this->em->persist($course);
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." show ".mt_rand());
+		$this->em->persist($testCourse);
 		$this->em->flush();
 		    		
     		
-		$crawler = $this->client->request("GET", "/course/show/{$course->getID()}");
+		$crawler = $this->client->request("GET", "/course/show/{$testCourse->getID()}");
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
-		$this->assertGreaterThan(0, $crawler->filter('html:contains("'.$this->testCourse["name"].'")')->count());
+		$this->assertGreaterThan(0, $crawler->filter('html:contains("'.$testCourse->getName().'")')->count());
 		
-		$this->em->remove($course);
+		$this->em->remove($testCourse);
 		$this->em->flush();
 	}
-	
 }
 
 ?>

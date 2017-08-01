@@ -92,7 +92,7 @@ class LessonController extends Controller {
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			if (!empty($lesson)) {
+			if ($lesson) {
 				$this->em->remove($lesson);
 				$this->em->flush();
 

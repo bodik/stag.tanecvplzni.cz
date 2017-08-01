@@ -14,33 +14,19 @@ class ParticipantControllerTest extends StagWebTestCase {
 	protected $em;
 	protected $participantRepo;
 
-	public $testParticipant = [
-		"sn" => "Tanečník",
-		"gn" => "Josef",
-		"email" => "josef.tanecnik@localhost",
-		"phoneNumber" => "+420123456789",
-		"gender" => Participant::ALL_GENDERS["muž"],
-		"paired" => Participant::ALL_PAIRS["v páru"],
-		"partner" => "marie.tanecnice@localhost",
-		"reference" => "facebook",
-		"note" => "poznamka k prihlascce",
-		"paid" => false,
-		"note" => "note1",	
-	];
 	protected $testCourse;
-	
-	protected function createTestParticipant($data) {
+	public function createTestParticipant() {
         	$tmp = new Participant();
-        	$tmp->setSn($data["sn"]);
-        	$tmp->setGn($data["gn"]);
-		$tmp->setEmail($data["email"]);
-		$tmp->setPhoneNumber($data["phoneNumber"]);
-		$tmp->setGender($data["gender"]);
-		$tmp->setPaired($data["paired"]);
-		$tmp->setPartner($data["partner"]);
-		$tmp->setReference($data["reference"]);
-		$tmp->setNote($data["note"]);
-		$tmp->setPaid($data["paid"]);
+        	$tmp->setSn("Tanečník");
+        	$tmp->setGn("Josef");
+		$tmp->setEmail("josef.tanecnik@localhost");
+		$tmp->setPhoneNumber("+420123456789");
+		$tmp->setGender(Participant::ALL_GENDERS["muž"]);
+		$tmp->setPaired(Participant::ALL_PAIRS["v páru"]);
+		$tmp->setPartner("marie.tanecnice@localhost");
+		$tmp->setReference("facebook");
+		$tmp->setNote("poznamka k prihlascce");
+		$tmp->setPaid(false);
 		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
 		return $tmp;
 	}
@@ -58,8 +44,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$this->participantRepo = $this->em->getRepository("StagBundle:Participant");
 		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 		
-		$tmp = new CourseControllerTest();
-		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
+		$this->testCourse = (new CourseControllerTest())->createTestCourse();
 		$this->em->persist($this->testCourse);
 		$this->em->flush();
 	}
@@ -89,30 +74,32 @@ class ParticipantControllerTest extends StagWebTestCase {
 	public function testAddAction() {
 		$this->logIn();
 		
-		$this->testParticipant["sn"] = $this->testParticipant["sn"]." add ".mt_rand();
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." add ".mt_rand());
+		
 						
 		$crawler = $this->client->request("GET", "/participant/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
 			'participant[courseRef]' => $this->testCourse->getId(),
-		        'participant[sn]' => $this->testParticipant["sn"],
-		        'participant[gn]' => $this->testParticipant["gn"],
-            		'participant[email]' => $this->testParticipant["email"],
-			'participant[paired]' => $this->testParticipant["paired"],
-            		'participant[partner]' => $this->testParticipant["partner"],
-            		'participant[phoneNumber]' => $this->testParticipant["phoneNumber"],
-            		'participant[gender]' => $this->testParticipant["gender"],
-            		'participant[reference]' => $this->testParticipant["reference"],
-			'participant[note]' => $this->testParticipant["note"],
-            		'participant[paid]' => $this->testParticipant["paid"],
+		        'participant[sn]' => $testParticipant->getSn(),
+		        'participant[gn]' => $testParticipant->getGn(),
+            		'participant[email]' => $testParticipant->getEmail(),
+			'participant[paired]' => $testParticipant->getPaired(),
+            		'participant[partner]' => $testParticipant->getPartner(),
+            		'participant[phoneNumber]' => $testParticipant->getPhoneNumber(),
+            		'participant[gender]' => $testParticipant->getGender(),
+            		'participant[reference]' => $testParticipant->getReference(),
+			'participant[note]' => $testParticipant->getNote(),
+            		'participant[paid]' => $testParticipant->getPaid(),
             		
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
         	
-        	$participant = $this->participantRepo->findOneBySn($this->testParticipant["sn"]);
+        	$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
         	$this->assertNotNull($participant);
-        	$this->assertSame($this->testParticipant["sn"], $participant->getSn());
-		$this->assertSame($this->testParticipant["paid"], $participant->getPaid());
+        	$this->assertSame($testParticipant->getSn(), $participant->getSn());
+		$this->assertSame($testParticipant->getPaid(), $participant->getPaid());
 
 		$this->em->remove($participant);
 		$this->em->flush();
@@ -122,12 +109,14 @@ class ParticipantControllerTest extends StagWebTestCase {
     	public function testEditAction() {
 		$this->logIn();
     		
-		$this->testParticipant["sn"] = $this->testParticipant["sn"]." edit ".mt_rand();
-		$participant = $this->createTestParticipant($this->testParticipant);
-		$this->em->persist($participant);
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." edit ".mt_rand());
+		$this->em->persist($testParticipant);
 		$this->em->flush();
+		$this->em->clear();
 		
-		$crawler = $this->client->request("GET", "/participant/edit/{$participant->getId()}");
+		
+		$crawler = $this->client->request("GET", "/participant/edit/{$testParticipant->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'participant[email]' => "edited email",
 			'participant[gender]' => Participant::ALL_GENDERS["žena"],
@@ -135,10 +124,9 @@ class ParticipantControllerTest extends StagWebTestCase {
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-		$this->em->refresh($participant); //must refresh on change without em        	
         	
 		# check general attributes change
-		$participant = $this->participantRepo->findOneById($participant->getID());
+		$participant = $this->participantRepo->findOneById($testParticipant->getId());
         	$this->assertNotNull($participant);
         	$this->assertSame("edited email", $participant->getEmail());
 		$this->assertSame(Participant::ALL_GENDERS["žena"], $participant->getGender());
@@ -151,46 +139,47 @@ class ParticipantControllerTest extends StagWebTestCase {
 	public function testDeleteAction() {
 		$this->logIn();
 		
-		$this->testParticipant["sn"] = $this->testParticipant["sn"]." delete ".mt_rand();
-		$participant = $this->createTestParticipant($this->testParticipant);
-		$this->em->persist($participant);
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." delete ".mt_rand());
+		$this->em->persist($testParticipant);
 		$this->em->flush();
     		
 
-		$crawler = $this->client->request("GET", "/participant/delete/{$participant->getID()}");
+		$crawler = $this->client->request("GET", "/participant/delete/{$testParticipant->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$participant = $this->participantRepo->findOneBySn($this->testParticipant["sn"]);
+		$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
 		$this->assertNull($participant);
 	}
 	
 	
 	
 	public function testApplicationAction() {
-		$this->testParticipant["sn"] = $this->testParticipant["sn"]." application ".mt_rand();
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." application ".mt_rand());
 						
 		$crawler = $this->client->request("GET", "/participant/application/".$this->testCourse->getId());
 		$form = $crawler->filter('button[type="submit"]')->form([
-		        'participant_application[sn]' => $this->testParticipant["sn"],
-		        'participant_application[gn]' => $this->testParticipant["gn"],
-            		'participant_application[email]' => $this->testParticipant["email"],
-			'participant_application[paired]' => $this->testParticipant["paired"],
-            		'participant_application[partner]' => $this->testParticipant["partner"],
-            		'participant_application[phoneNumber]' => $this->testParticipant["phoneNumber"],
-            		'participant_application[gender]' => $this->testParticipant["gender"],
-            		'participant_application[reference]' => $this->testParticipant["reference"],
-			'participant_application[note]' => $this->testParticipant["note"],
+		        'participant_application[sn]' => $testParticipant->getSn(),
+		        'participant_application[gn]' => $testParticipant->getGn(),
+            		'participant_application[email]' => $testParticipant->getEmail(),
+			'participant_application[paired]' => $testParticipant->getPaired(),
+            		'participant_application[partner]' => $testParticipant->getPartner(),
+            		'participant_application[phoneNumber]' => $testParticipant->getPhoneNumber(),
+            		'participant_application[gender]' => $testParticipant->getGender(),
+            		'participant_application[reference]' => $testParticipant->getReference(),
+			'participant_application[note]' => $testParticipant->getNote(),
 			'participant_application[tosagreed]' => 1,
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
         	
-        	$participant = $this->participantRepo->findOneBySn($this->testParticipant["sn"]);
+        	$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
         	$this->assertNotNull($participant);
-        	$this->assertSame($this->testParticipant["sn"], $participant->getSn());
-        	$this->assertSame($this->testParticipant["paired"], $participant->getPaired());
+        	$this->assertSame($testParticipant->getSn(), $participant->getSn());
+        	$this->assertSame($testParticipant->getPaired(), $participant->getPaired());
         	$this->assertSame($this->testCourse->getId(), $participant->getCourseRef()->getId());
 
 		$this->em->remove($participant);

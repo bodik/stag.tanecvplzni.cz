@@ -14,18 +14,12 @@ class LessonControllerTest extends StagWebTestCase {
 	protected $em;
 	protected $lessonRepo;
 
-	public $testLesson = [
-		"time" => "2012-01-01 22:22:22",
-		"length" => 60,
-		"note" => "poznamecka",	
-	];
 	protected $testCourse;
-	
-	protected function createTestLesson($data) {
+	public function createTestLesson() {
         	$tmp = new Lesson();
-        	$tmp->setTime(new \DateTime($data["time"]));
-        	$tmp->setLength($data["length"]);
-		$tmp->setNote($data["note"]);
+        	$tmp->setTime(new \DateTime("2012-01-01 22:22:22"));
+        	$tmp->setLength(60);
+		$tmp->setNote("poznamecka");
 		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
 		return $tmp;
 	}
@@ -43,16 +37,14 @@ class LessonControllerTest extends StagWebTestCase {
 		$this->lessonRepo = $this->em->getRepository("StagBundle:Lesson");
 		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 		
-		$tmp = new CourseControllerTest();
-		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
+		$this->testCourse = (new CourseControllerTest())->createTestCourse();
 		$this->em->persist($this->testCourse);
 		$this->em->flush();
 	}
 	protected function tearDown() {
 		parent::tearDown();
 		
-		$courseRepo = $this->em->getRepository("StagBundle:Course");
-		$this->em->remove($courseRepo->findOneById($this->testCourse->getId()));
+		$this->em->remove($this->courseRepo->findOneById($this->testCourse->getId()));
 		$this->em->flush();
 	}
 
@@ -73,22 +65,23 @@ class LessonControllerTest extends StagWebTestCase {
 	public function testAddAction() {
 		$this->logIn();		
 		
-		$this->testLesson["note"] = $this->testLesson["note"]." add ".mt_rand();
+		$testLesson = $this->createTestLesson();
+		$testLesson->setNote($testLesson->getNote()." add ".mt_rand());
 						
 		$crawler = $this->client->request("GET", "/lesson/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
 			'lesson[courseRef]' => $this->testCourse->getId(),
-		        'lesson[time]' => $this->testLesson["time"],
-		        'lesson[length]' => $this->testLesson["length"],
-            		'lesson[note]' => $this->testLesson["note"],            		
+		        'lesson[time]' => $testLesson->getTime()->format("c"),
+		        'lesson[length]' => $testLesson->getLength(),
+            		'lesson[note]' => $testLesson->getNote(),            		
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
         	
-        	$lesson = $this->lessonRepo->findOneByNote($this->testLesson["note"]);
+        	$lesson = $this->lessonRepo->findOneByNote($testLesson->getNote());
         	$this->assertNotNull($lesson);
-        	$this->assertSame((new \DateTime($this->testLesson["time"]))->getTimestamp(), $lesson->getTime()->getTimestamp());
-		$this->assertSame($this->testLesson["note"], $lesson->getNote());
+        	$this->assertSame($testLesson->getTime()->getTimestamp(), $lesson->getTime()->getTimestamp());
+		$this->assertSame($testLesson->getNote(), $lesson->getNote());
 
 		$this->em->remove($lesson);
 		$this->em->flush();
@@ -99,25 +92,26 @@ class LessonControllerTest extends StagWebTestCase {
     	public function testEditAction() {
 		$this->logIn();    		
     		
-		$this->testLesson["note"] = $this->testLesson["note"]." edit ".mt_rand();
-		$lesson = $this->createTestLesson($this->testLesson);
-		$this->em->persist($lesson);
+		$testLesson = $this->createTestLesson();
+		$testLesson->setNote($testLesson->getNote()." edit ".mt_rand());
+		$this->em->persist($testLesson);
 		$this->em->flush();
+		$this->em->clear();
 		
-		$crawler = $this->client->request("GET", "/lesson/edit/{$lesson->getId()}");
+		
+		$crawler = $this->client->request("GET", "/lesson/edit/{$testLesson->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'lesson[length]' => 45,
-			'lesson[note]' => $this->testLesson["note"]." canceled",
+			'lesson[note]' => $testLesson->getNote()." canceled",
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-		$this->em->refresh($lesson); //must refresh on change without em        	
         	
 		# check general attributes change
-		$lesson = $this->lessonRepo->findOneById($lesson->getID());
+		$lesson = $this->lessonRepo->findOneById($testLesson->getID());
         	$this->assertNotNull($lesson);
         	$this->assertSame(45, $lesson->getLength());
-		$this->assertSame($this->testLesson["note"]." canceled", $lesson->getNote());
+		$this->assertSame($testLesson->getNote()." canceled", $lesson->getNote());
 		
 		$this->em->remove($lesson);
 		$this->em->flush();
@@ -128,20 +122,19 @@ class LessonControllerTest extends StagWebTestCase {
 	public function testDeleteAction() {
 		$this->logIn();
 		
-		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
-		$lesson = $this->createTestLesson($this->testLesson);
-		$this->em->persist($lesson);
+		$testLesson = $this->createTestLesson();
+		$testLesson->setNote($testLesson->getNote()." delete ".mt_rand());
+		$this->em->persist($testLesson);
 		$this->em->flush();
     		
-		$crawler = $this->client->request("GET", "/lesson/delete/{$lesson->getID()}");
+		$crawler = $this->client->request("GET", "/lesson/delete/{$testLesson->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$lesson = $this->lessonRepo->findOneByNote($this->testLesson["note"]);
+		$lesson = $this->lessonRepo->findOneByNote($testLesson->getNote());
 		$this->assertNull($lesson);
 	}
-
 
 
 
@@ -155,9 +148,9 @@ class LessonControllerTest extends StagWebTestCase {
 
 
 	public function testEventsAction() {
-		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
-		$lesson = $this->createTestLesson($this->testLesson);
-		$this->em->persist($lesson);
+		$testLesson = $this->createTestLesson();
+		$testLesson->setNote($testLesson->getNote()." events ".mt_rand());
+		$this->em->persist($testLesson);
 		$this->em->flush();
     		
 		$crawler = $this->client->request("GET", "/lesson/events");
@@ -166,10 +159,11 @@ class LessonControllerTest extends StagWebTestCase {
 		$events = json_decode($this->client->getResponse()->getContent());
 		$this->assertNotNull($events);
 		
-		$this->em->remove($lesson);
+		$this->em->remove($testLesson);
 		$this->em->flush();
 	}
 	
+
 }
 
 ?>
