@@ -9,9 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class ParticipantControllerTest extends WebTestCase {
-	private $client;
-	private $em;
-	private $participantRepo;
+	protected $client;
+	protected $em;
+	protected $participantRepo;
 
 	public $testParticipant = [
 		"sn" => "Tanečník",
@@ -43,26 +43,41 @@ class ParticipantControllerTest extends WebTestCase {
 		$tmp->setCourseRef($this->testCourse);
 		return $tmp;
 	}
-	
+
+
+
+
+
+
 	protected function setUp() {
-		$this->client = static::createClient();
-		$this->em = static::$kernel->getContainer()->get("doctrine")->getManager();
+		parent::setUp();
+		if(!$this->client) { $this->client = static::createClient(); }
+		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
+		
 		$this->participantRepo = $this->em->getRepository("StagBundle:Participant");
 		
 		$tmp = new CourseControllerTest();
-		$tmp->setUp();	
 		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
 		$this->em->persist($this->testCourse);
 		$this->em->flush();
 	}
 	
 	protected function tearDown() {
+		parent::tearDown();
+		
 		$courseRepo = $this->em->getRepository("StagBundle:Course");
 		$this->em->remove($courseRepo->findOneById($this->testCourse->getId()));
 		$this->em->flush();
 	}
-    
+
+
+
+
+
+
 	public function testList() {
+		$this->logIn();
+
         	$crawler = $this->client->request('GET', '/participant/list');
 	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Participants")')->count());
 	}
@@ -70,6 +85,8 @@ class ParticipantControllerTest extends WebTestCase {
 
 
 	public function testAddAction() {
+		$this->logIn();
+		
 		$this->testParticipant["sn"] = $this->testParticipant["sn"]." add ".mt_rand();
 						
 		$crawler = $this->client->request("GET", "/participant/add");
@@ -101,6 +118,8 @@ class ParticipantControllerTest extends WebTestCase {
 
 
     	public function testEditAction() {
+		$this->logIn();
+    		
 		$this->testParticipant["sn"] = $this->testParticipant["sn"]." edit ".mt_rand();
 		$participant = $this->createTestParticipant($this->testParticipant);
 		$this->em->persist($participant);
@@ -114,7 +133,7 @@ class ParticipantControllerTest extends WebTestCase {
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-		$this->em->refresh($participant); //must refresh on change without em        	
+		//$this->em->refresh($participant); //must refresh on change without em        	
         	
 		# check general attributes change
 		$participant = $this->participantRepo->findOneById($participant->getID());
@@ -128,6 +147,8 @@ class ParticipantControllerTest extends WebTestCase {
     	}
 
 	public function testDeleteAction() {
+		$this->logIn();
+		
 		$this->testParticipant["sn"] = $this->testParticipant["sn"]." delete ".mt_rand();
 		$participant = $this->createTestParticipant($this->testParticipant);
 		$this->em->persist($participant);
@@ -168,7 +189,7 @@ class ParticipantControllerTest extends WebTestCase {
         	$this->assertNotNull($participant);
         	$this->assertSame($this->testParticipant["sn"], $participant->getSn());
         	$this->assertSame($this->testParticipant["paired"], $participant->getPaired());
-        	$this->assertSame($this->testCourse, $participant->getCourseRef());
+        	$this->assertSame($this->testCourse->getId(), $participant->getCourseRef()->getId());
 
 		$this->em->remove($participant);
 		$this->em->flush();

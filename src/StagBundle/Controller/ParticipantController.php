@@ -4,6 +4,7 @@ namespace StagBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Participant;
 use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\ParticipantType;
@@ -22,6 +23,7 @@ class ParticipantController extends Controller {
 
 	/**
 	 * @Route("/participant/list", name="participant_list")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function listAction(Request $request) {
         	$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
@@ -32,6 +34,7 @@ class ParticipantController extends Controller {
 	
 	/**
 	 * @Route("/participant/add", name="participant_add")
+	 * @Security("has_role('ROLE_ADMIN')")	 
 	 */
 	public function addAction(Request $request) {
 		$participant = new Participant();
@@ -56,6 +59,7 @@ class ParticipantController extends Controller {
 
 	/**
 	 * @Route("/participant/edit/{id}", name="participant_edit")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function editAction(Request $request, $id) {
 		$participant = $this->em->getRepository("StagBundle:Participant")->find($id);
@@ -77,6 +81,7 @@ class ParticipantController extends Controller {
 		
 	/**
 	 * @Route("/participant/delete/{id}", name="participant_delete")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function deleteAction(Request $request, $id) {
 		$participant = $this->em->getRepository("StagBundle:Participant")->find($id);

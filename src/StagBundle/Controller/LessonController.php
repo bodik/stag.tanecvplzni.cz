@@ -4,6 +4,7 @@ namespace StagBundle\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Lesson;
 use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\LessonType;
@@ -24,6 +25,7 @@ class LessonController extends Controller {
 
 	/**
 	 * @Route("/lesson/list", name="lesson_list")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function listAction(Request $request) {
         	$lessons = $this->em->getRepository("StagBundle:Lesson")->findAll();
@@ -34,6 +36,7 @@ class LessonController extends Controller {
 	
 	/**
 	 * @Route("/lesson/add/{course_id}", name="lesson_add", defaults={"course_id" = null})
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function addAction(Request $request, $course_id) {
 		$lesson = new Lesson();
@@ -58,6 +61,7 @@ class LessonController extends Controller {
 
 	/**
 	 * @Route("/lesson/edit/{id}", name="lesson_edit")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function editAction(Request $request, $id) {
 		$lesson = $this->em->getRepository("StagBundle:Lesson")->find($id);
@@ -79,6 +83,7 @@ class LessonController extends Controller {
 		
 	/**
 	 * @Route("/lesson/delete/{id}", name="lesson_delete")
+	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function deleteAction(Request $request, $id) {
 		$lesson = $this->em->getRepository("StagBundle:Lesson")->find($id);

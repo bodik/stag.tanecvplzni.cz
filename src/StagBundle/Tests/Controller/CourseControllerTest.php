@@ -3,13 +3,14 @@
 namespace StagBundle\Tests\Controller;
 
 use StagBundle\Entity\Course;
+use StagBundle\Tests\StagWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class CourseControllerTest extends WebTestCase {
-	private $client;
-	private $em;
-	private $courseRepo;
+class CourseControllerTest extends StagWebTestCase {
+	protected $client = null;
+	protected $em = null;
+	protected $courseRepo = null;
 
 	public $testCourse = [
 		"name" => "kurz test",
@@ -23,7 +24,7 @@ class CourseControllerTest extends WebTestCase {
 		"color" => "#eeffee",
 	];
 	
-	public function createTestCourse($data) {
+	public static function createTestCourse($data) {
 		$tmp = new Course();
         	$tmp->setName($data["name"]);
 		$tmp->setDescription($data["description"]);
@@ -41,10 +42,15 @@ class CourseControllerTest extends WebTestCase {
 	
 	
 	
-	protected function setUp() {
-		$this->client = static::createClient();
-		$this->em = static::$kernel->getContainer()->get("doctrine")->getManager();
+	public function setUp() {
+		parent::setUp();
+		if(!$this->client) { $this->client = static::createClient(); }
+		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
+
 		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
+	}
+	public function tearDown() {
+		parent::tearDown();
 	}
 	
 	
@@ -52,6 +58,8 @@ class CourseControllerTest extends WebTestCase {
 	
     
 	public function testList() {
+		$this->logIn();
+		
         	$crawler = $this->client->request('GET', '/course/list');
 	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Courses")')->count());
 	}
@@ -59,6 +67,8 @@ class CourseControllerTest extends WebTestCase {
 
 
 	public function testAddAction() {
+		$this->logIn();
+		
 		$this->testCourse["name"] = $this->testCourse["name"]." add ".mt_rand();
 						
 		$crawler = $this->client->request("GET", "/course/add");
@@ -88,6 +98,8 @@ class CourseControllerTest extends WebTestCase {
 
 
     	public function testEditAction() {
+    		$this->logIn();
+    		
 		$this->testCourse["name"] = $this->testCourse["name"]." edit ".mt_rand();
 		$course = $this->createTestCourse($this->testCourse);
 		$this->em->persist($course);
@@ -104,10 +116,10 @@ class CourseControllerTest extends WebTestCase {
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
 		//TODO: not sure why this does not work here as expected based on correo project		
-		//$this->em->refresh($course); //must refresh on change without em        	
+		$this->em->refresh($course); //must refresh on change without em        	
         	
 		# check general attributes change
-		$course = $this->courseRepo->findOneById($course->getID());
+		$course = $this->courseRepo->findOneById($course->getId());
         	$this->assertNotNull($course);
         	$this->assertSame("edited description", $course->getDescription());
         	$this->assertSame("edited teacher", $course->getTeacher());
@@ -121,6 +133,8 @@ class CourseControllerTest extends WebTestCase {
 
 
 	public function testDeleteAction() {
+		$this->logIn();
+		
 		$this->testCourse["name"] = $this->testCourse["name"]." delete ".mt_rand();   
 		$course = $this->createTestCourse($this->testCourse);
 		$this->em->persist($course);
@@ -135,8 +149,27 @@ class CourseControllerTest extends WebTestCase {
 		$course = $this->courseRepo->findOneByName($this->testCourse["name"]);
 		$this->assertNull($course);
 	}
-	
-	
+
+
+
+
+
+
+	public function testPriceAction() {
+		$this->testCourse["name"] = $this->testCourse["name"]." price ".mt_rand();
+		$course = $this->createTestCourse($this->testCourse);
+		$this->em->persist($course);
+		$this->em->flush();
+				
+		$crawler = $this->client->request("GET", "/course/price/{$course->getId()}/single");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		
+		$this->em->remove($course);
+		$this->em->flush();
+	}
+
+
+
 	public function testShowAction() {
 		$this->testCourse["name"] = $this->testCourse["name"]." show ".mt_rand();   
 		$course = $this->createTestCourse($this->testCourse);
@@ -152,6 +185,7 @@ class CourseControllerTest extends WebTestCase {
 		$this->em->remove($course);
 		$this->em->flush();
 	}
+	
 }
 
 ?>

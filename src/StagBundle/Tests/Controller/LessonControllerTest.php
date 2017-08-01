@@ -5,13 +5,14 @@ namespace StagBundle\Tests\Controller;
 use StagBundle\Entity\Course;
 use StagBundle\Entity\Lesson;
 use StagBundle\Tests\Controller\CourseControllerTest;
+use StagBundle\Tests\StagWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class LessonControllerTest extends WebTestCase {
-	private $client;
-	private $em;
-	private $lessonRepo;
+class LessonControllerTest extends StagWebTestCase {
+	protected $client;
+	protected $em;
+	protected $lessonRepo;
 
 	public $testLesson = [
 		"time" => "2012-01-01 22:22:22",
@@ -19,7 +20,6 @@ class LessonControllerTest extends WebTestCase {
 		"note" => "poznamecka",	
 	];
 	protected $testCourse;
-	
 	
 	protected function createTestLesson($data) {
         	$tmp = new Lesson();
@@ -29,26 +29,40 @@ class LessonControllerTest extends WebTestCase {
 		$tmp->setCourseRef($this->testCourse);
 		return $tmp;
 	}
-	
+
+
+
+
+
+
 	protected function setUp() {
-		$this->client = static::createClient();
-		$this->em = static::$kernel->getContainer()->get("doctrine")->getManager();
+		parent::setUp();
+		if(!$this->client) { $this->client = static::createClient(); }
+		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
+		
 		$this->lessonRepo = $this->em->getRepository("StagBundle:Lesson");
 		
 		$tmp = new CourseControllerTest();
-		$tmp->setUp();	
 		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
 		$this->em->persist($this->testCourse);
 		$this->em->flush();
 	}
-	
 	protected function tearDown() {
+		parent::tearDown();
+		
 		$courseRepo = $this->em->getRepository("StagBundle:Course");
 		$this->em->remove($courseRepo->findOneById($this->testCourse->getId()));
 		$this->em->flush();
 	}
-    
+
+
+
+
+
+
 	public function testList() {
+		$this->logIn();
+		
         	$crawler = $this->client->request('GET', '/lesson/list');
 	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Lessons")')->count());
 	}
@@ -56,6 +70,8 @@ class LessonControllerTest extends WebTestCase {
 
 
 	public function testAddAction() {
+		$this->logIn();		
+		
 		$this->testLesson["note"] = $this->testLesson["note"]." add ".mt_rand();
 						
 		$crawler = $this->client->request("GET", "/lesson/add");
@@ -78,10 +94,14 @@ class LessonControllerTest extends WebTestCase {
     	}
 
 
+
     	public function testEditAction() {
+		$this->logIn();    		
+    		
 		$this->testLesson["note"] = $this->testLesson["note"]." edit ".mt_rand();
 		$lesson = $this->createTestLesson($this->testLesson);
 		$this->em->persist($lesson);
+		$this->em->persist($lesson->getCourseRef());
 		$this->em->flush();
 		
 		$crawler = $this->client->request("GET", "/lesson/edit/{$lesson->getId()}");
@@ -104,10 +124,14 @@ class LessonControllerTest extends WebTestCase {
     	}
 
 
+
 	public function testDeleteAction() {
+		$this->logIn();
+		
 		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
 		$lesson = $this->createTestLesson($this->testLesson);
 		$this->em->persist($lesson);
+		$this->em->persist($lesson->getCourseRef());
 		$this->em->flush();
     		
 		$crawler = $this->client->request("GET", "/lesson/delete/{$lesson->getID()}");
@@ -118,8 +142,19 @@ class LessonControllerTest extends WebTestCase {
 		$lesson = $this->lessonRepo->findOneByNote($this->testLesson["note"]);
 		$this->assertNull($lesson);
 	}
-	
-	
+
+
+
+
+
+
+	public function testCalendarAction() {
+		$crawler = $this->client->request("GET", "/lesson/calendar");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+	}
+
+
+
 	public function testEventsAction() {
 		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
 		$lesson = $this->createTestLesson($this->testLesson);
