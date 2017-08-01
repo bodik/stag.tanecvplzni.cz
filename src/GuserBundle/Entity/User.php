@@ -164,17 +164,17 @@ class User implements AdvancedUserInterface, \Serializable {
 
 	static function generatePassword($length = 40) {
 		$alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".CryptPasswordEncoder::SPECIAL_CHARS;
-		$alphabet_max = strlen($chars) - 1;
+		$alphabet_max = strlen($alphabet) - 1;
 		$encoder = new CryptPasswordEncoder();
 		$ret = "";
 
 		while( $encoder->isPasswordStrength("dummy", $ret) != CryptPasswordEncoder::PASSWORD_RET_OK ) {
 			$ret = "";
-			for ($i=0; $i < $length; $i++) {
-				$ret .= $chars[random_int(0, $alphabet_max)];
+			for ($i = 0; $i < $length; $i++) {
+				$ret .= $alphabet[random_int(0, $alphabet_max)];
 			}
-			return $ret;
 		}
+		return $ret;
 	}
 
 

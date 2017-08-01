@@ -248,7 +248,6 @@ class UserControllerTest extends GuserWebTestCase {
 
 		# test change really works 
 		$this->testAdmin["password"] = $tmp;
-		dump($this->testAdmin["password"]);
 		$this->logIn();
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("User change password")')->count());
