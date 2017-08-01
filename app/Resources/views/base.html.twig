@@ -33,14 +33,18 @@
 			<ul class="nav navbar-nav">
 				<li><a href="{{ path('lesson_calendar') }}">Rozvrh</a></li>
 				<li><a href="{{ path('participant_application') }}">Přihláška</a></li>
-				<li><a href="{{ path('course_list') }}">Courses</a></li>
-				<li><a href="{{ path('lesson_list') }}">Lessons</a></li>
-				<li><a href="{{ path('participant_list') }}">Participants</a></li>
-				<li><a href="{{ path('user_list') }}">Users</a></li>
 			</ul>
 
 			{% if is_granted('IS_AUTHENTICATED_FULLY') %}
 			<ul class="nav navbar-nav navbar-right">
+		
+				{% if is_granted('ROLE_ADMIN') %}
+				<li><a href="{{ path('course_list') }}">Courses</a></li>
+				<li><a href="{{ path('lesson_list') }}">Lessons</a></li>
+				<li><a href="{{ path('participant_list') }}">Participants</a></li>
+				<li><a href="{{ path('user_list') }}">Users</a></li>
+				{% endif %}
+				
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<span class="glyphicon glyphicon-user"></span> 
