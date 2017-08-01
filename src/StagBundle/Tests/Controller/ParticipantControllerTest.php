@@ -5,10 +5,11 @@ namespace StagBundle\Tests\Controller;
 use StagBundle\Entity\Course;
 use StagBundle\Entity\Participant;
 use StagBundle\Tests\Controller\CourseControllerTest;
+use StagBundle\Tests\StagWebTestCase;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class ParticipantControllerTest extends WebTestCase {
+class ParticipantControllerTest extends StagWebTestCase {
 	protected $client;
 	protected $em;
 	protected $participantRepo;
@@ -40,7 +41,7 @@ class ParticipantControllerTest extends WebTestCase {
 		$tmp->setReference($data["reference"]);
 		$tmp->setNote($data["note"]);
 		$tmp->setPaid($data["paid"]);
-		$tmp->setCourseRef($this->testCourse);
+		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
 		return $tmp;
 	}
 
@@ -55,6 +56,7 @@ class ParticipantControllerTest extends WebTestCase {
 		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
 		
 		$this->participantRepo = $this->em->getRepository("StagBundle:Participant");
+		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 		
 		$tmp = new CourseControllerTest();
 		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
@@ -133,7 +135,7 @@ class ParticipantControllerTest extends WebTestCase {
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
-		//$this->em->refresh($participant); //must refresh on change without em        	
+		$this->em->refresh($participant); //must refresh on change without em        	
         	
 		# check general attributes change
 		$participant = $this->participantRepo->findOneById($participant->getID());

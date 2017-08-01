@@ -26,7 +26,7 @@ class LessonControllerTest extends StagWebTestCase {
         	$tmp->setTime(new \DateTime($data["time"]));
         	$tmp->setLength($data["length"]);
 		$tmp->setNote($data["note"]);
-		$tmp->setCourseRef($this->testCourse);
+		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
 		return $tmp;
 	}
 
@@ -41,6 +41,7 @@ class LessonControllerTest extends StagWebTestCase {
 		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
 		
 		$this->lessonRepo = $this->em->getRepository("StagBundle:Lesson");
+		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 		
 		$tmp = new CourseControllerTest();
 		$this->testCourse = $tmp->createTestCourse($tmp->testCourse);
@@ -101,7 +102,6 @@ class LessonControllerTest extends StagWebTestCase {
 		$this->testLesson["note"] = $this->testLesson["note"]." edit ".mt_rand();
 		$lesson = $this->createTestLesson($this->testLesson);
 		$this->em->persist($lesson);
-		$this->em->persist($lesson->getCourseRef());
 		$this->em->flush();
 		
 		$crawler = $this->client->request("GET", "/lesson/edit/{$lesson->getId()}");
@@ -131,7 +131,6 @@ class LessonControllerTest extends StagWebTestCase {
 		$this->testLesson["note"] = $this->testLesson["note"]." delete ".mt_rand();
 		$lesson = $this->createTestLesson($this->testLesson);
 		$this->em->persist($lesson);
-		$this->em->persist($lesson->getCourseRef());
 		$this->em->flush();
     		
 		$crawler = $this->client->request("GET", "/lesson/delete/{$lesson->getID()}");
