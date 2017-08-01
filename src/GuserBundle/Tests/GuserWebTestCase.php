@@ -25,7 +25,7 @@ class GuserWebTestCase extends WebTestCase {
 
 
 
-	public function setUp() {
+	protected function setUp() {
 		$this->client = static::createClient();
 		$this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
 		$this->userRepo = $this->em->getRepository('GuserBundle:User');
@@ -47,7 +47,7 @@ class GuserWebTestCase extends WebTestCase {
 	
 	
 	
-	public function tearDown() {
+	protected function tearDown() {
 		// cleanup user for performing the tests
 		$tmp = $this->userRepo->findOneByUsername($this->testAdmin["username"]);
 		if($tmp) {
@@ -58,7 +58,7 @@ class GuserWebTestCase extends WebTestCase {
 	
 	
 	
-	public function logIn() {
+	protected function logIn() {
 		// login as user performing the tests
 		$crawler = $this->client->request('GET', '/login');
 		$form = $crawler->filter('button[type="submit"]')->form([
