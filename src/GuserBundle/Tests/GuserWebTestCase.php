@@ -12,10 +12,6 @@ class GuserWebTestCase extends WebTestCase {
 	protected $em;
 	protected $userRepo;
 	
-	#protected $autotestAdminUsername = "autotestadmin";
-	#protected $autotestAdminEmail = "autotestadmin@localhost";
-	#protected $autotestAdminPassword;
-	#protected $autotestAdminRoles = ["ROLE_ADMIN"];
 	protected $testAdmin = [
 		"username" => "autotestadmin",
 		"email" => "autotestadmin@localhost",
@@ -23,10 +19,12 @@ class GuserWebTestCase extends WebTestCase {
 		"active" => true,
 		"roles" => ["ROLE_ADMIN"],
 	];
-	
-	
-	
-	
+
+
+
+
+
+
 	public function setUp() {
 		$this->client = static::createClient();
 		$this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
@@ -47,6 +45,8 @@ class GuserWebTestCase extends WebTestCase {
 		$this->em->flush();
 	}
 	
+	
+	
 	public function tearDown() {
 		// cleanup user for performing the tests
 		$tmp = $this->userRepo->findOneByUsername($this->testAdmin["username"]);
@@ -58,7 +58,7 @@ class GuserWebTestCase extends WebTestCase {
 	
 	
 	
-	protected function logIn() {
+	public function logIn() {
 		// login as user performing the tests
 		$crawler = $this->client->request('GET', '/login');
 		$form = $crawler->filter('button[type="submit"]')->form([
