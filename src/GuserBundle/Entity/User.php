@@ -162,9 +162,19 @@ class User implements AdvancedUserInterface, \Serializable {
 	// used primarily by self, encoder cannot be injected from security component as it's above
 	public function getPasswordEncoder() { return new CryptPasswordEncoder(); }
 
-	static function generatePassword() {
-		$tmp = CryptPasswordEncoder::SPECIAL_CHARS[ rand(0,strlen(CryptPasswordEncoder::SPECIAL_CHARS)-1)];
-		return hash('sha256', random_bytes(100)) . $tmp;
+	static function generatePassword($length = 40) {
+		$alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".CryptPasswordEncoder::SPECIAL_CHARS;
+		$alphabet_max = strlen($chars) - 1;
+		$encoder = new CryptPasswordEncoder();
+		$ret = "";
+
+		while( $encoder->isPasswordStrength("dummy", $ret) != CryptPasswordEncoder::PASSWORD_RET_OK ) {
+			$ret = "";
+			for ($i=0; $i < $length; $i++) {
+				$ret .= $chars[random_int(0, $alphabet_max)];
+			}
+			return $ret;
+		}
 	}
 
 

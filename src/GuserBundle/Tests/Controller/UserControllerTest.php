@@ -193,7 +193,7 @@ class UserControllerTest extends GuserWebTestCase {
 		# not match
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->autotestAdminPassword,
+			"change_password[current_password]" => $this->testAdmin["password"],
 			"change_password[new_password1]" => "anything1",
 			"change_password[new_password2]" => "anything2",
 		]);
@@ -203,7 +203,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = str_repeat("a", CryptPasswordEncoder::PASSWORD_MIN_LENGTH - 1);
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->autotestAdminPassword,
+			"change_password[current_password]" => $this->testAdmin["password"],
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -215,7 +215,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = str_repeat("a", CryptPasswordEncoder::PASSWORD_MIN_LENGTH);
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->autotestAdminPassword,
+			"change_password[current_password]" => $this->testAdmin["password"],
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -226,9 +226,9 @@ class UserControllerTest extends GuserWebTestCase {
 		# includes
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->autotestAdminPassword,
-			"change_password[new_password1]" => $this->autotestAdminUsername."ABC.123",
-			"change_password[new_password2]" => $this->autotestAdminUsername."ABC.123",
+			"change_password[current_password]" => $this->testAdmin["password"],
+			"change_password[new_password1]" => $this->testAdmin["username"]."ABC.123",
+			"change_password[new_password2]" => $this->testAdmin["username"]."ABC.123",
 		]);
 		$this->client->submit($form);
 		$this->assertContains("must not be based on username", $this->client->getResponse()->getContent());
@@ -238,7 +238,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$tmp = User::generatePassword();
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$form = $crawler->filter('button[type="submit"]')->form([
-			"change_password[current_password]" => $this->autotestAdminPassword,
+			"change_password[current_password]" => $this->testAdmin["password"],
 			"change_password[new_password1]" => $tmp,
 			"change_password[new_password2]" => $tmp,
 		]);
@@ -247,7 +247,8 @@ class UserControllerTest extends GuserWebTestCase {
 		
 
 		# test change really works 
-		$this->autotestAdminPassword = $tmp;
+		$this->testAdmin["password"] = $tmp;
+		dump($this->testAdmin["password"]);
 		$this->logIn();
 		$crawler = $this->client->request("GET", "/user/changepassword");
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("User change password")')->count());

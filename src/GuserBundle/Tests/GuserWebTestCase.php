@@ -12,38 +12,45 @@ class GuserWebTestCase extends WebTestCase {
 	protected $em;
 	protected $userRepo;
 	
-	protected $autotestAdminUsername = "autotestadmin";
-	protected $autotestAdminEmail = "autotestadmin@localhost";
-	protected $autotestAdminPassword;
-	protected $autotestAdminRoles = ["ROLE_ADMIN"];
+	#protected $autotestAdminUsername = "autotestadmin";
+	#protected $autotestAdminEmail = "autotestadmin@localhost";
+	#protected $autotestAdminPassword;
+	#protected $autotestAdminRoles = ["ROLE_ADMIN"];
+	protected $testAdmin = [
+		"username" => "autotestadmin",
+		"email" => "autotestadmin@localhost",
+		"password" => null,
+		"active" => true,
+		"roles" => ["ROLE_ADMIN"],
+	];
 	
 	
 	
 	
-	protected function setUp() {
+	public function setUp() {
 		$this->client = static::createClient();
 		$this->em = static::$kernel->getContainer()->get('doctrine')->getManager();
 		$this->userRepo = $this->em->getRepository('GuserBundle:User');
 
 		// create user for performing the tests
-		$tmp = $this->userRepo->findOneByUsername($this->autotestAdminUsername);
+		$tmp = $this->userRepo->findOneByUsername($this->testAdmin["username"]);
 		if(empty($tmp)) {				
 			$tmp = new User();
-			$tmp->setUsername($this->autotestAdminUsername);
-			$tmp->setEmail($this->autotestAdminEmail);
-			$tmp->setActive(true);
-			$tmp->setRoles($this->autotestAdminRoles);		
+			$tmp->setUsername($this->testAdmin["username"]);
+			$tmp->setEmail($this->testAdmin["email"]);
+			$tmp->setActive($this->testAdmin["active"]);
+			$tmp->setRoles($this->testAdmin["roles"]);		
 		}	
-		$this->autotestAdminPassword = User::generatePassword();
-		$tmp->setPassword($this->autotestAdminPassword);
+		$this->testAdmin["password"] = User::generatePassword();
+		$tmp->setPassword($this->testAdmin["password"]);
 		$this->em->persist($tmp);
 		$this->em->flush();
 	}
 	
-	protected function tearDown() {
+	public function tearDown() {
 		// cleanup user for performing the tests
-		$tmp = $this->userRepo->findOneByUsername($this->autotestAdminUsername);
-		if(!empty($tmp)) {
+		$tmp = $this->userRepo->findOneByUsername($this->testAdmin["username"]);
+		if($tmp) {
 			$this->em->remove($tmp);
 			$this->em->flush();
 		}
@@ -55,8 +62,8 @@ class GuserWebTestCase extends WebTestCase {
 		// login as user performing the tests
 		$crawler = $this->client->request('GET', '/login');
 		$form = $crawler->filter('button[type="submit"]')->form([
-			'_username' => $this->autotestAdminUsername,
-			'_password' => $this->autotestAdminPassword,
+			'_username' => $this->testAdmin["username"],
+			'_password' => $this->testAdmin["password"],
 		]);
 		$this->client->submit($form);
 		$this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
