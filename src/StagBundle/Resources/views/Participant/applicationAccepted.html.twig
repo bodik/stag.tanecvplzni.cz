@@ -15,6 +15,7 @@
 		<table class="table">
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
 		<tr><td>Kurz</td><td>{{participant.courseRef.name}}</td></tr>
+		<tr><td>Cena</td><td>{% if (participant.paired) %}{{participant.courseRef.pricePair}}{% else %}{{participant.courseRef.priceSingle}}{% endif %},-</td></tr>
 		</table>
 	</div>
 </div>

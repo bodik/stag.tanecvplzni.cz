@@ -144,7 +144,7 @@ class ParticipantController extends Controller {
 		$message->setTo($participant->getEmail());
 
 		$text = $participant->getCourseRef()->getApplEmailText();
-		$text .= "\n\nReferenční číslo přihlášky: {$participant->getId()}";
+		$text .= $this->renderView("StagBundle:Participant:applicationAcceptedEmailFooter.html.twig", ["participant" => $participant]);
 		$message->setBody($text, "text/plain");
 
 		$this->get("mailer")->send($message);
