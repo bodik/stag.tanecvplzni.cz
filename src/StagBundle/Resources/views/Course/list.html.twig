@@ -32,7 +32,7 @@
                 	<td>{{ course.id }}</td>
 			<td>{{ course.name }}</td>
 			<td>{{ course.level }}</td>
-			<td>{{ course.description }}</td>
+			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.teacher }}</td>
 			<td>{{ course.place }}</td>
 			<td>{{ course.capacity }}</td>
@@ -44,9 +44,10 @@
 			<td>{{ course.lessons|length }}</td>
 			<td>{{ course.participants|length }}</td>
 			<td>
-				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>
 				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>				
 				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
+				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>				
 				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
 			</td>
 		</tr>
