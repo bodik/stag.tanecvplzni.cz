@@ -51,7 +51,7 @@ class UserControllerTest extends GuserWebTestCase {
 		$this->logIn();
 
 		$testUser = $this->createTestUser();
-		$testUser->setUsername($testUser->getUsername()." add ".mt_rand());
+		$testUser->setUsername($testUser->getUsername()."_add_".mt_rand());
 		$testUser->setEmail("add_".mt_rand()."_".$testUser->getEmail());
 		$tmpPassword = User::generatePassword();
 
@@ -86,7 +86,7 @@ class UserControllerTest extends GuserWebTestCase {
 
 		# create a test user
 		$testUser = $this->createTestUser();
-		$testUser->setUsername($testUser->getUsername()." edit ".mt_rand());
+		$testUser->setUsername($testUser->getUsername()."_edit_".mt_rand());
 		$testUser->setEmail("edit_".mt_rand()."_".$testUser->getEmail());
 		$tmpPassword = User::generatePassword();
 		$this->em->persist($testUser);
@@ -130,7 +130,7 @@ class UserControllerTest extends GuserWebTestCase {
 		
 		# create a test user
 		$testUser = $this->createTestUser();
-		$testUser->setUsername($testUser->getUsername()." delete ".mt_rand());
+		$testUser->setUsername($testUser->getUsername()."_delete_".mt_rand());
 		$testUser->setEmail("delete_".mt_rand()."_".$testUser->getEmail());
 		$this->em->persist($testUser);
 		$this->em->flush();
@@ -255,7 +255,7 @@ class UserControllerTest extends GuserWebTestCase {
 
 		# create a test user
 		$testUser = $this->createTestUser();
-		$testUser->setUsername($testUser->getUsername()." lostpassword ".mt_rand());
+		$testUser->setUsername($testUser->getUsername()."_lostpassword_".mt_rand());
 		$testUser->setEmail("lostpassword_".mt_rand()."_".$testUser->getEmail());
 		$this->em->persist($testUser);
 		$this->em->flush();

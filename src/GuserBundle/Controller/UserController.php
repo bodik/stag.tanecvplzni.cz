@@ -10,6 +10,7 @@ use GuserBundle\Form\SetPasswordType;
 use GuserBundle\Form\ChangePasswordType;
 use GuserBundle\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -19,9 +20,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
 class UserController extends Controller {
+	private $log;
 	private $em;
 
-	public function __construct(EntityManagerInterface $em) {
+	public function __construct(LoggerInterface $log, EntityManagerInterface $em) {
+		$this->log = $log;
 		$this->em = $em;
 	}
 	
@@ -53,7 +56,10 @@ class UserController extends Controller {
 			$user = $form->getData();
 			$this->em->persist($user);
 			$this->em->flush();
-
+			/* security audit */
+			list($username, $remote_addr) = $this->_getAuthenticationInfo();
+			$this->log->info("GUSER USER ADD {$user->getUsername()} from $username $remote_addr");
+			
 			$this->addFlash("success","User {$user->getUsername()} was created");
 			return $this->redirectToRoute("user_list");
 		}
@@ -76,6 +82,9 @@ class UserController extends Controller {
 			
 			$user = $form->getData();
 			$this->em->flush();
+			/* security audit */
+			list($username, $remote_addr) = $this->_getAuthenticationInfo();
+			$this->log->info("GUSER USER EDIT {$user->getUsername()} from $username $remote_addr");
 
 			$this->addFlash("success","User {$user->getUsername()} was saved");
             		return $this->redirectToRoute("user_list");
@@ -99,8 +108,12 @@ class UserController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			if ($user) {
+				
 				$this->em->remove($user);
 				$this->em->flush();
+				/* security audit */
+				list($username, $remote_addr) = $this->_getAuthenticationInfo();
+				$this->log->info("GUSER USER DELETE {$user->getUsername()} from $username $remote_addr");
 
 				$this->addFlash("success","User {$user->getUsername()} was deleted");
 			} else {
@@ -163,6 +176,9 @@ class UserController extends Controller {
 					$user->setPassword($new_password2);
 					$this->em->persist($user);
 					$this->em->flush();
+					/* security audit */
+					list($username, $remote_addr) = $this->_getAuthenticationInfo();
+					$this->log->info("GUSER USER CHANGEPASSWORD {$user->getUsername()} from $username $remote_addr");
 					
 					$this->_sendPasswordChangedEmail($user);
 					$this->addFlash("success","Password changed.");
@@ -177,7 +193,7 @@ class UserController extends Controller {
 	
 	
 	
-	public function _sendPasswordChangedEmail($user){
+	public function _sendPasswordChangedEmail($user) {
 		# send email
 		$message = (new \Swift_Message("{$this->container->getParameter('guser.appname')} password changed"));
 		$message->setFrom($this->container->getParameter("guser.mailer.from"));
@@ -215,7 +231,13 @@ class UserController extends Controller {
 				$data = $form->getData();
 				$user = $this->em->getRepository("GuserBundle:User")->findOneByEmail($data["email"]);
 				
-				if ($user) { $this->_sendLostPasswordEmail($user); }
+				if ($user) {
+						$this->_sendLostPasswordEmail($user);
+						/* security audit */
+						list($username, $remote_addr) = $this->_getAuthenticationInfo();
+						$this->log->info("GUSER USER LOSTPASSWORD {$user->getUsername()} from $username $remote_addr");
+
+				}
 				sleep(rand(1,5)); # anti information gathering time gap
 				
 				$this->addFlash("info","Lost password reset information was sent on registered email.");
@@ -237,7 +259,10 @@ class UserController extends Controller {
 					$user->setLostPasswordTokenExpiration(null);
 					$this->em->persist($user);
 					$this->em->flush();
-					
+					/* security audit */
+					list($username, $remote_addr) = $this->_getAuthenticationInfo();
+					$this->log->info("GUSER USER LOSTPASSWORDCHANGE {$user->getUsername()} from $username $remote_addr");
+
 					return $this->redirectToRoute("user_lostpassword");
 				}
 				return $this->render("GuserBundle:User:setpassword.html.twig", ["form" => $form->createView()]);
@@ -280,6 +305,7 @@ class UserController extends Controller {
 
 
 
+
 	/**
          * only used to render loginform
 	 *
@@ -297,10 +323,22 @@ class UserController extends Controller {
 			"error" => $error,
 		]);
 	}
+
 	/**
 	 * @Route("/logout", name="logout")
 	 */
     	public function logoutAction() {
         	return $this->redirectToRoute("/");
+	}
+	
+	public function _getAuthenticationInfo() {
+		$tmp = $this->container->get('security.token_storage')->getToken()->getUser();
+		if(is_object($tmp)) { 
+			$username = $tmp->getUsername(); 
+		} else {
+			$username = $tmp;
+		}
+		$remote_addr = $this->container->get('request_stack')->getCurrentRequest()->getClientIp();
+		return [$username, $remote_addr];
 	}
 }

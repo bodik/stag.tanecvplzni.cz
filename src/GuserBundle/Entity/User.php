@@ -5,6 +5,7 @@ namespace GuserBundle\Entity;
 use GuserBundle\CryptPasswordEncoder;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -25,6 +26,7 @@ class User implements AdvancedUserInterface, \Serializable {
 
 	/**
 	 * @ORM\Column(name="username", type="string", length=255, unique=true)
+	 * @Assert\Regex("/^[a-z0-9_]+$/")
 	 */
 	private $username;
 
