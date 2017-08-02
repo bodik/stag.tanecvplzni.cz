@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="GuserBundle\Repository\UserRepository") 
  * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="users")
+ * @ORM\Table(name="user")
  */
 class User implements AdvancedUserInterface, \Serializable {
 	const ALL_ROLES = ["ROLE_OPERATOR", "ROLE_ADMIN"];
