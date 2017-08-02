@@ -176,6 +176,21 @@ class CourseControllerTest extends StagWebTestCase {
 		$this->em->remove($testCourse);
 		$this->em->flush();
 	}
+	
+	public function testGridAction() {
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." grid ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+		    		
+    		
+		$crawler = $this->client->request("GET", "/course/grid");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$this->assertGreaterThan(0, $crawler->filter('h3:contains("'.$testCourse->getName().'")')->count());
+		
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
 }
 
 ?>

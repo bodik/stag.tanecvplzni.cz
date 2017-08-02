@@ -8,4 +8,8 @@ ENCODED_PASSWORD=$(php bin/console security:encode-password --empty-salt --no-in
 mysql -NBe "insert into users (username,email,password,created,modified,active,roles) values ('$USERNAME', '$EMAIL', '$ENCODED_PASSWORD', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" stagtvp
 echo "INFO: password generated for $USERNAME $PASSWORD"
 
+mysql -NBe "insert into users (username,email,password,created,modified,active,roles) values ('janakucerova', 'jana.kucerova@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" stagtvp
+mysql -NBe "insert into users (username,email,password,created,modified,active,roles) values ('pavelsherin', 'pavlo.sherin@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" stagtvp
+mysql -NBe "insert into users (username,email,password,created,modified,active,roles) values ('martinmareska', 'martin.mareska@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" stagtvp
+
 

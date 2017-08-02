@@ -11,6 +11,7 @@
 		<tr>
 			<th>id</th>
 			<th>name</th>
+			<th>level</th>
 			<th>description</th>
 			<th>teacher</th>
 			<th>place</th>
@@ -19,6 +20,7 @@
 			<th>priceSingle</th>
 			<th>pricePair</th>
 			<th>color</th>
+			<th>applEmailText</th>
 			<th>No. lessons</th>
 			<th>No. pariticpantsf</th>
 			<th></th>
@@ -29,6 +31,7 @@
                 <tr>
                 	<td>{{ course.id }}</td>
 			<td>{{ course.name }}</td>
+			<td>{{ course.level }}</td>
 			<td>{{ course.description }}</td>
 			<td>{{ course.teacher }}</td>
 			<td>{{ course.place }}</td>
@@ -37,6 +40,7 @@
 			<td>{{ course.priceSingle }}</td>
 			<td>{{ course.pricePair }}</td>
 			<td>{{ course.color }}</td>
+			<td>{{ course.applEmailText[0:20] }}...</td>
 			<td>{{ course.lessons|length }}</td>
 			<td>{{ course.participants|length }}</td>
 			<td>

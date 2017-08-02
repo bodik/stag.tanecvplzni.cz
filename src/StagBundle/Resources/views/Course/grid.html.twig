@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StagBundle:Course:grid{% endblock %}
+
+{% block body %}
+<div class="courses container">
+	<div class="row text-center">
+	<h1>Otevřené kurzy</h1>
+	</div>
+
+	{% for row in courses|batch(3) %}
+	<div class="container row row-centered">
+        	{% for course in row %}
+        	<a href="{{ path('course_show', {'id': course.id}) }}">
+            	<div class="col-md-3 col-centered well" style="background-color: {{course.color}};">
+            		<h3>{{course.name}}</h3>
+			<div>{{course.level}}</div>
+			<div><strong>{{course.teacher}}</strong></div>
+            		<div>{{course.place}}</div>
+			<div><strong>{{course.timespan}}</strong></div>
+            	</div>
+            	</a>
+        	{% endfor %}
+   	 </div>
+	{% endfor %}
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<!-- http://www.minimit.com/demos/bootstrap-3-responsive-centered-columns -->
+<style>
+.row-centered { text-align:center; }
+.col-centered {
+	display:inline-block;
+	float:none;
+	text-align:left;
+	margin-right: 1em;
+	margin-left: 1em;
+	border-radius: 10px;
+}
+a { color: inherit; }
+h3 { 
+	margin-top: 0;
+}
+</style>
+{% endblock %}

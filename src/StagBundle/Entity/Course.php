@@ -23,6 +23,11 @@ class Course {
 	 * @ORM\Column(name="name", type="string", length=255)
 	 */
 	private $name;
+	
+	/**
+	 * @ORM\Column(name="level", type="string", length=255, nullable=true)
+	 */
+	private $level;
 
 	/**
 	 * @ORM\Column(name="description", type="string", length=65535, nullable=true)
@@ -65,6 +70,11 @@ class Course {
 	private $color;
 	
 	/**
+	 * @ORM\Column(name="appl_email_text", type="string", length=65535)
+	 */
+	private $applEmailText;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
@@ -78,7 +88,8 @@ class Course {
 
 	public function __construct() {
 		$this->pair = false;
-		$this->color = '#cccccc';
+		$this->color = "#cccccc";
+		$this->applEmailText = "Vaše přihláška byla prijata\nstag.tanecvplzni.cz";
 		$this->lessons = new ArrayCollection();
 		$this->participants = new ArrayCollection();
 	}
@@ -87,6 +98,9 @@ class Course {
 
 	public function getName() { return $this->name; }
 	public function setName($name) { $this->name = $name; return $this; }
+	
+	public function getLevel() { return $this->level; }
+	public function setLevel($level) { $this->level = $level; return $this; }
 
 	public function getDescription() { return $this->description; }
 	public function setDescription($description) { $this->description = $description; return $this; }
@@ -111,6 +125,9 @@ class Course {
 		
 	public function getColor() { return $this->color; }
 	public function setColor($color) { $this->color = $color; return $this; }
+	
+	public function getApplEmailText() { return $this->applEmailText; }
+	public function setApplEmailText($applEmailText) { $this->applEmailText = $applEmailText; return $this; }
 	
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }

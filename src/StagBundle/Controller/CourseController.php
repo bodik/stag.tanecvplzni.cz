@@ -109,6 +109,9 @@ class CourseController extends Controller {
 
 
 
+
+
+
 	/**
 	 * @Route("/course/price/{id}/{paired}", name="course_price")
 	 */
@@ -124,12 +127,54 @@ class CourseController extends Controller {
 	}
 	
 	
+	
 	/**
 	 * @Route("/course/show/{id}", name="course_show")
 	 */
 	public function showAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+	}
+
+
+
+	/**
+	 * @Route("/course/grid", name="course_grid")
+	 */
+	public function gridAction(Request $request) {
+		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+		
+		
+
+		$data = [];
+		foreach ($courses as $tmp) {
+			$oneLesson = $tmp->getLessons()[0];
+			if($oneLesson) {			
+				$currentLocale = setlocale(LC_TIME, 0);
+				setlocale(LC_TIME, 'cs_CZ.UTF-8');
+				$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
+				setlocale(LC_TIME, $currentLocale);
+			
+				$begin = $oneLesson->getTime()->format('H:i');
+				$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
+				$timespan = "{$day} {$begin} - {$end}";
+			} else {
+				$timespan = "";
+			}
+			
+			$data[] = [
+				"id" => $tmp->getId(),
+				"name" => $tmp->getName(),
+				"level" => $tmp->getLevel(),
+				"teacher" => $tmp->getTeacher(),
+				"place" => $tmp->getPlace(),
+				"color" => $tmp->getColor(),
+				"timespan" => $timespan,
+			];
+		}		
+		
+		
+		return $this->render("StagBundle:Course:grid.html.twig", [ "courses" => $data ] );
 	}
 	
 }
