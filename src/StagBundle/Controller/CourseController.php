@@ -140,6 +140,7 @@ class CourseController extends Controller {
 
 	/**
 	 * @Route("/course/grid", name="course_grid")
+	 * @Route("/", name="default_index")
 	 */
 	public function gridAction(Request $request) {
 		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
