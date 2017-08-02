@@ -128,6 +128,7 @@ class LessonController extends Controller {
 				"start" => $tmp->getTime()->format('c'),
 				"end" => $tmp->getTime()->add(new \DateInterval("PT".$tmp->getLength()."M"))->format('c'),
 				"color" => $tmp->getCourseRef()->getColor(),
+				"place" => $tmp->getCourseRef()->getPlace(),
 				"url" => $this->generateUrl('course_show', ["id" => $tmp->getCourseRef()->getId()]),
 			];
 		}

@@ -123,6 +123,8 @@ class ParticipantController extends Controller {
 				$this->em->persist($participant);
 				$this->em->flush();
 
+				$this->_sendApplicationAcceptedEmail($participant);
+
 				$this->addFlash("success", "Vaše přihláška byla přijata");
 				return $this->render("StagBundle:Participant:applicationAccepted.html.twig", ["participant" => $participant]);
 			} else {
@@ -133,4 +135,19 @@ class ParticipantController extends Controller {
 		return $this->render("StagBundle:Participant:application.html.twig", array("form" => $form->createView(),));
 	}
 	
+	public function _sendApplicationAcceptedEmail($participant) {
+		# send email
+		$message = (new \Swift_Message("tanecvplzni.cz: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
+		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message->setTo($participant->getEmail());
+
+		$text = $participant->getCourseRef()->getApplEmailText();
+		$text .= "\n\nReferenční číslo přihlášky: {$participant->getId()}";
+		$message->setBody($text, "text/plain");
+
+		$this->get("mailer")->send($message);
+
+		return;
+
+	}
 }
