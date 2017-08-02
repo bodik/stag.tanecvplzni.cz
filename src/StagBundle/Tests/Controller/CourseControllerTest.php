@@ -142,6 +142,55 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
+	public function testScheduleAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." schedule ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+		$this->em->clear();
+
+
+		$crawler = $this->client->request("GET", "/course/schedule/{$testCourse->getID()}");
+		$form = $crawler->filter('button[type="submit"]')->form([
+            		'course_schedule[length]' => 13,
+			'course_schedule[schedule]' => "2001-01-01 01:01\n2002-02-02 02:02\n",
+            	]);
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$course = $this->courseRepo->findOneByName($testCourse->getName());
+		$this->assertNotNull($course);
+		$this->assertSame(count($course->getLessons()), 2);
+		$this->assertSame($course->getLessons()[0]->getLength(), 13);
+
+		foreach ($course->getLessons() as $tmp) { $this->em->remove($tmp); }
+		$this->em->remove($course);
+		$this->em->flush();
+	}
+	
+	
+	
+	public function testBookAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." book ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+
+		$crawler = $this->client->request("GET", "/course/book/{$testCourse->getID()}");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());		
+		$this->assertGreaterThan(0, $crawler->filter("li:contains('{$testCourse->getName()}')")->count());
+
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+
 
 
 

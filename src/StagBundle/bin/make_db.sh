@@ -15,7 +15,7 @@ COURSE_ID=$(mysql -NBe "select id from course where name='SALSA 1'" stagtvp)
 for all in "$(date --date="monday -7 days 18:00" "${FORMAT}")" "$(date --date="monday 18:00" "${FORMAT}")" "$(date --date="monday +7 days 18:00" "${FORMAT}")" "$(date --date="monday +14 days 18:00" "${FORMAT}")"; do
 	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" stagtvp
 done
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single',NULL,0,'${NOW}','${NOW}')" stagtvp
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,paytime,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 0, NULL, '${NOW}','${NOW}')" stagtvp
 
 COURSE_ID=$(mysql -NBe "select id from course where name='BACHATA 2'" stagtvp)
 for all in "$(date --date="monday -7 days 19:00" "${FORMAT}")" "$(date --date="monday 19:00" "${FORMAT}")" "$(date --date="monday +7 days 19:00" "${FORMAT}")" "$(date --date="monday +14 days 19:00" "${FORMAT}")"; do
@@ -27,6 +27,6 @@ for all in "$(date --date="monday -7 days 19:30" "${FORMAT}")" "$(date --date="m
 	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 45)" stagtvp
 done
 
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz','female','pair','alois netanecnik',1,'${NOW}','${NOW}')" stagtvp
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,paytime,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz','female','pair','alois netanecnik',1, '${NOW}', '${NOW}','${NOW}')" stagtvp
 
 

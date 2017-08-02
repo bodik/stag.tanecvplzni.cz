@@ -106,6 +106,7 @@ class ParticipantControllerTest extends StagWebTestCase {
     	}
 
 
+
     	public function testEditAction() {
 		$this->logIn();
     		
@@ -136,6 +137,8 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$this->em->flush();
     	}
 
+
+
 	public function testDeleteAction() {
 		$this->logIn();
 		
@@ -152,6 +155,33 @@ class ParticipantControllerTest extends StagWebTestCase {
 
 		$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
 		$this->assertNull($participant);
+	}
+	
+	
+	
+	public function testPaidAction() {
+		$this->logIn();
+		
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." paid ".mt_rand());
+		$this->em->persist($testParticipant);
+		$this->em->flush();
+		$this->em->clear();
+		$this->assertSame(false, $testParticipant->getPaid());
+    		
+
+		$crawler = $this->client->request("GET", "/participant/paid/{$testParticipant->getID()}");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
+		$this->assertNotNull($participant);
+		$this->assertSame(true, $participant->getPaid());
+		
+		
+		$this->em->remove($participant);
+		$this->em->flush();
 	}
 	
 	

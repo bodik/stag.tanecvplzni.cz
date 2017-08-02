@@ -73,6 +73,11 @@ class Participant {
 	private $paid;
 	
 	/**
+	 * @ORM\Column(name="paytime", type="datetime", nullable=true)
+	 */
+	private $paytime;
+	
+	/**
 	 * @ORM\ManyToOne(targetEntity="Course", inversedBy="participants")
 	 * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=false)
 	 */
@@ -125,6 +130,9 @@ class Participant {
 
 	public function getPaid() { return (bool) $this->paid; }
 	public function setPaid($paid) { $this->paid = (bool) $paid; return $this; }
+
+	public function getPaytime() { return $this->paytime; }
+	public function setPaytime($paytime) { $this->paytime = $paytime; return $this; }
 	
 	public function getCourseRef() { return $this->courseRef; }
 	public function setCourseRef($courseRef) { $this->courseRef = $courseRef; return $this; }

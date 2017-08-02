@@ -20,6 +20,7 @@
 			<th>reference</th>
 			<th>note</th>
 			<th>paid</th>
+			<th>paytime</th>
 			<th>courseRef</th>
 			<th>created</th>
 			<th>modified</th>
@@ -39,11 +40,13 @@
 			<td>{{ participant.partner }}</td>
 			<td>{{ participant.reference }}</td>
 			<td>{{ participant.note }}</td>
-			<td>{{ participant.paid }}</td>
-			<td>{{ participant.courseRef.name }}</td>
-			<td>{{ participant.created|date('c') }}</td>
-			<td>{{ participant.modified|date('c') }}</td>
+			<td><span class="glyphicon {% if participant.paid %}glyphicon-ok text-success{% else %}glyphicon-remove text-danger{% endif %}"></span></td>
+			<td>{{ participant.paytime is empty ? "" : participant.paytime|date('c')[0:10] }}</td>
+			<td><a  href="{{ path('course_book', {'id': participant.courseRef.id}) }}">{{ participant.courseRef.name }}</a></td>
+			<td>{{ participant.created|date('c')[0:10] }}</td>
+			<td>{{ participant.modified|date('c')[0:10] }}</td>
 			<td>
+				{{ render(controller("StagBundle:Participant:paid", {'id': participant.id})) }}
 				<a class="btn btn-xs btn-primary" href="{{ path('participant_edit', {'id': participant.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
 				{{ render(controller("StagBundle:Participant:delete", {'id': participant.id})) }}
 			</td>

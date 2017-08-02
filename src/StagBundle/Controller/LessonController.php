@@ -28,7 +28,7 @@ class LessonController extends Controller {
 	 */
 	public function listAction(Request $request) {
         	$lessons = $this->em->getRepository("StagBundle:Lesson")->findAll();
-		return $this->render("StagBundle:Lesson:index.html.twig", [ "lessons" => $lessons ] );
+		return $this->render("StagBundle:Lesson:list.html.twig", [ "lessons" => $lessons ] );
 	}
 
 

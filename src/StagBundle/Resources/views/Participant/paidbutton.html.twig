@@ -1,0 +1,7 @@
+{{ form_start(form, {"attr": {"style": "display:inline;"}}) }}
+
+{# templating just parts of the form does not worked, #}
+<button type="submit" class="btn btn-xs btn-info"><span class="glyphicon glyphicon-euro"></span> Paid</button>
+{% do form.paid.setRendered %}
+
+{{ form_end(form) }}

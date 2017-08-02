@@ -17,6 +17,18 @@
 			<div class="text-center">
 			<a class="btn btn-lg btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}">Přihlásit se</a>
 			</div>
+			
+			{% if is_granted('ROLE_ADMIN') %}
+			<div class="text-center hidden-print well" style="margin:1em;">
+				Admin:
+				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>				
+				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
+				<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>				
+				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>				
+				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
+			</div>
+			{% endif %}
 		</div>
 	
 		<div class="well col-md-4 pull-right">

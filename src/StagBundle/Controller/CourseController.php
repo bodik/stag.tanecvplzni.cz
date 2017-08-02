@@ -7,6 +7,8 @@ use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Course;
+use StagBundle\Entity\Lesson;
+use StagBundle\Form\CourseScheduleType;
 use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -106,7 +108,59 @@ class CourseController extends Controller {
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
 	}
+	
+	
 
+	/**
+	 * @Route("/course/schedule/{id}", name="course_schedule")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function scheduleAction(Request $request, $id) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		
+		$schedule = [];
+		foreach ($course->getLessons() as $tmp) { $schedule[] = $tmp->getTime()->format('c'); }
+		asort($schedule);
+		$form = $this->createForm(CourseScheduleType::class, ["schedule" => join("\n", $schedule)]);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			$data = $form->getData();
+			
+			$newLessons = [];
+			foreach ( explode("\n", $data["schedule"]) as $date ) {
+				$tmp = new Lesson();
+				$tmp->setLength($data["length"]);
+				$tmp->setNote($data["note"]);
+				$tmp->setTime(new \Datetime($date));
+				$newLessons[] = $tmp;
+			}
+			foreach ( $course->getLessons() as $tmp ) {
+				$this->em->remove($tmp);
+			}
+			foreach ( $newLessons as $tmp ) {
+				$tmp->setCourseRef($course);
+				$this->em->persist($tmp);
+			}
+			$this->em->flush();
+			
+			$this->addFlash("success","Course {$course->getName()} was scheduled");
+			return $this->redirectToRoute("course_book", ["id" => $course->getId()]);
+		}
+
+		return $this->render("StagBundle:Course:schedule.html.twig", ["form" => $form->createView(), "course" => $course]);
+	}
+
+
+
+	/**
+	 * @Route("/course/book/{id}", name="course_book")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function Action(Request $request, $id) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
+	}
 
 
 

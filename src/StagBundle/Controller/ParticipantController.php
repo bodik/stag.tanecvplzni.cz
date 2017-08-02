@@ -7,8 +7,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Participant;
 use StagBundle\Form\DeleteButtonType;
-use StagBundle\Form\ParticipantType;
 use StagBundle\Form\ParticipantApplicationType;
+use StagBundle\Form\ParticipantPaidButtonType;
+use StagBundle\Form\ParticipantType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,7 +30,7 @@ class ParticipantController extends Controller {
 	 */
 	public function listAction(Request $request) {
         	$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
-		return $this->render("StagBundle:Participant:index.html.twig", [ "participants" => $participants ] );
+		return $this->render("StagBundle:Participant:list.html.twig", [ "participants" => $participants ] );
 	}
 
 
@@ -93,7 +94,7 @@ class ParticipantController extends Controller {
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			if (!empty($participant)) {
+			if ($participant) {
 				$this->em->remove($participant);
 				$this->em->flush();
 
@@ -105,6 +106,39 @@ class ParticipantController extends Controller {
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
+	}
+	
+	/**
+	 * @Route("/participant/paid/{id}", name="participant_paid")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function paidAction(Request $request, $id) {
+		$participant = $this->em->getRepository("StagBundle:Participant")->find($id);
+		$form = $this->createForm(ParticipantPaidButtonType::class, $participant,
+			array("action" => $this->generateUrl("participant_paid", ["id" => $id]))
+		);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			if ($participant) {
+				if ($participant->getPaid()) {
+					$participant->setPaid(false);
+					$participant->setPaytime(null);
+				} else {
+					$participant->setPaid(true);
+					$participant->setPaytime(new \Datetime());
+				}
+				$this->em->flush();
+
+				$this->addFlash("success","Participant {$participant->getSn()} paid triggered");
+			} else {
+				$this->addFlash("error","Participant with ID {$id} does not exits");
+			}
+			
+			return $this->redirect($request->server->get('HTTP_REFERER'));
+		}
+
+		return $this->render("StagBundle:Participant:paidbutton.html.twig", ["form" => $form->createView()]);
 	}
 	
 	

@@ -2,7 +2,7 @@
 
 {% block body %}
 <div class="courses">
-	<h1>Course add</h1>
+	<h1>Course schedule {{course.name}}</h1>
 	{{ form_start(form) }}
         {{ form_widget(form) }}	
         {{ form_end(form) }}
@@ -12,5 +12,4 @@
 {% endblock %}
 
 {% block stylesheets %}
-<script src="{{ asset('bundles/stag/jscolor.min.js') }}"></script>
 {% endblock %}
