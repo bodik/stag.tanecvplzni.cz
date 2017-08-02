@@ -36,7 +36,7 @@
 			
 			<td><span class="glyphicon {% if user.active == true %}glyphicon-ok{% else %}glyphicon-remove{% endif %}"></span></td>
 			<td>{{ user.roles|join(' ') }}</td>
-			<td>{{ user.lastPasswordChange|date("c") }}</td>
+			<td>{{ user.lastPasswordChange is empty ? "" : user.lastPasswordChange|date('c') }}</td>
 			
 			<td>{{ user.lostPasswordToken[0:4] }}...</td>
 			<td>{{ user.lostPasswordTokenExpiration|date("c") }}</td>
