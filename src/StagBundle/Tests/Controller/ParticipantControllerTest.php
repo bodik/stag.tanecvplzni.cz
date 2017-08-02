@@ -173,8 +173,9 @@ class ParticipantControllerTest extends StagWebTestCase {
 			'participant_application[note]' => $testParticipant->getNote(),
 			'participant_application[tosagreed]' => 1,
         	]);
-        	$this->client->submit($form);
-        	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        	$crawler = $this->client->submit($form);
+        	$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        	$this->assertGreaterThan(0, $crawler->filter('h1:contains("Vaše přihláška byla přijata")')->count());
         	
         	$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
         	$this->assertNotNull($participant);

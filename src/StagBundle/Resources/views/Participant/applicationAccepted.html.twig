@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="participants container">
+
+	<div class="row" style="padding-bottom:2em;">
+	<h1 class="centered">Vaše přihláška byla přijata</h1>
+	</div>
+	
+	<div class="row" style="padding-bottom:2em;">
+	Na vámi zadanou emailovou adresu byla odeslána zpráva s dalšími instrukcemi pro dokončení přihlášky.
+	</div>
+		
+	<div class="row col-md-3">
+		<table class="table">
+		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
+		<tr><td>Kurz</td><td>{{participant.courseRef.name}}</td></tr>
+		</table>
+	</div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}

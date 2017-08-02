@@ -124,7 +124,7 @@ class ParticipantController extends Controller {
 				$this->em->flush();
 
 				$this->addFlash("success", "Vaše přihláška byla přijata");
-				return $this->redirectToRoute("default_index");
+				return $this->render("StagBundle:Participant:applicationAccepted.html.twig", ["participant" => $participant]);
 			} else {
 				$this->addFlash("success", "Musíte souhlasit ...");
 			}
@@ -132,5 +132,5 @@ class ParticipantController extends Controller {
 
 		return $this->render("StagBundle:Participant:application.html.twig", array("form" => $form->createView(),));
 	}
-
+	
 }
