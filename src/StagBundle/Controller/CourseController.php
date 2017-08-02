@@ -143,9 +143,6 @@ class CourseController extends Controller {
 	 */
 	public function gridAction(Request $request) {
 		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
-		
-		
-
 		$data = [];
 		foreach ($courses as $tmp) {
 			$oneLesson = $tmp->getLessons()[0];
@@ -154,7 +151,6 @@ class CourseController extends Controller {
 				setlocale(LC_TIME, 'cs_CZ.UTF-8');
 				$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
 				setlocale(LC_TIME, $currentLocale);
-			
 				$begin = $oneLesson->getTime()->format('H:i');
 				$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
 				$timespan = "{$day} {$begin} - {$end}";
@@ -172,7 +168,6 @@ class CourseController extends Controller {
 				"timespan" => $timespan,
 			];
 		}		
-		
 		
 		return $this->render("StagBundle:Course:grid.html.twig", [ "courses" => $data ] );
 	}
