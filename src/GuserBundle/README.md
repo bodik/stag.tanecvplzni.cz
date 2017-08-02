@@ -6,7 +6,6 @@ configure config parameters as needed in bundle's `config.yml`
 ```
 imports:
     - { resource: "@GuserBundle/Resources/config/services.yml" }
-    - { resource: "@GuserBundle/Resources/config/config.yml" }
 ```
 
 

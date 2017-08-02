@@ -22,10 +22,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class UserController extends Controller {
 	private $log;
 	private $em;
+	private $appName;
 
 	public function __construct(LoggerInterface $log, EntityManagerInterface $em) {
 		$this->log = $log;
 		$this->em = $em;
+		$this->appName = (array_key_exists("SERVER_NAME", $_SERVER) ? $_SERVER["SERVER_NAME"] : "localhost");
 	}
 	
 	
@@ -195,12 +197,12 @@ class UserController extends Controller {
 	
 	public function _sendPasswordChangedEmail($user) {
 		# send email
-		$message = (new \Swift_Message("{$this->container->getParameter('guser.appname')} password changed"));
-		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message = (new \Swift_Message("{$this->appName} password changed"));
+		$message->setFrom("noreply@{$this->appName}");
 		$message->setTo($user->getEmail());
 		$message->setBody(
 			$this->renderView("GuserBundle:User:passwordchangedemail.html.twig", [
-				"appname" => $this->container->getParameter("guser.appname"),
+				"appname" => $this->appName,
 				"username" => $user->getUsername(),
 				"email" => $user->getEmail(),
 				"url" => $this->generateUrl("user_lostpassword", [], UrlGeneratorInterface::ABSOLUTE_URL)
@@ -286,12 +288,12 @@ class UserController extends Controller {
 		$this->em->flush();		
 		
 		# send email
-		$message = (new \Swift_Message("{$this->container->getParameter('guser.appname')} password reset"));
-		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message = (new \Swift_Message("{$this->appName} password reset"));
+		$message->setFrom("noreply@{$this->appName}");
 		$message->setTo($user->getEmail());
 		$message->setBody(
 			$this->renderView("GuserBundle:User:lostpasswordemail.html.twig", [
-				"appname" => $this->container->getParameter("guser.appname"),
+				"appname" => $this->appName,
 				"url" => $this->generateUrl("user_lostpassword", ["token" => $user->getLostPasswordToken()], UrlGeneratorInterface::ABSOLUTE_URL)
 				]),
 			"text/plain"

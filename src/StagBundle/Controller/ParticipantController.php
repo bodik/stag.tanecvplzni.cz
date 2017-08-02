@@ -14,9 +14,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class ParticipantController extends Controller {
 	private $em;
+	private $appName;
 
 	public function __construct(EntityManagerInterface $em) {
 		$this->em = $em;
+		$this->appName = (array_key_exists("SERVER_NAME", $_SERVER) ? $_SERVER["SERVER_NAME"] : "localhost");
 	}
 
 
@@ -137,8 +139,8 @@ class ParticipantController extends Controller {
 	
 	public function _sendApplicationAcceptedEmail($participant) {
 		# send email
-		$message = (new \Swift_Message("tanecvplzni.cz: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
-		$message->setFrom($this->container->getParameter("guser.mailer.from"));
+		$message = (new \Swift_Message("{$this->appName}: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
+		$message->setFrom("info@tanecvplzni.cz");
 		$message->setTo($participant->getEmail());
 
 		$text = $participant->getCourseRef()->getApplEmailText();
