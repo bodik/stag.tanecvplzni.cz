@@ -39,8 +39,7 @@
 			<td>{{ user.lastPasswordChange is empty ? "" : user.lastPasswordChange|date('c') }}</td>
 			
 			<td>{{ user.lostPasswordToken[0:4] }}...</td>
-			<td>{{ user.lostPasswordTokenExpiration|date("c") }}</td>
-			
+			<td>{{ user.lostPasswordTokenExpiration is empty ? "" : user.lostPasswordTokenExpiration|date('c') }}</td>
 			
 			<td>{{ user.created|date("c")[0:10] }}...</td>
 			<td>{{ user.modified|date("c")[0:10] }}...</td>
