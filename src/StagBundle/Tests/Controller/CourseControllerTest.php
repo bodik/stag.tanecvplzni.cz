@@ -131,7 +131,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$this->em->flush();
 		    		
     		
-		$crawler = $this->client->request("GET", "/course/delete/{$testCourse->getID()}");
+		$crawler = $this->client->request("GET", "/course/delete/{$testCourse->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form();
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
