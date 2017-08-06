@@ -2,6 +2,7 @@
 
 namespace StagBundle\Form;
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -23,6 +24,14 @@ class CourseType extends AbstractType {
 		$builder->add('pricePair');
 		$builder->add('color', TextType::class, ["attr" => ["class" => "jscolor {hash:true, uppercase:false}"]]);
 		$builder->add('applEmailText', TextareaType::class, ["attr" => [ "rows" => 10] ]);
+
+		$builder->add('pictureRef', EntityType::class, array(
+			'class' => 'StagBundle:Blob',
+			'choice_label' => 'FileName',
+			'expanded' => false,
+			'multiple' => false
+			));		
+		
 		$builder->add('save', SubmitType::class);
 	}
 }

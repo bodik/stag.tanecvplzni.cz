@@ -7,19 +7,24 @@
 
 	<div class="row">
 	
-		<div class="col-md-6 text-justify">
-			<h1>{{course.name}}</h1>
-			
-			<div style="padding-bottom: 3em;">
+		<div class="col-md-6">
+		
+			{% if course.pictureRef %}
+			<div class="text-center padded">
+				<img style="max-height: 15em;" class="img-responsive img-rounded center-block" src="{{ path('blob_get', {'id': course.pictureRef.fileName}) }}">
+			</div>
+			{% endif %}
+
+			<div class="text-justify padded" style="padding-bottom: 3em;">
 				{{course.description}}
 			</div>
-
-			<div class="text-center">
-			<a class="btn btn-lg btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}">Přihlásit se</a>
+			
+			<div class="text-center padded">
+				<a class="btn btn-lg btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}">Přihlásit se</a>
 			</div>
 			
 			{% if is_granted('ROLE_ADMIN') %}
-			<div class="text-center hidden-print well" style="margin:1em;">
+			<div class="text-center hidden-print well">
 				Admin:
 				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>				
 				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
@@ -32,10 +37,16 @@
 		</div>
 	
 		<div class="well col-md-4 pull-right">
+			<h2 class="text-center">
+				<span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}
+			</h2>
+
 			<table class="table">
 				<tr><td><strong>Lektor</strong></td><td>{{course.teacher}}</td></tr>
 				<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
 				<tr><td><strong>Vhodný pro</strong></td><td>{% if (course.pair) %}taneční pár{% else %}jednotlivce{% endif %}</td></tr>
+				<tr><td><strong>Cena pro jednotlice</strong></td><td>{{ course.priceSingle }}</td></tr>
+				<tr><td><strong>Cena pro jednoho v páru</strong></td><td>{{ course.pricePair }}</td></tr>			
 				<tr><td><strong>Kapacita</strong></td><td>{{course.capacity}}</td></tr>
 				<tr><td><strong>Počet lekcí</strong></td><td>{{course.lessons|length}}</td></tr>
 			</table>
@@ -56,4 +67,8 @@
 {% endblock %}
 
 {% block stylesheets %}
+<style>
+.padded { margin-bottom: 3em; }
+h2 { margin-top: 0; margin-bottom: 1em; }
+</style>
 {% endblock %}

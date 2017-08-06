@@ -75,6 +75,11 @@ class Course {
 	private $applEmailText;
 	
 	/**
+	 * @ORM\ManyToOne(targetEntity="Blob")
+	 */
+	private $pictureRef;
+	
+	/**
 	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
@@ -128,6 +133,9 @@ class Course {
 	
 	public function getApplEmailText() { return $this->applEmailText; }
 	public function setApplEmailText($applEmailText) { $this->applEmailText = $applEmailText; return $this; }
+	
+	public function getPictureRef() { return $this->pictureRef; }
+	public function setPictureRef($pictureRef) { $this->pictureRef = $pictureRef; return $this; }
 	
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }

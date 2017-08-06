@@ -42,6 +42,7 @@ class CourseController extends Controller {
 	 */
 	public function addAction(Request $request) {
 		$course = new Course();
+		$blobs = $this->em->getRepository("StagBundle:Blob")->findAll();
 		$form = $this->createForm(CourseType::class, $course);
 		
 		$form->handleRequest($request);
@@ -56,7 +57,7 @@ class CourseController extends Controller {
 			return $this->redirectToRoute("course_list");
 		}
 
-		return $this->render("StagBundle:Course:addedit.html.twig", array("form" => $form->createView(),));
+		return $this->render("StagBundle:Course:addedit.html.twig", ["form" => $form->createView(), "blobs" => $blobs]);
 	}
 
 
@@ -67,7 +68,9 @@ class CourseController extends Controller {
 	 */
 	public function editAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		$blobs = $this->em->getRepository("StagBundle:Blob")->findAll();
 		$form = $this->createForm(CourseType::class, $course);
+		
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
@@ -78,7 +81,7 @@ class CourseController extends Controller {
             		return $this->redirectToRoute("course_list");
 		}
 
-		return $this->render("StagBundle:Course:addedit.html.twig", array("form" => $form->createView(),));
+		return $this->render("StagBundle:Course:addedit.html.twig", ["form" => $form->createView(), "blobs" => $blobs]);
 	}	
 	
 	
@@ -221,6 +224,7 @@ class CourseController extends Controller {
 				"place" => $tmp->getPlace(),
 				"color" => $tmp->getColor(),
 				"timespan" => $timespan,
+				"pictureRef" => $tmp->getPictureRef(),
 			];
 		}		
 		

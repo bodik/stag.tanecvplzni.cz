@@ -21,6 +21,7 @@
 			<th>pricePair</th>
 			<th>color</th>
 			<th>applEmailText</th>
+			<th>pictureRef</th>
 			<th>No. lessons</th>
 			<th>No. pariticpantsf</th>
 			<th></th>
@@ -36,11 +37,12 @@
 			<td>{{ course.teacher }}</td>
 			<td>{{ course.place }}</td>
 			<td>{{ course.capacity }}</td>
-			<td>{{ course.pair }}</td>
+			<td><span class="glyphicon {% if course.pair %}glyphicon-forward{% else %}glyphicon-play{% endif %}"></span></td>
 			<td>{{ course.priceSingle }}</td>
 			<td>{{ course.pricePair }}</td>
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
 			<td>{{ course.applEmailText[0:20] }}...</td>
+			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 100px;">{% endif %}</td>
 			<td>{{ course.lessons|length }}</td>
 			<td>{{ course.participants|length }}</td>
 			<td>
