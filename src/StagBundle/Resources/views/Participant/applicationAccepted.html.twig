@@ -14,7 +14,11 @@
 	<div class="row col-md-3">
 		<table class="table">
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
-		<tr><td>Kurz</td><td>{{participant.courseRef.name}}</td></tr>
+		<tr><td>Kurz</td><td><a href="{{ path('course_show', {'id': participant.courseRef.id})}}">{{participant.courseRef.name}}</a></td></tr>
+		<tr><td>Úroveň</td><td>{{participant.courseRef.level}}</td></tr>
+		<tr><td>Lektor</td><td>{{participant.courseRef.teacher}}</td></tr>
+		<tr><td>Místo</td><td>{{participant.courseRef.place}}</td></tr>
+		<tr><td>Typ přihlášky</td><td>{% for key, value in constant('StagBundle\\Entity\\Participant::ALL_PAIRS') %}{% if value == participant.paired %}{{ key }}{% endif %}{% endfor %}</td></tr>
 		<tr><td>Cena</td><td>{% if (participant.paired) %}{{participant.courseRef.pricePair}}{% else %}{{participant.courseRef.priceSingle}}{% endif %},-</td></tr>
 		</table>
 	</div>
