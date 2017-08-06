@@ -9,7 +9,7 @@ mysql -NBe "insert into user (username,email,password,created,modified,active,ro
 echo "INFO: password generated for $USERNAME $PASSWORD"
 
 mysql -NBe "insert into user (username,email,password,created,modified,active,roles) values ('janakucerova', 'jana.kucerova@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" $DATABASE
-mysql -NBe "insert into user (username,email,password,created,modified,active,roles) values ('pavelsherin', 'pavlo.sherin@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" $DATABASE
+mysql -NBe "insert into user (username,email,password,created,modified,active,roles) values ('pavlosherin', 'pavlo.sherin@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" $DATABASE
 mysql -NBe "insert into user (username,email,password,created,modified,active,roles) values ('martinmareska', 'martin.mareska@tanecvplzni.cz', '*', now(), now(), 1, 'ROLE_ADMIN,ROLE_OPERATOR')" $DATABASE
 
 
