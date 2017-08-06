@@ -1,7 +1,7 @@
 php bin/console doctrine:schema:drop --force
 php bin/console doctrine:schema:create
 
-export DATABASE="stagtvp"
+export DATABASE="$(cat app/config/parameters.yml | grep database_name | awk '{print $2}')"
 sh src/StagBundle/bin/make_db.sh
 sh src/GuserBundle/bin/make_db.sh
 
