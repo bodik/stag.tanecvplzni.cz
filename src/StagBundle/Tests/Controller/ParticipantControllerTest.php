@@ -19,7 +19,7 @@ class ParticipantControllerTest extends StagWebTestCase {
         	$tmp = new Participant();
         	$tmp->setSn("Tanečník");
         	$tmp->setGn("Josef");
-		$tmp->setEmail("josef.tanecnik@localhost");
+		$tmp->setEmail("josef.tanecnik@tanecvplzni.cz");
 		$tmp->setPhoneNumber("+420123456789");
 		$tmp->setGender(Participant::ALL_GENDERS["muž"]);
 		$tmp->setPaired(Participant::ALL_PAIRS["v páru"]);
@@ -119,7 +119,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 		
 		$crawler = $this->client->request("GET", "/participant/edit/{$testParticipant->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
-            		'participant[email]' => "edited email",
+            		'participant[email]' => "edited_email@tanecvplzni.cz",
 			'participant[gender]' => Participant::ALL_GENDERS["žena"],
            		'participant[paid]' => true,
             	]);
@@ -129,7 +129,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 		# check general attributes change
 		$participant = $this->participantRepo->findOneById($testParticipant->getId());
         	$this->assertNotNull($participant);
-        	$this->assertSame("edited email", $participant->getEmail());
+        	$this->assertSame("edited_email@tanecvplzni.cz", $participant->getEmail());
 		$this->assertSame(Participant::ALL_GENDERS["žena"], $participant->getGender());
 		$this->assertSame(true, $participant->getPaid());
 		

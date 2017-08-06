@@ -3,6 +3,7 @@
 namespace StagBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Course
@@ -34,6 +35,7 @@ class Participant {
 
 	/**
 	 * @ORM\Column(name="email", type="string", length=255)
+	 * @Assert\Email(message = "Hodnota '{{ value }}' není spravně zapsaná adresa.", checkMX=true)
 	 */
 	private $email;
 
