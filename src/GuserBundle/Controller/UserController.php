@@ -190,7 +190,7 @@ class UserController extends Controller {
 			$this->addFlash("error","New passwords does not match. Password not changed.");
 		}
 		
-		return;
+		return $passwordStrength;
 	}
 	
 	
@@ -256,19 +256,21 @@ class UserController extends Controller {
 				$form->handleRequest($request);
 				if ($form->isSubmitted() && $form->isValid()) {
 					$data = $form->getData(); 
-					$this->_changePassword($user, $data["new_password1"], $data["new_password2"]);
-					$user->setLostPasswordToken(null);
-					$user->setLostPasswordTokenExpiration(null);
-					$this->em->persist($user);
-					$this->em->flush();
-					/* security audit */
-					list($username, $remote_addr) = $this->_getAuthenticationInfo();
-					$this->log->info("GUSER USER LOSTPASSWORDCHANGE {$user->getUsername()} from $username $remote_addr");
-
-					return $this->redirectToRoute("user_lostpassword");
+					$ret = $this->_changePassword($user, $data["new_password1"], $data["new_password2"]);
+					if ( $ret == CryptPasswordEncoder::PASSWORD_RET_OK) {
+						$user->setLostPasswordToken(null);
+						$user->setLostPasswordTokenExpiration(null);
+						$this->em->persist($user);
+						$this->em->flush();
+						/* security audit */
+						list($username, $remote_addr) = $this->_getAuthenticationInfo();
+						$this->log->info("GUSER USER LOSTPASSWORDCHANGE {$user->getUsername()} from $username $remote_addr");
+						return $this->redirectToRoute("login");
+					} else {
+						return $this->redirectToRoute("user_lostpassword", ["token" => $token]);
+					}
 				}
 				return $this->render("GuserBundle:User:setpassword.html.twig", ["form" => $form->createView()]);
-				
 			} else {
 				$this->addFlash("error","Invalid lost password token.");
 				return $this->redirectToRoute("user_lostpassword");
