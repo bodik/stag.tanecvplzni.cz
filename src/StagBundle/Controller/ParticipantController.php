@@ -175,6 +175,7 @@ class ParticipantController extends Controller {
 		# send email
 		$message = (new \Swift_Message("{$this->appName}: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
 		$message->setFrom("info@tanecvplzni.cz");
+		$message->setBcc("info@tanecvplzni.cz");
 		$message->setTo($participant->getEmail());
 
 		$text = $participant->getCourseRef()->getApplEmailText();
