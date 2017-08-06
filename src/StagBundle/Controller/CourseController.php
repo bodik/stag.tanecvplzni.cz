@@ -95,7 +95,7 @@ class CourseController extends Controller {
 
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
-			if (!empty($course)) {
+			if ($course) {
 				$this->em->remove($course);
 				$this->em->flush();
 
