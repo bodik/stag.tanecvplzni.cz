@@ -98,7 +98,7 @@ class ParticipantController extends Controller {
 				$this->em->remove($participant);
 				$this->em->flush();
 
-				$this->addFlash("success","Participant {$participant->getSn()} was deleted");
+				$this->addFlash("success","Participant {$participant->getSn()} was deleted from {$participant->getCourseRef()->getName()}");
 			} else {
 				$this->addFlash("error","Participant with ID {$id} does not exits");
 			}
