@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # blob data
+mkdir -p var/data-stagbundle-blob
 for all in $(ls src/StagBundle/bin/*jpg); do
 	FILENAME=$(basename $all)
 	FILENAMESUM=$(echo $FILENAME | md5sum | awk '{print $1}')
