@@ -1,4 +1,5 @@
 stag.tanecvplzni.cz
 ===================
 
-A Symfony project created on July 20, 2017, 2:45 pm.
+Sometimes it lasts in love but sometimes it hurts instead ...
+
