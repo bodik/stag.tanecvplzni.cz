@@ -174,13 +174,14 @@ class CourseController extends Controller {
 	 */
 	public function priceAction(Request $request, $id, $paired) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		if ( $paired == "single" ) {
-			return new Response("{$course->getPriceSingle()},-");
-		} elseif ($paired == "pair") {
-			return new Response("{$course->getPricePair()},-");
-		} else {
-			return new Response("error");
+		if ($course) {
+			if ( $paired == "single" ) {
+				return new Response("{$course->getPriceSingle()},-");
+			} elseif ($paired == "pair") {
+				return new Response("{$course->getPricePair()},-");
+			}
 		}
+		return new Response("error");
 	}
 	
 	
