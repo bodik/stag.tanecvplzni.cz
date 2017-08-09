@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
 class CourseController extends Controller {
 	private $em;
 
@@ -122,7 +123,7 @@ class CourseController extends Controller {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		
 		$schedule = [];
-		foreach ($course->getLessons() as $tmp) { $schedule[] = $tmp->getTime()->format('c'); }
+		foreach ($course->getLessons() as $tmp) { $schedule[] = $tmp->getTime()->format('d.m.Y H:i'); }
 		asort($schedule);
 		$form = $this->createForm(CourseScheduleType::class, ["schedule" => join("\n", $schedule)]);
 
@@ -130,28 +131,36 @@ class CourseController extends Controller {
 		if ($form->isSubmitted() && $form->isValid()) {
 			$data = $form->getData();
 			
-			$newLessons = [];
-			foreach ( explode("\n", $data["schedule"]) as $date ) {
-				$tmp = new Lesson();
-				$tmp->setLength($data["length"]);
-				$tmp->setNote($data["note"]);
-				$tmp->setTime(new \Datetime($date));
-				$newLessons[] = $tmp;
+			# validate schedule and update
+			$newLessons = $this->_parseSchedule($data);
+			if($newLessons) {
+				foreach ( $course->getLessons() as $tmp ) { $this->em->remove($tmp); }
+				foreach ( $newLessons as $tmp ) {
+					$tmp->setCourseRef($course);
+					$this->em->persist($tmp);
+				}
+				$this->em->flush();
+				$this->addFlash("success","Course {$course->getName()} was scheduled");
+				return $this->redirectToRoute("course_book", ["id" => $course->getId()]);
+			} else {
+				$this->addFlash("error","Course schedule not valid");
 			}
-			foreach ( $course->getLessons() as $tmp ) {
-				$this->em->remove($tmp);
-			}
-			foreach ( $newLessons as $tmp ) {
-				$tmp->setCourseRef($course);
-				$this->em->persist($tmp);
-			}
-			$this->em->flush();
-			
-			$this->addFlash("success","Course {$course->getName()} was scheduled");
-			return $this->redirectToRoute("course_book", ["id" => $course->getId()]);
 		}
 
 		return $this->render("StagBundle:Course:schedule.html.twig", ["form" => $form->createView(), "course" => $course]);
+	}
+
+	public function _parseSchedule($data) {
+		$newLessons = [];
+		foreach ( explode("\n", $data["schedule"]) as $date ) {
+			$tmp = new Lesson();
+			$tmp->setLength($data["length"]);
+			$tmp->setNote($data["note"]);
+			$t = \DateTime::createFromFormat('d.m.Y H:i',trim($date));
+			if($t) { $tmp->setTime($t); } else { return null; } # not so nice, but works for validation
+			$newLessons[] = $tmp;
+		}
+		return $newLessons;
 	}
 
 

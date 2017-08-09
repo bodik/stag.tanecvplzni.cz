@@ -153,7 +153,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/course/schedule/{$testCourse->getID()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course_schedule[length]' => 13,
-			'course_schedule[schedule]' => "2001-01-01 01:01\n2002-02-02 02:02\n",
+			'course_schedule[schedule]' => "01.01.2001 01:01\n02.02.2002 02:02\n",
             	]);
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
