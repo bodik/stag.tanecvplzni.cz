@@ -12,6 +12,7 @@ use StagBundle\Form\CourseScheduleType;
 use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -172,6 +173,33 @@ class CourseController extends Controller {
 	public function Action(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
+	}
+	
+	
+	/**
+	 * @Route("/course/suggest/place", name="course_suggest_place")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function suggestPlaceAction(Request $request) {
+		$data = [];
+		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+		foreach ($courses as $course) {
+			array_push($data, ["value" => $course->getPlace()]);
+		}
+		return new JsonResponse($data);
+	}
+	
+	/**
+	 * @Route("/course/suggest/lecturer", name="course_suggest_lecturer")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function suggestLecturerAction(Request $request) {
+		$data = [];
+		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+		foreach ($courses as $course) {
+			array_push($data, ["value" => $course->getLecturer()]);
+		}
+		return new JsonResponse($data);
 	}
 
 
