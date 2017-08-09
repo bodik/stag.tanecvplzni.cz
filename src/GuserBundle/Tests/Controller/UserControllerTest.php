@@ -355,6 +355,10 @@ class UserControllerTest extends GuserWebTestCase {
 		$crawler = $this->client->followRedirect();
 		$this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("Account is locked")')->count());
+
+		$user = $this->userRepo->findOneByUsername($testUser->getUsername());
+		$this->em->remove($user);
+		$this->em->flush();
 	}
 	
 }
