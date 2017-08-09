@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Course
  *
- * @ORM\Table(name="participant")
+ * @ORM\Table(name="participant", options={"auto_increment": 1024})
  * @ORM\Entity(repositoryClass="StagBundle\Repository\ParticipantRepository")
  * @ORM\HasLifecycleCallbacks
  */
