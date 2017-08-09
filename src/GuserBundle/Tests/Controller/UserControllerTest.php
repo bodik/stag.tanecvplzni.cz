@@ -257,6 +257,8 @@ class UserControllerTest extends GuserWebTestCase {
 		$testUser = $this->createTestUser();
 		$testUser->setUsername($testUser->getUsername()."_lostpassword_".mt_rand());
 		$testUser->setEmail("lostpassword_".mt_rand()."_".$testUser->getEmail());
+		$testUser->setLocked(true);
+		$testUser->setFailedLoginCount(5);
 		$this->em->persist($testUser);
 		$this->em->flush();
 		
@@ -272,12 +274,15 @@ class UserControllerTest extends GuserWebTestCase {
 		//$this->em->refresh($user); //must refresh on change without em
 		$user = $this->userRepo->findOneByUsername($testUser->getUsername());
 		$this->assertNotNull($user);
-		
+		$this->assertSame(true, $user->getLocked());
+
+
+
 		# use the reset token
 		$crawler = $this->client->request("GET", "/user/lostpassword/{$user->getLostPasswordToken()}");
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		$this->assertGreaterThan(0, $crawler->filter('html:contains("User Set Password")')->count());
-		
+
 		$tmpPassword = User::generatePassword();
 		$form = $crawler->filter('button[type="submit"]')->form([
 			"set_password[new_password1]" => $tmpPassword,
@@ -285,6 +290,12 @@ class UserControllerTest extends GuserWebTestCase {
 		]);
 		$this->client->submit($form);
 		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$this->em->refresh($user); //must refresh on change without em
+		$this->assertSame(false, $user->getLocked());
+		$this->assertSame(5, $user->getFailedLoginCount());
+
+
 		
 		# test new password
 		$crawler = $this->client->request('GET', '/login');
@@ -297,8 +308,53 @@ class UserControllerTest extends GuserWebTestCase {
 		$this->client->followRedirect();
 		$this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		
+		$this->em->refresh($user); //must refresh on change without em
+		$this->assertSame(0, $user->getFailedLoginCount());
+
+
+
 		$this->em->remove($user);
 		$this->em->flush();
+	}
+
+
+
+	public function testLockAccountAction() {
+
+		# create a test user
+		$testUser = $this->createTestUser();
+		$testUser->setUsername($testUser->getUsername()."_lockaccount_".mt_rand());
+		$testUser->setEmail("lockaccount_".mt_rand()."_".$testUser->getEmail());
+		$this->em->persist($testUser);
+		$this->em->flush();
+
+
+		for ($i = 0; $i < User::FAILED_LOGIN_LOCKOUT; $i++ ) {
+			$crawler = $this->client->request('GET', '/login');
+			$form = $crawler->filter('button[type="submit"]')->form([
+				'_username' => $testUser->getUsername(),
+				'_password' => "abc",
+			]);
+			$this->client->submit($form);
+			$this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+			$crawler = $this->client->followRedirect();
+			$this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+			$this->assertGreaterThan(0, $crawler->filter('html:contains("Invalid credentials")')->count());
+		}
+
+		$crawler = $this->client->request('GET', '/login');
+		$form = $crawler->filter('button[type="submit"]')->form([
+			'_username' => $testUser->getUsername(),
+			'_password' => "abc",
+		]);
+
+		$this->client->submit($form);
+		$this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$crawler = $this->client->followRedirect();
+		$this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$this->assertGreaterThan(0, $crawler->filter('html:contains("Account is locked")')->count());
 	}
 	
 }

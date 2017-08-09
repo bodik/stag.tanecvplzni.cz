@@ -13,15 +13,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 class UserType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('username');
-		$builder->add('email');
 		$builder->add('password', TextType::class, ["data" => "", "required" => false,]);
-		$builder->add('active', CheckboxType::class, ["required" => false,]);
 		$builder->add('roles', ChoiceType::class, array(
 			'choices' => User::ALL_ROLES,
 			'choice_label' => function ($value, $key, $index) { return $value; },
 			'multiple' => true,
 			'expanded' => true,
 		));
+
+		$builder->add('active', CheckboxType::class, ["required" => false,]);
+		$builder->add('locked', CheckboxType::class, ["required" => false,]);
+
+		$builder->add('email');
+		$builder->add('failedLoginCount');
+
 		$builder->add('save', SubmitType::class);
 	}
 }

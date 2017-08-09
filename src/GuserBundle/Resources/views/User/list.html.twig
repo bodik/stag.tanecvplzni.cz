@@ -12,14 +12,16 @@
 			
 			<th>username</th>
 			<th>password</th>
-			<th>email</th>
+			<th>roles</th>
 
 			<th>active</th>
-			<th>roles</th>
-			<th>last password change</th>
+			<th>locked</th>
 
+			<th>email</th>
+			<th>last password change</th>
 			<th>lost password token</th>
 			<th>lost password token expiration</th>
+			<th>failed login count</th>
 			
 			<th>created</th>
 			<th>modified</th>
@@ -29,18 +31,20 @@
 		{% for user in users %}
                 <tr>
                 	<td>{{ user.id }}</td>
-                	
+
 			<td>{{ user.username }}</td>
 			<td>{{ user.password[0:4] }}...</td>
-			<td>{{ user.email }}</td>
-			
-			<td><span class="glyphicon {% if user.active == true %}glyphicon-ok{% else %}glyphicon-remove{% endif %}"></span></td>
 			<td>{{ user.roles|join(' ') }}</td>
+
+			<td><span class="glyphicon {% if user.active == true %}glyphicon-ok{% else %}glyphicon-remove{% endif %}"></span></td>
+			<td>{% if user.locked == true %}<span class="glyphicon glyphicon-lock"></span>{% endif %}</td>
+
+			<td>{{ user.email }}</td>
 			<td>{{ user.lastPasswordChange is empty ? "" : user.lastPasswordChange|date('c') }}</td>
-			
 			<td>{{ user.lostPasswordToken[0:4] }}...</td>
 			<td>{{ user.lostPasswordTokenExpiration is empty ? "" : user.lostPasswordTokenExpiration|date('c') }}</td>
-			
+			<td>{{ user.failedLoginCount }}</td>
+
 			<td>{{ user.created|date("c")[0:10] }}...</td>
 			<td>{{ user.modified|date("c")[0:10] }}...</td>
 

@@ -260,7 +260,7 @@ class UserController extends Controller {
 					if ( $ret == CryptPasswordEncoder::PASSWORD_RET_OK) {
 						$user->setLostPasswordToken(null);
 						$user->setLostPasswordTokenExpiration(null);
-						$this->em->persist($user);
+						$user->setLocked(false);
 						$this->em->flush();
 						/* security audit */
 						list($username, $remote_addr) = $this->_getAuthenticationInfo();

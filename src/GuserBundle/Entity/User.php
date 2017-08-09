@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class User implements AdvancedUserInterface, \Serializable {
 	const ALL_ROLES = ["ROLE_OPERATOR", "ROLE_ADMIN"];
 	const LOST_PASSWORD_TOKEN_EXPIRATION = 3600*3;
+	const FAILED_LOGIN_LOCKOUT = 10;
 	
 	/**
 	 * @ORM\Column(name="id", type="integer")
@@ -34,11 +35,13 @@ class User implements AdvancedUserInterface, \Serializable {
 	 * @ORM\Column(name="password", type="string", length=255)
 	 */
 	private $password;
-	
+
 	/**
-	 * @ORM\Column(name="email", type="string", length=255, unique=true)
+	 * @ORM\Column(name="roles", type="simple_array", nullable=true)
 	 */
-	private $email;
+	private $roles;
+
+
 
 	/**
 	 * @ORM\Column(name="active", type="boolean")
@@ -46,28 +49,43 @@ class User implements AdvancedUserInterface, \Serializable {
 	private $active;
 
 	/**
-	 * @ORM\Column(name="roles", type="simple_array", nullable=true)
+	 * @ORM\Column(name="locked", type="boolean")
 	 */
-	private $roles;
+	private $locked;
+
+
+
+
+
+
+	/**
+	 * @ORM\Column(name="email", type="string", length=255, unique=true)
+	 */
+	private $email;
 	
 	/**
 	 * @ORM\Column(name="last_password_change", type="datetime", nullable=true)
 	 */
 	private $lastPasswordChange;
-	
-	
-	
+
 	/**
 	 * @ORM\Column(name="lost_password_token", type="string", nullable=true)
 	 */
 	private $lostPasswordToken;
+
 	/**
 	 * @ORM\Column(name="lost_password_token_expiration", type="datetime", nullable=true)
 	 */
 	private $lostPasswordTokenExpiration;
-	
-	
-	
+
+	/**
+	 * @ORM\Column(name="failed_login_count", type="integer")
+	 */
+	private $failedLoginCount;
+
+
+
+
 	/**
 	 * @ORM\Column(name="created", type="datetime")
 	 */
@@ -79,11 +97,19 @@ class User implements AdvancedUserInterface, \Serializable {
 	private $modified;
 
 
+
+
+
+
 	public function __construct() {
+		$this->password = "*";
+
+		$this->active = false;
+		$this->locked = false;
+		$this->failedLoginCount = 0;
+
 		$this->created = new \DateTime();
 		$this->modified = new \DateTime();
-		$this->password = "*";
-		$this->active = false;
 	}
 	
 	
@@ -123,8 +149,8 @@ class User implements AdvancedUserInterface, \Serializable {
 	/* AdvancedUserInterface */
 	public function isEnabled() { return (bool) $this->active; }
 	public function isAccountNonExpired() { return true; }
-	public function isAccountNonLocked() { return true; }
-	public function isCredentialsNonExpired() { return true; }	
+	public function isAccountNonLocked() { return (bool) ! $this->locked; }
+	public function isCredentialsNonExpired() { return true; }
 
 
 
@@ -148,6 +174,9 @@ class User implements AdvancedUserInterface, \Serializable {
 	public function getActive() { return (bool) $this->active; }
 	public function setActive($active) { $this->active = $active; return $this; }
 	
+	public function getLocked() { return (bool) $this->locked; }
+	public function setLocked($locked) { $this->locked = $locked; return $this; }
+
 	public function getLastPasswordChange() { return $this->lastPasswordChange; }
 	
 	public function getLostPasswordToken() { return $this->lostPasswordToken; }
@@ -155,6 +184,11 @@ class User implements AdvancedUserInterface, \Serializable {
 	
 	public function getLostPasswordTokenExpiration() { return $this->lostPasswordTokenExpiration; }
 	public function setLostPasswordTokenExpiration($lostPasswordTokenExpiration) { $this->lostPasswordTokenExpiration = $lostPasswordTokenExpiration; return $this; }
+
+	public function getFailedLoginCount() { return $this->failedLoginCount; }
+	public function setFailedLoginCount($failedLoginCount) { $this->failedLoginCount = $failedLoginCount; return $this; }
+
+
 
 
 
