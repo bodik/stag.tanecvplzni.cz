@@ -35,9 +35,9 @@ class Course {
 	private $description;
 	
 	/**
-	 * @ORM\Column(name="teacher", type="string", length=255)
+	 * @ORM\Column(name="lecturer", type="string", length=255)
 	 */
-	private $teacher;
+	private $lecturer;
 
 	/**
 	 * @ORM\Column(name="place", type="string", length=255)
@@ -110,8 +110,8 @@ class Course {
 	public function getDescription() { return $this->description; }
 	public function setDescription($description) { $this->description = $description; return $this; }
 
-	public function getTeacher() { return $this->teacher; }
-	public function setTeacher($teacher) { $this->teacher = $teacher; return $this; }
+	public function getLecturer() { return $this->lecturer; }
+	public function setLecturer($lecturer) { $this->lecturer = $lecturer; return $this; }
 
 	public function getPlace() { return $this->place; }
 	public function setPlace($place) { $this->place = $place; return $this; }

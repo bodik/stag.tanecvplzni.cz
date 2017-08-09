@@ -5,7 +5,7 @@
 
 Kurz: {{participant.CourseRef.name}}
 Úroveň: {{participant.CourseRef.level}}
-Lektor: {{participant.CourseRef.teacher}}
+Lektor: {{participant.CourseRef.lecturer}}
 Místo: {{participant.CourseRef.place}}
 Typ přihlášky: {% for key, value in constant('StagBundle\\Entity\\Participant::ALL_PAIRS') %}{% if value == participant.paired %}{{ key }}{% endif %}{% endfor %}
 

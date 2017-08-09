@@ -221,7 +221,7 @@ class CourseController extends Controller {
 				"id" => $tmp->getId(),
 				"name" => $tmp->getName(),
 				"level" => $tmp->getLevel(),
-				"teacher" => $tmp->getTeacher(),
+				"lecturer" => $tmp->getLecturer(),
 				"place" => $tmp->getPlace(),
 				"color" => $tmp->getColor(),
 				"timespan" => $timespan,

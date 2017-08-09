@@ -16,7 +16,7 @@ class CourseType extends AbstractType {
 		$builder->add('name');
 		$builder->add('level');
 		$builder->add('description', TextareaType::class, ["attr" => [ "rows" => 3] ]);
-		$builder->add('teacher');
+		$builder->add('lecturer');
 		$builder->add('place');
 		$builder->add('capacity');
 		$builder->add('pair', CheckboxType::class, ['required' => false,]);

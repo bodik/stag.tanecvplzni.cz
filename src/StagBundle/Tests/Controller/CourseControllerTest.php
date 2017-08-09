@@ -16,7 +16,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$tmp = new Course();
         	$tmp->setName("kurz test");
 		$tmp->setDescription("kurz test popis");
-		$tmp->setTeacher("ucitel");
+		$tmp->setLecturer("ucitel");
 		$tmp->setPlace("tanecni sal");
 		$tmp->setCapacity(10);
 		$tmp->setPair(true);
@@ -65,7 +65,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[name]' => $testCourse->getName(),
             		'course[description]' => $testCourse->getDescription(),
-            		'course[teacher]' => $testCourse->getTeacher(),
+            		'course[lecturer]' => $testCourse->getLecturer(),
             		'course[place]' => $testCourse->getPlace(),
             		'course[capacity]' => $testCourse->getCapacity(),
             		'course[pair]' => $testCourse->getPair(),
@@ -100,7 +100,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/course/edit/{$testCourse->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[description]' => "edited description",
-			'course[teacher]' => "edited teacher",
+			'course[lecturer]' => "edited lecturer",
            		'course[pair]' => false,
             	]);
         	$this->client->submit($form);
@@ -112,7 +112,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$course = $this->courseRepo->findOneById($testCourse->getId());
         	$this->assertNotNull($course);
         	$this->assertSame("edited description", $course->getDescription());
-        	$this->assertSame("edited teacher", $course->getTeacher());
+        	$this->assertSame("edited lecturer", $course->getLecturer());
 		$this->assertSame(false, $course->getPair());
 		
 		$this->em->remove($course);
