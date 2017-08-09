@@ -45,11 +45,6 @@ class Course {
 	private $place;
 
 	/**
-	 * @ORM\Column(name="capacity", type="integer")
-	 */
-	private $capacity;
-
-	/**
 	 * @ORM\Column(name="pair", type="boolean")
 	 */
 	private $pair;
@@ -115,9 +110,6 @@ class Course {
 
 	public function getPlace() { return $this->place; }
 	public function setPlace($place) { $this->place = $place; return $this; }
-
-	public function getCapacity() { return $this->capacity; }
-	public function setCapacity($capacity) { $this->capacity = $capacity; return $this; }
 
 	public function getPair() { return (bool) $this->pair; }
 	public function setPair($pair) { $this->pair = $pair; return $this; }
