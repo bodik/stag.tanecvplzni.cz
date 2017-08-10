@@ -189,6 +189,45 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
+	public function testSuggestPlaceAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." suggest_place ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$crawler = $this->client->request("GET", "/course/suggest/place");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$places = json_decode($this->client->getResponse()->getContent());
+		$this->assertNotNull($places);
+		$this->assertGreaterThan(0, count($places));
+
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+	public function testSuggestLecturerAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse();
+		$testCourse->setName($testCourse->getName()." suggest_lecturer ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$crawler = $this->client->request("GET", "/course/suggest/lecturer");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$lecturers = json_decode($this->client->getResponse()->getContent());
+		$this->assertNotNull($lecturers);
+		$this->assertGreaterThan(0, count($lecturers));
+
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+
 
 
 
