@@ -13,6 +13,7 @@
 
 <style>
 .thumbnails li img { width: 100px; }
+.help-block { margin-top: 0; }
 </style>
 {% endblock %}
 
@@ -21,34 +22,65 @@
 	<h1>Course add</h1>
 	{{ form_start(form) }}
 	
-	{% do form.pictureRef.setRendered %}
-	{% do form.save.setRendered %}
-	
-        {{ form_widget(form) }}
-        
+        {{ form_row(form.name) }}
+        {{ form_row(form.level) }}
+
 	<div class="form-group">
-		<label class="col-sm-2 control-label required" for="course_pictureRef">PictureRef</label>
-	
+		{{ form_label(form.description) }}
+		{{ form_errors(form.description) }}
 		<div class="col-sm-10">
-		<select id="image-picker" class="image-picker show-html" name="course[pictureRef]">
-			<option value=""></option>
-			{% for blob in blobs %}
-			<option 
-				{% if form.pictureRef.vars.value == blob.id %} selected {% endif %}
-				data-img-src="{{ path('blob_get', {'id': blob.fileName}) }}" 
-				data-img-alt="{{ blob.fileName }}"
-				value="{{ blob.id }}">{{ blob.fileName }}</option>
-			{% endfor %}
-		</select>
-		
+			{{ form_widget(form.description) }}
+			<div class="help-block">Supports markdown.</div>
 		</div>
 	</div>
-	
+
+	<div class="form-group">
+		{{ form_label(form.lecturer) }}
+		{{ form_errors(form.lecturer) }}
+		<div class="col-sm-10">
+			{{ form_widget(form.lecturer) }}
+			<div class="help-block">Supports search and select from already existing items.</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		{{ form_label(form.place) }}
+		{{ form_errors(form.place) }}
+		<div class="col-sm-10">
+			{{ form_widget(form.place) }}
+			<div class="help-block">Supports search and select from already existing items.</div>
+		</div>
+	</div>
+
+        {{ form_row(form.pair) }}
+	{{ form_row(form.priceSingle) }}
+	{{ form_row(form.pricePair) }}
+	{{ form_row(form.color) }}
+	{{ form_row(form.applEmailText) }}
+
+        {% do form.pictureRef.setRendered %}
+	<div class="form-group">
+		<label class="col-sm-2 control-label required" for="course_pictureRef">PictureRef</label>
+		<div class="col-sm-10">
+			<select id="image-picker" class="image-picker show-html" name="course[pictureRef]">
+				<option value=""></option>
+				{% for blob in blobs %}
+				<option 
+					{% if form.pictureRef.vars.value == blob.id %} selected {% endif %}
+					data-img-src="{{ path('blob_get', {'id': blob.fileName}) }}" 
+					data-img-alt="{{ blob.fileName }}"
+					value="{{ blob.id }}">{{ blob.fileName }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	{% do form.save.setRendered %}
 	<div class="form-group">
 		<div class="col-sm-2"></div>
 		<div class="col-sm-10"><button type="submit" id="course_save" name="course[save]" class="btn-default btn">Save</button></div>
 	</div>
-	
+
 	{{ form_end(form) }}
 
 </div>
