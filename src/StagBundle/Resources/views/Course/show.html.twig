@@ -42,9 +42,12 @@
 			<h2 class="text-center">
 				<span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}
 			</h2>
+			
+			{% if course.lessons is not empty%}
 			<div class="text-center padded">
 				{{ attribute(course.lessons|first, 'time')|date('d.m.Y') }} - {{ attribute(course.lessons|last, 'time')|date('d.m.Y') }}
 			</div>
+			{% endif %}
 
 			<table class="table">
 				<tr><td><strong>Úroveň</strong></td><td>{{course.level}}</td></tr>
