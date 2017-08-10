@@ -161,6 +161,7 @@ class CourseController extends Controller {
 			if($t) { $tmp->setTime($t); } else { return null; } # not so nice, but works for validation
 			$newLessons[] = $tmp;
 		}
+		asort($newLessons);
 		return $newLessons;
 	}
 

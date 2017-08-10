@@ -42,6 +42,9 @@
 			<h2 class="text-center">
 				<span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}
 			</h2>
+			<div class="text-center padded">
+				{{ attribute(course.lessons|first, 'time')|date('d.m.Y') }} - {{ attribute(course.lessons|last, 'time')|date('d.m.Y') }}
+			</div>
 
 			<table class="table">
 				<tr><td><strong>Úroveň</strong></td><td>{{course.level}}</td></tr>
@@ -70,7 +73,7 @@
 
 {% block stylesheets %}
 <style>
-.padded { margin-bottom: 3em; }
-h2 { margin-top: 0; margin-bottom: 1em; }
+.padded { margin-bottom: 1em; }
+h2 { margin-top: 0; margin-bottom: 0em; }
 </style>
 {% endblock %}
