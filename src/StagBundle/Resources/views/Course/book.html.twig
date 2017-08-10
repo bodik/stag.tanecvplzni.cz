@@ -17,6 +17,7 @@
 		<li><strong>Course:</strong> {{course.name}}</li>
 		<li><strong>Lecturer:</strong> {{course.lecturer}}</li>
 		<li><strong>Place:</strong> {{course.place}}</li>
+		<li><strong>Type:</strong> {{course.type}}</li>
 		<li><strong>No. lessons:</strong> {{course.lessons|length}}</li>
 		<li><strong>Lessons:</strong> 
 			{% for tmp in course.lessons %}{{ tmp.time|date("c") }}; {% endfor %}

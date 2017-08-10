@@ -235,19 +235,25 @@ class CourseController extends Controller {
 
 
 	/**
-	 * @Route("/course/grid", name="course_grid")
-	 * @Route("/", name="default_index")
+	 * @Route("/course/grid/{type}", name="course_grid", defaults={"type" = "all"})
+	 * @Route("/", name="default_index", defaults={"type" = "all"})
 	 */
-	public function gridAction(Request $request) {
-		$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+	public function gridAction(Request $request, $type) {
+		if($type == "all") {
+			$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+		} else {
+			$courses = $this->em->getRepository("StagBundle:Course")->findByType($type);
+		}
+		
 		$data = [];
 		foreach ($courses as $tmp) {
 			$oneLesson = $tmp->getLessons()[0];
 			if($oneLesson) {			
-				$currentLocale = setlocale(LC_TIME, 0);
+				$currentLocale = setlocale(LC_TIME, 0);	
 				setlocale(LC_TIME, 'cs_CZ.UTF-8');
 				$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
 				setlocale(LC_TIME, $currentLocale);
+				
 				$begin = $oneLesson->getTime()->format('H:i');
 				$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
 				$timespan = "{$day} {$begin} - {$end}";

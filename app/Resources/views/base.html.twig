@@ -11,6 +11,7 @@
 	
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" />
 	<link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}" />
+	<link rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}" />	
 	<script src="{{ asset('js/jquery-3.2.1.min.js') }}"></script>
 	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('js/toastr.min.js') }}"></script>
@@ -37,7 +38,8 @@
 		</div>
 		<div id="navbar" class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="{{ path('course_grid') }}">Kurzy</a></li>
+				<li><a href="{{ path('course_grid', {'type': 'regular'}) }}">Kurzy</a></li>
+				<li><a href="{{ path('course_grid', {'type': 'workshop'}) }}">Workshopy</a></li>
 				<li><a href="{{ path('lesson_calendar') }}">Rozvrh</a></li>
 				<li><a href="{{ path('participant_application') }}">Přihláška</a></li>
 			</ul>

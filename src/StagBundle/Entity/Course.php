@@ -12,6 +12,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="StagBundle\Repository\CourseRepository")
  */
 class Course {
+	const ALL_TYPES = ["regular" => "regular", "workshop" => "workshop"];
+	
+	
 	/**
 	 * @ORM\Column(name="id", type="integer")
 	 * @ORM\Id
@@ -45,10 +48,15 @@ class Course {
 	private $place;
 
 	/**
+	 * @ORM\Column(name="type", type="string", length=255)
+	 */
+	private $type;
+
+	/**
 	 * @ORM\Column(name="pair", type="boolean")
 	 */
 	private $pair;
-
+	
 	/**
 	 * @ORM\Column(name="price_single", type="integer")
 	 */
@@ -88,6 +96,7 @@ class Course {
 
 	public function __construct() {
 		$this->pair = false;
+		$this->type = self::ALL_TYPES["regular"];
 		$this->color = "#cccccc";
 		$this->applEmailText = "Vaše přihláška byla prijata\nstag.tanecvplzni.cz";
 		$this->lessons = new ArrayCollection();
@@ -110,6 +119,9 @@ class Course {
 
 	public function getPlace() { return $this->place; }
 	public function setPlace($place) { $this->place = $place; return $this; }
+
+	public function getType() { return $this->type; }
+	public function setType($type) { $this->type = $type; return $this; }
 
 	public function getPair() { return (bool) $this->pair; }
 	public function setPair($pair) { $this->pair = $pair; return $this; }

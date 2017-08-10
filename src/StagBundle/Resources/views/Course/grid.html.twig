@@ -4,10 +4,6 @@
 
 {% block body %}
 <div class="courses container">
-	<div class="row text-center" style="padding-bottom: 2em;">
-	<h1>Otevřené kurzy</h1>
-	</div>
-
 	{% for course in courses %}
 	<div class="row">
 		<a href="{{ path('course_show', {'id': course.id}) }}">

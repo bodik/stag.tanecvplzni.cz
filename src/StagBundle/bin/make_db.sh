@@ -35,9 +35,9 @@ Loni skončil na 2.místě v bachata Jack and Jill, profi třídě lektoři. Mez
 Jana Kučerová - je zakladatelkou Tance v Plzni, z. s., tančí od 9 let. Vyučuje salsu 5 let a bachatu druhým rokem. Neustále se snaží zdokonalovat u českých i zahraničních lektorů.
 V letošním roce se umístili na 4. místě v Mistrovství ČR v bachatě, vystupují na akcích po celé ČR."
 
-mysql -NBe "insert into course (name,level,description,lecturer,place,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
-mysql -NBe "insert into course (name,level,description,lecturer,place,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('BACHATA 2', 'pokrocily', '${TEXT2}', 'Mamka', 'Salon Rounda', 1, 300, 400, '#a874cc', '${TEXT1}', 1)" $DATABASE
-mysql -NBe "insert into course (name,level,description,lecturer,place,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'Lochotin', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
+mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 'regular', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
+mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('BACHATA 2', 'pokrocily', '${TEXT2}', 'Mamka', 'Salon Rounda', 'regular', 1, 300, 400, '#a874cc', '${TEXT1}', 1)" $DATABASE
+mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'workshop', 'Lochotin', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
 
 
 # lesson data

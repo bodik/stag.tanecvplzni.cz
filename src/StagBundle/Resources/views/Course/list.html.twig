@@ -15,6 +15,7 @@
 			<th>description</th>
 			<th>lecturer</th>
 			<th>place</th>
+			<th>type</th>
 			<th>pair</th>
 			<th>priceSingle</th>
 			<th>pricePair</th>
@@ -35,7 +36,26 @@
 			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.lecturer }}</td>
 			<td>{{ course.place }}</td>
-			<td><span class="glyphicon {% if course.pair %}glyphicon-forward{% else %}glyphicon-play{% endif %}"></span></td>
+			
+			<td>
+				{% if course.type == "regular" %}
+					<span class="glyphicon glyphicon-repeat" title="{{ course.type }}"></span>
+				{% elseif course.type == "workshop" %}
+					<span class="glyphicon glyphicon-record" title="{{ course.type }}"></span>
+				{% else %}
+					{{ course.type }}
+				{% endif %}
+			</td>
+			
+			<td>
+				{% if course.pair %}
+					<i class="fa fa-male" aria-hidden="true"></i>
+					<i class="fa fa-female" aria-hidden="true"></i>
+				{% else %}
+					<i class="fa fa-qq" aria-hidden="true"></i>
+				{% endif %}
+			</td>
+			
 			<td>{{ course.priceSingle }}</td>
 			<td>{{ course.pricePair }}</td>
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
