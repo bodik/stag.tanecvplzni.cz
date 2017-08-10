@@ -58,6 +58,7 @@ $(document).ready(function() {
 
 	$("#image-picker").imagepicker();
 	$("#course_place").selectize({
+		plugins: ['restore_on_backspace'],
 		create: true,
 		maxItems: 1,
 		delimiter: null,
@@ -78,6 +79,7 @@ $(document).ready(function() {
 	});
 	
 	$("#course_lecturer").selectize({
+		plugins: ['restore_on_backspace'],
 		create: true,
 		maxItems: 1,
 		delimiter: null,
