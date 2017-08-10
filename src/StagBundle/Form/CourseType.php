@@ -15,10 +15,10 @@ class CourseType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name');
 		$builder->add('level');
-		$builder->add('description', TextareaType::class, ["attr" => [ "rows" => 3] ]);
+		$builder->add('description', TextareaType::class, ["attr" => [ "rows" => 10] ]);
 		$builder->add('lecturer');
 		$builder->add('place');
-		$builder->add('pair', CheckboxType::class, ['required' => false,]);
+		$builder->add('pair', CheckboxType::class, ['required' => false]);
 		$builder->add('priceSingle');
 		$builder->add('pricePair');
 		$builder->add('color', TextType::class, ["attr" => ["class" => "jscolor {hash:true, uppercase:false}"]]);
