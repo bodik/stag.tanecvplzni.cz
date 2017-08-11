@@ -70,14 +70,14 @@ class Participant {
 	private $note;
 
 	/**
-	 * @ORM\Column(name="paid", type="boolean")
+	 * @ORM\Column(name="deposit", type="string", length=255, nullable=true)
 	 */
-	private $paid;
-	
+	private $deposit;
+
 	/**
-	 * @ORM\Column(name="paytime", type="datetime", nullable=true)
+	 * @ORM\Column(name="payment", type="string", length=255, nullable=true)
 	 */
-	private $paytime;
+	private $payment;
 	
 	/**
 	 * @ORM\ManyToOne(targetEntity="Course", inversedBy="participants")
@@ -130,11 +130,11 @@ class Participant {
 	public function getNote() { return $this->note; }
 	public function setNote($note) { $this->note = $note; return $this; }
 
-	public function getPaid() { return (bool) $this->paid; }
-	public function setPaid($paid) { $this->paid = (bool) $paid; return $this; }
+	public function getDeposit() { return $this->deposit; }
+	public function setDeposit($deposit) { $this->deposit = $deposit; return $this; }
 
-	public function getPaytime() { return $this->paytime; }
-	public function setPaytime($paytime) { $this->paytime = $paytime; return $this; }
+	public function getPayment() { return $this->payment; }
+	public function setPayment($payment) { $this->payment = $payment; return $this; }
 	
 	public function getCourseRef() { return $this->courseRef; }
 	public function setCourseRef($courseRef) { $this->courseRef = $courseRef; return $this; }

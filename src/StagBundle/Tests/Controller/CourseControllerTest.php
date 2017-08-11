@@ -18,6 +18,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$tmp->setDescription("kurz test popis");
 		$tmp->setLecturer("ucitel");
 		$tmp->setPlace("tanecni sal");
+		$tmp->setType("regular");
 		$tmp->setPair(true);
 		$tmp->setPriceSingle(130);
 		$tmp->setPricePair(200);
@@ -66,6 +67,7 @@ class CourseControllerTest extends StagWebTestCase {
             		'course[description]' => $testCourse->getDescription(),
             		'course[lecturer]' => $testCourse->getLecturer(),
             		'course[place]' => $testCourse->getPlace(),
+			'course[type]' => $testCourse->getType(),
             		'course[pair]' => $testCourse->getPair(),
             		'course[priceSingle]' => $testCourse->getPriceSingle(),
             		'course[pricePair]' => $testCourse->getPricePair(),

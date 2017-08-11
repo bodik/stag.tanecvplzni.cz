@@ -37,9 +37,10 @@ class ParticipantType extends AbstractType {
 		$builder->add('partner', TextType::class, ["required" => false,]);
 		$builder->add('reference', TextType::class, ["required" => false,]);
 		$builder->add('note', TextType::class, ["required" => false,]);
-		
-		$builder->add('paid', CheckboxType::class, ["required" => false,]);
-		$builder->add('paytime', DateTimeType::class, ["required" => false, "widget" => "single_text"]);
+
+		$builder->add('deposit', TextType::class, ["required" => false,]);
+		$builder->add('payment', TextType::class, ["required" => false,]);
+
 		$builder->add('save', SubmitType::class);
 	}
 }

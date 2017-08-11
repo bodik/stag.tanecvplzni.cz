@@ -26,7 +26,8 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$tmp->setPartner("marie.tanecnice@localhost");
 		$tmp->setReference("facebook");
 		$tmp->setNote("poznamka k prihlascce");
-		$tmp->setPaid(false);
+		$tmp->setDeposit(null);
+		$tmp->setPayment(null);
 		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
 		return $tmp;
 	}
@@ -90,8 +91,6 @@ class ParticipantControllerTest extends StagWebTestCase {
             		'participant[gender]' => $testParticipant->getGender(),
             		'participant[reference]' => $testParticipant->getReference(),
 			'participant[note]' => $testParticipant->getNote(),
-            		'participant[paid]' => $testParticipant->getPaid(),
-            		
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -99,7 +98,7 @@ class ParticipantControllerTest extends StagWebTestCase {
         	$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
         	$this->assertNotNull($participant);
         	$this->assertSame($testParticipant->getSn(), $participant->getSn());
-		$this->assertSame($testParticipant->getPaid(), $participant->getPaid());
+		$this->assertSame($testParticipant->getPhoneNumber(), $participant->getPhoneNumber());
 
 		$this->em->remove($participant);
 		$this->em->flush();
@@ -121,7 +120,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'participant[email]' => "edited_email@tanecvplzni.cz",
 			'participant[gender]' => Participant::ALL_GENDERS["žena"],
-           		'participant[paid]' => true,
+			'participant[payment]' => "prevodem",
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -131,7 +130,7 @@ class ParticipantControllerTest extends StagWebTestCase {
         	$this->assertNotNull($participant);
         	$this->assertSame("edited_email@tanecvplzni.cz", $participant->getEmail());
 		$this->assertSame(Participant::ALL_GENDERS["žena"], $participant->getGender());
-		$this->assertSame(true, $participant->getPaid());
+		$this->assertSame("prevodem", $participant->getPayment());
 		
 		$this->em->remove($participant);
 		$this->em->flush();
@@ -156,36 +155,9 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
 		$this->assertNull($participant);
 	}
-	
-	
-	
-	public function testPaidAction() {
-		$this->logIn();
-		
-		$testParticipant = $this->createTestParticipant();
-		$testParticipant->setSn($testParticipant->getSn()." paid ".mt_rand());
-		$this->em->persist($testParticipant);
-		$this->em->flush();
-		$this->em->clear();
-		$this->assertSame(false, $testParticipant->getPaid());
-    		
 
-		$crawler = $this->client->request("GET", "/participant/paid/{$testParticipant->getID()}");
-		$form = $crawler->filter('button[type="submit"]')->form();
-		$this->client->submit($form);
-		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
 
-		$participant = $this->participantRepo->findOneBySn($testParticipant->getSn());
-		$this->assertNotNull($participant);
-		$this->assertSame(true, $participant->getPaid());
-		
-		
-		$this->em->remove($participant);
-		$this->em->flush();
-	}
-	
-	
-	
+
 	public function testApplicationAction() {
 		$testParticipant = $this->createTestParticipant();
 		$testParticipant->setSn($testParticipant->getSn()." application ".mt_rand());

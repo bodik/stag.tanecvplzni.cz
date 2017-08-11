@@ -37,7 +37,7 @@ V letošním roce se umístili na 4. místě v Mistrovství ČR v bachatě, vyst
 
 mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 'regular', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
 mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('BACHATA 2', 'pokrocily', '${TEXT2}', 'Mamka', 'Salon Rounda', 'regular', 1, 300, 400, '#a874cc', '${TEXT1}', 1)" $DATABASE
-mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'workshop', 'Lochotin', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
+mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'Lochotin', 'workshop', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
 
 
 # lesson data
@@ -48,7 +48,7 @@ COURSE_ID=$(mysql -NBe "select id from course where name='SALSA 1'" $DATABASE)
 for all in "$(date --date="monday -7 days 18:00" "${FORMAT}")" "$(date --date="monday 18:00" "${FORMAT}")" "$(date --date="monday +7 days 18:00" "${FORMAT}")" "$(date --date="monday +14 days 18:00" "${FORMAT}")"; do
 	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" $DATABASE
 done
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,paytime,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 0, NULL, '${NOW}','${NOW}')" $DATABASE
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 'cash', 'cash', '${NOW}','${NOW}')" $DATABASE
 
 COURSE_ID=$(mysql -NBe "select id from course where name='BACHATA 2'" $DATABASE)
 for all in "$(date --date="monday -7 days 19:00" "${FORMAT}")" "$(date --date="monday 19:00" "${FORMAT}")" "$(date --date="monday +7 days 19:00" "${FORMAT}")" "$(date --date="monday +14 days 19:00" "${FORMAT}")"; do
@@ -62,5 +62,5 @@ done
 
 
 # participant data
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,paid,paytime,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz','female','pair','alois netanecnik',1, '${NOW}', '${NOW}','${NOW}')" $DATABASE
+mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz', 'female', 'pair', 'alois netanecnik', 'wire-transfer', NULL, '${NOW}','${NOW}')" $DATABASE
 
