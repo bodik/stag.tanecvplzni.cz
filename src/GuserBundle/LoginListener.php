@@ -54,7 +54,7 @@ class LoginListener {
 	
 	public function _sendAccountLockedEmail($user) {
 		$message = (new \Swift_Message("$this->appName: {$user->getUsername()} account locked"));
-		$message->setFrom("noreply@{$this->appName}");
+		$message->setFrom( ($this->container->getParameter('mailer_user') ? $this->container->getParameter('mailer_user') : "noreply@{$this->appName}") );
 		$message->setTo($user->getEmail());
 		$message->setBody(
 			$this->container->get('templating')->render("GuserBundle:User:accountlockedemail.html.twig", [

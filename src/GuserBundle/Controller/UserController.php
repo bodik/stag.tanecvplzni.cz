@@ -198,7 +198,7 @@ class UserController extends Controller {
 	public function _sendPasswordChangedEmail($user) {
 		# send email
 		$message = (new \Swift_Message("{$this->appName} password changed"));
-		$message->setFrom("noreply@{$this->appName}");
+		$message->setFrom( ($this->container->getParameter('mailer_user') ? $this->container->getParameter('mailer_user') : "noreply@{$this->appName}") );
 		$message->setTo($user->getEmail());
 		$message->setBody(
 			$this->renderView("GuserBundle:User:passwordchangedemail.html.twig", [
@@ -288,10 +288,10 @@ class UserController extends Controller {
 		$user->setLostPasswordTokenExpiration($expire);
 		$this->em->persist($user);
 		$this->em->flush();		
-		
+
 		# send email
 		$message = (new \Swift_Message("{$this->appName} password reset"));
-		$message->setFrom("noreply@{$this->appName}");
+		$message->setFrom( ($this->container->getParameter('mailer_user') ? $this->container->getParameter('mailer_user') : "noreply@{$this->appName}") );
 		$message->setTo($user->getEmail());
 		$message->setBody(
 			$this->renderView("GuserBundle:User:lostpasswordemail.html.twig", [

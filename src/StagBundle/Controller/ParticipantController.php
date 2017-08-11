@@ -174,10 +174,11 @@ class ParticipantController extends Controller {
 	public function _sendApplicationAcceptedEmail($participant) {
 		# send email
 		$message = (new \Swift_Message("{$this->appName}: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
-		$message->setFrom("info@tanecvplzni.cz");
+		$message->setFrom( ($this->container->getParameter('mailer_user') ? $this->container->getParameter('mailer_user') : "noreply@{$this->appName}") );
+		$message->setReplyTo("info@tanecvplzni.cz");
 		$message->setBcc("info@tanecvplzni.cz");
-		$message->setTo($participant->getEmail());
 
+		$message->setTo($participant->getEmail());
 		$text = $participant->getCourseRef()->getApplEmailText();
 		$text .= $this->renderView("StagBundle:Participant:applicationAcceptedEmailFooter.html.twig", ["participant" => $participant]);
 		$message->setBody($text, "text/plain");
