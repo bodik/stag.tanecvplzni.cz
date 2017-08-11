@@ -109,6 +109,9 @@ class ParticipantController extends Controller {
 
 
 
+
+
+
 	/**
 	 * @Route("/participant/application/{course_id}", name="participant_application", defaults={"course_id" = null})
 	 */
