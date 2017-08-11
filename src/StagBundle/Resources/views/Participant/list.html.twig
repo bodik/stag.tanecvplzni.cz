@@ -2,6 +2,9 @@
 
 {% block title %}StagBundle:Participant:index{% endblock %}
 
+{% block stylesheets %}
+{% endblock %}
+
 {% block body %}
 <div class="participants">
 	<h1>Participants</h1>
@@ -42,7 +45,7 @@
 			<td>{{ participant.note }}</td>
 			<td>{{ participant.deposit }}</td>
 			<td>{{ participant.payment }}</td>
-			<td><a  href="{{ path('course_book', {'id': participant.courseRef.id}) }}">{{ participant.courseRef.name }}</a></td>
+			<td><a href="{{ path('course_book', {'id': participant.courseRef.id}) }}">{{ participant.courseRef.name }}</a></td>
 			<td>{{ participant.created|date('c')[0:10] }}</td>
 			<td>{{ participant.modified|date('c')[0:10] }}</td>
 			<td>
@@ -54,7 +57,5 @@
 	</tbody>
 	</table>
 </div>
-{% endblock %}
 
-{% block stylesheets %}
 {% endblock %}
