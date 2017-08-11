@@ -9,6 +9,8 @@ use Symfony\Component\Debug\Debug;
 // read https://symfony.com/doc/current/setup.html#checking-symfony-application-configuration-and-setup
 // for more information
 //umask(0000);
+umask(0002);
+
 
 set_time_limit(0);
 
