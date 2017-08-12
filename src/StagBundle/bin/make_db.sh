@@ -19,20 +19,23 @@ Kurz je určen pro ty, kteří navštěvovali náš kurz bachata 3 nebo ty, kte�
 
 Bachatu milujeme a rádi bychom tuto vášeň s vámi sdíleli.
 
-Lektoři: Jakub Peca, Jana Kučerová
-Kdy - pondělí od 11.9 - 13.11.2017 od 20.30-21.30(10 lekcí po 60 minutách)
-Kde - taneční sál v indické restauraci Masala Ghar, nám. Republiky 21, Plzeň, 2.patro
-Cena: 1000,-/osobu
+### Základní informace
+
+* Lektoři: Jakub Peca, Jana Kučerová
+* Kdy - pondělí od 11.9 - 13.11.2017 od 20.30-21.30(10 lekcí po 60 minutách)
+* Kde - taneční sál v indické restauraci Masala Ghar, nám. Republiky 21, Plzeň, 2.patro
+* Cena: 1000,-/osobu
 
 Hlásit se můžete i bez partnera, do určité míry přijímáme přhlášky od samotných dam. Snažíme se, aby poměr pánů a dam byl na kurzu vyrovnaný.
 
 Přihlášky na mail: jana.kucerova@tanecvplzni.cz nebo do zpráv na FB. platba před první lekcí.
 
-O lektorovi
+### O lektorech
 
-Jakub Peca - tanci se věnuje od svých 15 let, závodně tančil standard a latinu. Později přešel k salse a bachatě, které začal před 5 lety vyučovat v Mostě pod TŠ Kamily Hlavačikové.
+**Jakub Peca** - tanci se věnuje od svých 15 let, závodně tančil standard a latinu. Později přešel k salse a bachatě, které začal před 5 lety vyučovat v Mostě pod TŠ Kamily Hlavačikové.
 Loni skončil na 2.místě v bachata Jack and Jill, profi třídě lektoři. Mezi jeho oblíbené lektory bachaty, u kterých měl možnost se učit, patří například Daniel y Desireé.
-Jana Kučerová - je zakladatelkou Tance v Plzni, z. s., tančí od 9 let. Vyučuje salsu 5 let a bachatu druhým rokem. Neustále se snaží zdokonalovat u českých i zahraničních lektorů.
+
+**Jana Kučerová** - je zakladatelkou Tance v Plzni, z. s., tančí od 9 let. Vyučuje salsu 5 let a bachatu druhým rokem. Neustále se snaží zdokonalovat u českých i zahraničních lektorů.
 V letošním roce se umístili na 4. místě v Mistrovství ČR v bachatě, vystupují na akcích po celé ČR."
 
 mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 'regular', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
