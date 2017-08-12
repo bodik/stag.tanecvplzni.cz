@@ -28,7 +28,7 @@ class CourseType extends AbstractType {
 			]
 		);
 		
-		$builder->add('pair', CheckboxType::class, ["label" => "aaa", "required" => false]);
+		$builder->add('pair', CheckboxType::class, ["required" => false]);
 		
 		$builder->add('priceSingle');
 		$builder->add('pricePair');
