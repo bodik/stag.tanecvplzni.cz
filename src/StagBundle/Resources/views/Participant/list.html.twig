@@ -47,9 +47,9 @@
 
 			<td>
 				{% if participant.deposit == "wire" %}
-					<span class="glyphicon glyphicon-retweet text-success" title="wire"></span>
+					<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
 				{% elseif participant.deposit == "cash" %}
-					<span class="glyphicon glyphicon-hand-right text-success" title="cash"></span>
+					<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
 				{% else %}
 					{{ participant.deposit }}
 				{% endif %}
@@ -65,9 +65,9 @@
 
 			<td>
 				{% if participant.payment == "wire" %}
-					<span class="glyphicon glyphicon-retweet text-success" title="wire"></span>
+					<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
 				{% elseif participant.payment == "cash" %}
-					<span class="glyphicon glyphicon-hand-right text-success" title="cash"></span>
+					<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
 				{% else %}
 					{{ participant.payment }}
 				{% endif %}
