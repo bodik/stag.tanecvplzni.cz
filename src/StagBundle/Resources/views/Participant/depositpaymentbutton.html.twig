@@ -1,0 +1,17 @@
+{{ form_start(form, {"attr": {"style": "display:inline;"}}) }}
+
+{# templating just parts of the form does not worked, #}
+
+{% do form.submit.setRendered %}
+
+{% if value is empty %}
+	<button type="submit" class="btn btn-xs btn-link" title="Remove"><span class="glyphicon glyphicon-remove"></span></button>
+{% elseif value == "wire" %}
+	<button type="submit" class="btn btn-xs btn-primary" title="Wire-transfer"><span class="glyphicon glyphicon-retweet"></span></button>
+{% elseif value == "cash" %}
+	<button type="submit" class="btn btn-xs btn-info" title="Cash"><span class="glyphicon glyphicon-hand-right"></span></button>
+{% else %}
+	<button type="submit" class="btn btn-xs btn-info" title="{{value}}"> {{value}}</button>
+{% endif %}
+
+{{ form_end(form) }}

@@ -158,6 +158,84 @@ class ParticipantControllerTest extends StagWebTestCase {
 
 
 
+	public function testDepositAction() {
+		$this->logIn();
+
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." deposit ".mt_rand());
+		$this->em->persist($testParticipant);
+		$this->em->flush();
+		$this->em->clear(); // will change entity outside em
+
+
+		$crawler = $this->client->request("GET", "/participant/deposit/{$testParticipant->getID()}/some%20deposit");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$participant = $this->participantRepo->findOneById($testParticipant->getId());
+		$this->assertNotNull($participant);
+		$this->assertSame("some deposit", $participant->getDeposit());
+
+
+		$this->em->clear(); // will change entity outside em
+		$crawler = $this->client->request("GET", "/participant/deposit/{$testParticipant->getID()}");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$participant = $this->participantRepo->findOneById($testParticipant->getId());
+		$this->assertNotNull($participant);
+		$this->assertSame(null, $participant->getDeposit());
+
+
+		$this->em->remove($participant);
+		$this->em->flush();
+	}
+
+
+
+	public function testPaymentAction() {
+		$this->logIn();
+
+		$testParticipant = $this->createTestParticipant();
+		$testParticipant->setSn($testParticipant->getSn()." payment ".mt_rand());
+		$this->em->persist($testParticipant);
+		$this->em->flush();
+		$this->em->clear(); // will change entity outside em
+
+
+		$crawler = $this->client->request("GET", "/participant/payment/{$testParticipant->getID()}/some%20other%20payment");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$participant = $this->participantRepo->findOneById($testParticipant->getId());
+		$this->assertNotNull($participant);
+		$this->assertSame("some other payment", $participant->getPayment());
+
+
+		$this->em->clear(); // will change entity outside em
+		$crawler = $this->client->request("GET", "/participant/payment/{$testParticipant->getID()}");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+
+		$participant = $this->participantRepo->findOneById($testParticipant->getId());
+		$this->assertNotNull($participant);
+		$this->assertSame(null, $participant->getPayment());
+
+
+		$this->em->remove($participant);
+		$this->em->flush();
+	}
+
+
+
+
+
+
 	public function testApplicationAction() {
 		$testParticipant = $this->createTestParticipant();
 		$testParticipant->setSn($testParticipant->getSn()." application ".mt_rand());

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Participant;
 use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\ParticipantApplicationType;
+use StagBundle\Form\ParticipantDepositPaymentButtonType;
 use StagBundle\Form\ParticipantType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,6 @@ class ParticipantController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$participant = $form->getData();
-			//$participant->setDomain($participant->getCourseRef()->getCourse());
 			
 			$this->em->persist($participant);
 			$this->em->flush();
@@ -105,6 +105,62 @@ class ParticipantController extends Controller {
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
+	}
+
+
+
+	/**
+	 * @Route("/participant/deposit/{id}/{value}", name="participant_deposit", defaults={"value" = null})
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function depositAction(Request $request, $id, $value) {
+		$participant = $this->em->getRepository("StagBundle:Participant")->find($id);
+		$form = $this->createForm(ParticipantDepositPaymentButtonType::class, $participant,
+			array("action" => $this->generateUrl("participant_deposit", ["id" => $id, "value" => $value]))
+		);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			if($participant) {
+				$participant->setDeposit($value);
+				$this->em->flush();
+
+				$this->addFlash("success", "Participant {$participant->getSn()} deposit saved.");
+			} else {
+				$this->addFlash("error","Participant with ID {$id} does not exits");
+			}
+
+			return $this->redirect($request->server->get('HTTP_REFERER'));
+		}
+
+		return $this->render("StagBundle:Participant:depositpaymentbutton.html.twig", ["form" => $form->createView(), "value" => $value]);
+	}
+
+	/**
+	 * @Route("/participant/payment/{id}/{value}", name="participant_payment", defaults={"value" = null})
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function paymentAction(Request $request, $id, $value) {
+		$participant = $this->em->getRepository("StagBundle:Participant")->find($id);
+		$form = $this->createForm(ParticipantDepositPaymentButtonType::class, $participant,
+			array("action" => $this->generateUrl("participant_payment", ["id" => $id, "value" => $value]))
+		);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			if($participant) {
+				$participant->setPayment($value);
+				$this->em->flush();
+
+				$this->addFlash("success", "Participant {$participant->getSn()} payment saved.");
+			} else {
+				$this->addFlash("error","Participant with ID {$id} does not exits");
+			}
+
+			return $this->redirect($request->server->get('HTTP_REFERER'));
+		}
+
+		return $this->render("StagBundle:Participant:depositpaymentbutton.html.twig", ["form" => $form->createView(), "value" => $value]);
 	}
 
 

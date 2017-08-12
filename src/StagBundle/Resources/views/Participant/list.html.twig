@@ -43,8 +43,44 @@
 			<td>{{ participant.partner }}</td>
 			<td>{{ participant.reference }}</td>
 			<td>{{ participant.note }}</td>
-			<td>{{ participant.deposit }}</td>
-			<td>{{ participant.payment }}</td>
+
+
+			<td>
+				{% if participant.deposit == "wire" %}
+					<span class="glyphicon glyphicon-retweet"></span>
+				{% elseif participant.deposit == "cash" %}
+					<span class="glyphicon glyphicon-hand-right"></span>
+				{% else %}
+					{{ participant.deposit }}
+				{% endif %}
+
+				{% if participant.deposit %}
+					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': null})) }}
+				{% else %}
+					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': 'wire'})) }}
+					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': 'cash'})) }}
+				{% endif %}
+			</td>
+
+
+			<td>
+				{% if participant.payment == "wire" %}
+					<span class="glyphicon glyphicon-retweet"></span>
+				{% elseif participant.payment == "cash" %}
+					<span class="glyphicon glyphicon-hand-right"></span>
+				{% else %}
+					{{ participant.payment }}
+				{% endif %}
+
+				{% if participant.payment %}
+					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': null})) }}
+				{% else %}
+					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'wire'})) }}
+					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'cash'})) }}
+				{% endif %}
+			</td>
+
+
 			<td><a href="{{ path('course_book', {'id': participant.courseRef.id}) }}">{{ participant.courseRef.name }}</a></td>
 			<td>{{ participant.created|date('c')[0:10] }}</td>
 			<td>{{ participant.modified|date('c')[0:10] }}</td>
