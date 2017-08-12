@@ -1,15 +1,41 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+	<script src="{{ asset('bundles/stag/fullcalendar/moment.min.js') }}"></script>
+
+<script>
+function generateSchedule() {
+	var schedule = [];
+
+	var numberOfLessons = prompt("Number of lessons", "10");
+	var firstLesson = prompt("Starting at date", document.getElementById("course_schedule_schedule").value.split("\n")[0]);
+	var firstDate = moment(firstLesson, 'DD.MM.YYYY HH:mm');
+
+	for( var i = 0; i < numberOfLessons; i++) {
+		schedule.push(firstDate.clone().add(i*7, 'days').format('DD.MM.YYYY HH:mm'));
+	}
+	document.getElementById("course_schedule_schedule").value = schedule.join("\n");
+}
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="courses">
 	<h1>Course schedule {{course.name}}</h1>
+
 	{{ form_start(form) }}
-        {{ form_widget(form) }}	
+
+        {{ form_row(form.length) }}
+        {{ form_row(form.note) }}
+
+        <div class="form-group">
+		<label class="col-sm-2 control-label"></label>
+		<div class="col-sm-10"><a href="javascript:generateSchedule();">Generate schedule</a></div>
+	</div>
+        {{ form_row(form.schedule) }}
+
         {{ form_end(form) }}
-	
 </div>
 
 {% endblock %}
 
-{% block stylesheets %}
-{% endblock %}
