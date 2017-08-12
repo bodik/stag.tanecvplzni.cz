@@ -23,7 +23,7 @@ Bachatu milujeme a rádi bychom tuto vášeň s vámi sdíleli.
 
 * Lektoři: Jakub Peca, Jana Kučerová
 * Kdy - pondělí od 11.9 - 13.11.2017 od 20.30-21.30(10 lekcí po 60 minutách)
-* Kde - taneční sál v indické restauraci Masala Ghar, nám. Republiky 21, Plzeň, 2.patro
+* Kde - taneční sál v indické restauraci Masala Ghar, [nám. Republiky 21, Plzeň](https://www.google.cz/search?q=n%C3%A1m.+Republiky+21%2C+Plze%C5%88), 2.patro
 * Cena: 1000,-/osobu
 
 Hlásit se můžete i bez partnera, do určité míry přijímáme přhlášky od samotných dam. Snažíme se, aby poměr pánů a dam byl na kurzu vyrovnaný.
@@ -33,7 +33,7 @@ Přihlášky na mail: jana.kucerova@tanecvplzni.cz nebo do zpráv na FB. platba 
 ### O lektorech
 
 **Jakub Peca** - tanci se věnuje od svých 15 let, závodně tančil standard a latinu. Později přešel k salse a bachatě, které začal před 5 lety vyučovat v Mostě pod TŠ Kamily Hlavačikové.
-Loni skončil na 2.místě v bachata Jack and Jill, profi třídě lektoři. Mezi jeho oblíbené lektory bachaty, u kterých měl možnost se učit, patří například Daniel y Desireé.
+Loni skončil na 2.místě v bachata Jack and Jill, profi třídě lektoři. Mezi jeho oblíbené lektory bachaty, u kterých měl možnost se učit, patří například  [Daniel y Desireé](https://www.google.cz/search?q=Daniel+y+Desire%C3%A9&tbm=vid).
 
 **Jana Kučerová** - je zakladatelkou Tance v Plzni, z. s., tančí od 9 let. Vyučuje salsu 5 let a bachatu druhým rokem. Neustále se snaží zdokonalovat u českých i zahraničních lektorů.
 V letošním roce se umístili na 4. místě v Mistrovství ČR v bachatě, vystupují na akcích po celé ČR."
