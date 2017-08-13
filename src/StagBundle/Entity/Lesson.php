@@ -3,6 +3,7 @@
 namespace StagBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Lesson
@@ -26,6 +27,7 @@ class Lesson {
 	
 	/**
 	 * @ORM\Column(name="length", type="integer")
+	 * @Assert\Range(min = 0)
 	 */
 	private $length;
 	
