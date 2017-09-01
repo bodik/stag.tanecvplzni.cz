@@ -26,7 +26,12 @@ class Course {
 	 * @ORM\Column(name="name", type="string", length=255)
 	 */
 	private $name;
-	
+
+	/**
+	 * @ORM\Column(name="type", type="string", length=255)
+	 */
+	private $type;
+
 	/**
 	 * @ORM\Column(name="level", type="string", length=255, nullable=true)
 	 */
@@ -46,11 +51,6 @@ class Course {
 	 * @ORM\Column(name="place", type="string", length=255)
 	 */
 	private $place;
-
-	/**
-	 * @ORM\Column(name="type", type="string", length=255)
-	 */
-	private $type;
 
 	/**
 	 * @ORM\Column(name="pair", type="boolean")
@@ -108,6 +108,9 @@ class Course {
 	public function getName() { return $this->name; }
 	public function setName($name) { $this->name = $name; return $this; }
 	
+	public function getType() { return $this->type; }
+	public function setType($type) { $this->type = $type; return $this; }
+
 	public function getLevel() { return $this->level; }
 	public function setLevel($level) { $this->level = $level; return $this; }
 
@@ -119,9 +122,6 @@ class Course {
 
 	public function getPlace() { return $this->place; }
 	public function setPlace($place) { $this->place = $place; return $this; }
-
-	public function getType() { return $this->type; }
-	public function setType($type) { $this->type = $type; return $this; }
 
 	public function getPair() { return (bool) $this->pair; }
 	public function setPair($pair) { $this->pair = $pair; return $this; }

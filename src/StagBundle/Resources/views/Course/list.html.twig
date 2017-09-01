@@ -2,20 +2,55 @@
 
 {% block title %}StagBundle:Course:index{% endblock %}
 
+
+{% block stylesheets %}
+<style>
+.legend div span { margin:1px; }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="courses">
-	<h1>Courses</h1>
-	<a class="btn btn-success" href="{{ path('course_add') }}">Add</a>
+
+	<div class="row legend">
+		<div class="col-xs-2"><h1>Courses <a class="btn btn-success" href="{{ path('course_add') }}">Add</a></h1></div>
+		<div class="col-xs-6 pull-right text-right">
+			Legend:
+			<span class="label label-info">
+				<span title="pair" class="glyphicon glyphicon-repeat"></span>
+				regular
+			</span>
+			<span class="label label-info">
+				<span title="pair" class="glyphicon glyphicon-record"></span>
+				workshop
+			</span>
+			<span class="label label-info">
+				<span title="pair" class="glyphicon glyphicon-glass"></span>
+				party
+			</span>
+
+			<span class="label label-primary">
+				<span title="pair" class="fa fa-male"></span>
+				<span title="pair" class="fa fa-female"></span>
+				pair
+			</span>
+			<span class="label label-primary">
+				<span title="pair" class="fa fa-qq"></span>
+				single
+			</span>
+		</div>
+	</div>
+
 	<table class="table table-responsive">
 	<thead>
 		<tr>
 			<th>id</th>
 			<th>name</th>
+			<th>type</th>
 			<th>level</th>
 			<th>description</th>
 			<th>lecturer</th>
 			<th>place</th>
-			<th>type</th>
 			<th>pair</th>
 			<th>priceSingle</th>
 			<th>pricePair</th>
@@ -32,32 +67,39 @@
                 <tr>
                 	<td>{{ course.id }}</td>
 			<td><a  href="{{ path('course_book', {'id': course.id}) }}">{{ course.name }}</a></td>
+
+			<td>
+				{% if course.type == "regular" %}
+					<span class="glyphicon glyphicon-repeat" title="{{ course.type }}"></span>
+				{% elseif course.type == "workshop" %}
+					<span class="glyphicon glyphicon-record" title="{{ course.type }}"></span>
+				{% elseif course.type == "party" %}
+					<span class="glyphicon glyphicon-glass" title="{{ course.type }}"></span>
+				{% else %}
+					{{ course.type }}
+				{% endif %}
+			</td>
+
 			<td>{{ course.level }}</td>
 			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.lecturer }}</td>
 			<td>{{ course.place }}</td>
 			
 			<td>
-				{% if course.type == "regular" %}
-					<span class="glyphicon glyphicon-repeat" title="{{ course.type }}"></span>
-				{% elseif course.type == "workshop" %}
-					<span class="glyphicon glyphicon-record" title="{{ course.type }}"></span>
-				{% else %}
-					{{ course.type }}
-				{% endif %}
-			</td>
-			
-			<td>
 				{% if course.pair %}
-					<i class="fa fa-male" aria-hidden="true"></i>
-					<i class="fa fa-female" aria-hidden="true"></i>
+					<span title="pair" class="fa fa-male"></span>
+					<span title="pair" class="fa fa-female"></span>
 				{% else %}
-					<i class="fa fa-qq" aria-hidden="true"></i>
+					<span title="single" class="fa fa-qq"></span>
 				{% endif %}
 			</td>
 			
-			<td>{{ course.priceSingle }}</td>
-			<td>{{ course.pricePair }}</td>
+			<td>{{ course.priceSingle }},-</td>
+			<td>
+				{% if not course.pair %}<del>{% endif %}
+				{{ course.pricePair }},-
+				{% if not course.pair %}</del>{% endif %}
+			</td>
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
 			<td>{{ course.applEmailText[0:20] }}...</td>
 			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 100px;">{% endif %}</td>
@@ -76,7 +118,4 @@
 	</tbody>
 	</table>
 </div>
-{% endblock %}
-
-{% block stylesheets %}
 {% endblock %}

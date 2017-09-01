@@ -52,9 +52,9 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 				<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
 				<tr><td><strong>DJ</strong></td><td>{{course.lecturer}}</td></tr>
 				<tr><td><strong>Tance</strong></td><td>{{course.level}}</td></tr>
-				<tr><td><strong>Cena pro jednotlice</strong></td><td>{{ course.priceSingle }}</td></tr>
+				<tr><td><strong>Cena pro jednotlice</strong></td><td>{{ course.priceSingle }},-</td></tr>
 				{% if course.pair %}
-					<tr><td><strong>Cena pro jednoho v páru</strong></td><td>{{ course.pricePair }}</td></tr>
+					<tr><td><strong>Cena pro jednoho v páru</strong></td><td>{{ course.pricePair }},-</td></tr>
 				{% endif %}
 			</table>
 			

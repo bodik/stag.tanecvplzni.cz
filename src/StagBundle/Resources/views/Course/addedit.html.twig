@@ -21,8 +21,10 @@
 <div class="courses">
 	<h1>Course add</h1>
 	{{ form_start(form) }}
-	
-        {{ form_row(form.name) }}
+
+	{{ form_row(form.name) }}
+	{{ form_row(form.type) }}
+
         <div class="form-group">
 		{{ form_label(form.level) }}
 		{{ form_errors(form.level) }}
@@ -59,7 +61,6 @@
 		</div>
 	</div>
 
-	{{ form_row(form.type) }}
         {{ form_row(form.pair) }}
 	{{ form_row(form.priceSingle) }}
 	{{ form_row(form.pricePair) }}

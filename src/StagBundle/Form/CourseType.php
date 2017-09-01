@@ -16,18 +16,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 class CourseType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		$builder->add('name');
-		$builder->add('level');
-		$builder->add('description', TextareaType::class, ["attr" => [ "rows" => 10] ]);
-		$builder->add('lecturer');
-		$builder->add('place');
-	
+
 		$builder->add('type', ChoiceType::class, [
 			"choices" => Course::ALL_TYPES,
 			"choice_label" => function ($value, $key, $index) { return $key; },
 			"expanded" => true,
 			]
 		);
-		
+
+		$builder->add('level');
+		$builder->add('description', TextareaType::class, ["attr" => [ "rows" => 10] ]);
+		$builder->add('lecturer');
+		$builder->add('place');
+
 		$builder->add('pair', CheckboxType::class, ["required" => false]);
 		
 		$builder->add('priceSingle');
