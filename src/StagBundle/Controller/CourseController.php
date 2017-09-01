@@ -268,6 +268,7 @@ class CourseController extends Controller {
 			$data[] = [
 				"id" => $tmp->getId(),
 				"name" => $tmp->getName(),
+				"type" => $tmp->getType(),
 				"level" => $tmp->getLevel(),
 				"lecturer" => $tmp->getLecturer(),
 				"place" => $tmp->getPlace(),
