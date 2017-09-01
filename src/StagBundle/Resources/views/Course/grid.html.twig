@@ -22,39 +22,53 @@ a:hover{ color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center; /* Optional, to align inner items horizontally inside the column */
 }
+
+.row-centered { text-align:center; }
+.col-centered {
+	display:inline-block;
+	float:none;
+	text-align:left;
+	margin-right: 1em;
+	margin-left: 1em;
+	border-radius: 10px;
+}
+
+.panel-body { padding: 0.7em; min-height: 9.5em; }
+.col-coursepicture { padding-left: 0.5em; padding-right: 0.5em;}
+
 </style>
 {% endblock %}
 
 
 {% block body %}
 <div class="courses container">
-	{% for course in courses %}
-	<div class="row">
-	
-		<a href="{{ path('course_show', {'id': course.id}) }}">
-		<div class="panel panel-default center-block" style="max-width: 500px;"><div class="panel-body">
-		
- 				<div class="row vertical-align">
- 					<div class="col-xs-4">
-						{% if course.pictureRef %}
-  						<center><img class="img-responsive img-rounded coursepicture" src="{{ path('blob_get', {'id': course.pictureRef.fileName}) }}"></center>
-  						{% endif %}
-  					</div>
-  					<div class="col-md-8">
-						<div>
-							<h4><span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}</h4>
-							{{course.level}}<br/>
-							<strong>{{course.lecturer}}</strong><br/>
-							{{course.place}}<br/>
-							<strong>{{course.timespan}}</strong>
+	{% for row in courses|batch(3) %}
+		<div class="row row-centered">
+			{% for course in row %}
+			
+				<a href="{{ path('course_show', {'id': course.id}) }}"><!-- single course box -->
+				<div class="col-md-3 col-centered panel panel-default"><div class="panel-body">
+
+					<div class="row vertical-align">
+ 						<div class="col-xs-4 col-coursepicture">
+							{% if course.pictureRef %}<center><img class="img-responsive img-rounded coursepicture" src="{{ path('blob_get', {'id': course.pictureRef.fileName}) }}"></center>{% endif %}
+  						</div>
+  						<div class="col-md-8">
+							<div>
+								<h4><span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}</h4>
+								{{course.level}}<br/>
+								<strong>{{course.lecturer}}</strong><br/>
+								{{course.place}}<br/>
+								<strong>{{course.timespan}}</strong>
+							</div>
 						</div>
 					</div>
-				</div>
+
+				</div></div>
+				</a><!-- single course box -->
 				
-  		</div></div> <!-- panel -->
-  		</a>
-  		
-	</div> <!-- single course row -->
+			{% endfor %}
+		</div>
 	{% endfor %}
 </div>
 {% endblock %}
