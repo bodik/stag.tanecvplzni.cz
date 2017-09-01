@@ -3,6 +3,7 @@
 namespace StagBundle\Form;
 
 use StagBundle\Entity\Participant;
+use StagBundle\Repository\CourseRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -18,7 +19,8 @@ class ParticipantApplicationType extends AbstractType {
 			"class" => "StagBundle:Course",
 			"choice_label" => "name",
 			"expanded" => false,
-			"multiple" => false
+			"multiple" => false,
+			'query_builder' => function(CourseRepository $er){return $er->createQueryBuilder('c')->where("c.type != 'party'");},
 			]);
 
 		$builder->add("gn", TextType::class, ["label" => "Jméno"]);

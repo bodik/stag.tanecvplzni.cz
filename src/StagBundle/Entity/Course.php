@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="StagBundle\Repository\CourseRepository")
  */
 class Course {
-	const ALL_TYPES = ["regular" => "regular", "workshop" => "workshop"];
+	const ALL_TYPES = ["regular" => "regular", "workshop" => "workshop", "party" => "party"];
 	
 	
 	/**

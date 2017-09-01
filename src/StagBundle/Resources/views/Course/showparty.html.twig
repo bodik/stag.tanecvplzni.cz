@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}StagBundle:Course:show{% endblock %}
+
+
+{% block stylesheets %}
+<style>
+h2 { margin-top: 0; margin-bottom: 0em; }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div class="courses container">
+
+	<div class="row">
+	
+		<div class="col-md-6">
+
+			{% if is_granted('ROLE_ADMIN') %}
+			<div class="text-center hidden-print well">
+				Admin:
+				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>
+				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
+				<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>
+				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>
+				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
+			</div>
+			{% endif %}
+		
+			{% if course.pictureRef %}
+			<div class="text-center padded">
+				<img style="max-height: 15em;" class="img-responsive img-rounded center-block" src="{{ path('blob_get', {'id': course.pictureRef.fileName}) }}">
+			</div>
+			{% endif %}
+
+			<div class="text-justify padded">
+				{{course.description|markdown}}
+			</div>
+
+		</div>
+		<div class="col-md-2">
+		</div>
+	
+		<div class="well col-md-4">
+			<h2 class="text-center">
+				<span class="glyphicon glyphicon-th-large" style="color: {{course.color}};"></span>&nbsp;{{course.name}}
+			</h2>
+			
+			<table class="table">
+				<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
+				<tr><td><strong>DJ</strong></td><td>{{course.lecturer}}</td></tr>
+				<tr><td><strong>Tance</strong></td><td>{{course.level}}</td></tr>
+				<tr><td><strong>Cena pro jednotlice</strong></td><td>{{ course.priceSingle }}</td></tr>
+				{% if course.pair %}
+					<tr><td><strong>Cena pro jednoho v páru</strong></td><td>{{ course.pricePair }}</td></tr>
+				{% endif %}
+			</table>
+			
+			<div class="panel panel-info">
+				<div class="panel-heading">Datum konání</div>
+				<div class="panel-body">
+					<ul class="list-group">
+					{% for lesson in course.lessons %}
+						<li class="list-group-item">{{lesson.time|date('d.m.Y H:i T')}}</li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+  		</div>
+	</div>
+</div>
+{% endblock %}

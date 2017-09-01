@@ -171,7 +171,7 @@ class CourseController extends Controller {
 	 * @Route("/course/book/{id}", name="course_book")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 */
-	public function Action(Request $request, $id) {
+	public function bookAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
 	}
@@ -228,8 +228,13 @@ class CourseController extends Controller {
 	 * @Route("/course/show/{id}", name="course_show")
 	 */
 	public function showAction(Request $request, $id) {
-		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+		$course = $this->em->getRepository("StagBundle:Course")->findOneById($id);
+		dump($course);
+		if ( $course->getType() == "party" ) {
+			return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
+		} else {
+			return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+		}
 	}
 
 

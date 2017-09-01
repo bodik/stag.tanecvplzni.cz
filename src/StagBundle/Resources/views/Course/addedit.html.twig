@@ -23,7 +23,14 @@
 	{{ form_start(form) }}
 	
         {{ form_row(form.name) }}
-        {{ form_row(form.level) }}
+        <div class="form-group">
+		{{ form_label(form.level) }}
+		{{ form_errors(form.level) }}
+		<div class="col-sm-10">
+			{{ form_widget(form.level) }}
+			<div class="help-block">Fill in a dances when editing a "party".</div>
+		</div>
+	</div>
 
 	<div class="form-group">
 		{{ form_label(form.description) }}
@@ -39,7 +46,7 @@
 		{{ form_errors(form.lecturer) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.lecturer) }}
-			<div class="help-block">Supports search and select from already existing items.</div>
+			<div class="help-block">Supports search and select from already existing items. Fill in a DJs when editing a "party".</div>
 		</div>
 	</div>
 
