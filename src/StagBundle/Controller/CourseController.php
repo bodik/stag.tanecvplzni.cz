@@ -229,7 +229,6 @@ class CourseController extends Controller {
 	 */
 	public function showAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->findOneById($id);
-		dump($course);
 		if ( $course->getType() == "party" ) {
 			return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
 		} else {
