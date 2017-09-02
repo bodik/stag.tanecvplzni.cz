@@ -6,7 +6,7 @@ for all in $(ls src/StagBundle/bin/*jpg); do
 	FILENAME=$(basename $all)
 	FILENAMESUM=$(echo $FILENAME | md5sum | awk '{print $1}')
 	DATAPATH="$(pwd)/var/data-stagbundle-blob/${FILENAMESUM}"
-	mysql -NBe "insert into blobx (file_name,data_path) values ('${FILENAME}', '${DATAPATH}')" $DATABASE
+	$MYSQL -NBe "insert into blobx (file_name,data_path) values ('${FILENAME}', '${DATAPATH}')" $DATABASE
 	cp $all var/data-stagbundle-blob/${FILENAMESUM}
 done
 
@@ -38,32 +38,32 @@ Loni skončil na 2.místě v bachata Jack and Jill, profi třídě lektoři. Mez
 **Jana Kučerová** - je zakladatelkou Tance v Plzni, z. s., tančí od 9 let. Vyučuje salsu 5 let a bachatu druhým rokem. Neustále se snaží zdokonalovat u českých i zahraničních lektorů.
 V letošním roce se umístili na 4. místě v Mistrovství ČR v bachatě, vystupují na akcích po celé ČR."
 
-mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 'regular', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
-mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('BACHATA 2', 'pokrocily', '${TEXT2}', 'Mamka', 'Salon Rounda', 'regular', 1, 300, 400, '#a874cc', '${TEXT1}', 1)" $DATABASE
-mysql -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'Lochotin', 'workshop', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
+$MYSQL -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('SALSA 1', 'zacatecnici', '${TEXT3}', 'Strejda', 'Masala Ghar', 'regular', 1, 100, 200, '#527dce', '${TEXT1}', 2)" $DATABASE
+$MYSQL -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('BACHATA 2', 'pokrocily', '${TEXT2}', 'Mamka', 'Salon Rounda', 'regular', 1, 300, 400, '#a874cc', '${TEXT1}', 1)" $DATABASE
+$MYSQL -NBe "insert into course (name,level,description,lecturer,place,type,pair,price_single,price_pair,color,appl_email_text,picture_ref_id) values ('WORKOUT 3', 'susinky vod klavesnic', '${TEXT2}', 'Spajdrmen', 'Lochotin', 'workshop', 0, 500, 600, '#ffac5e', '${TEXT1}', 3)" $DATABASE
 
 
 # lesson data
 FORMAT='+%Y-%m-%d %H:%M'
 NOW=$(date "${FORMAT}")
 
-COURSE_ID=$(mysql -NBe "select id from course where name='SALSA 1'" $DATABASE)
+COURSE_ID=$($MYSQL -NBe "select id from course where name='SALSA 1'" $DATABASE)
 for all in "$(date --date="monday -7 days 18:00" "${FORMAT}")" "$(date --date="monday 18:00" "${FORMAT}")" "$(date --date="monday +7 days 18:00" "${FORMAT}")" "$(date --date="monday +14 days 18:00" "${FORMAT}")"; do
-	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" $DATABASE
+	$MYSQL -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" $DATABASE
 done
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 'cash', 'cash', '${NOW}','${NOW}')" $DATABASE
+$MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 'cash', 'cash', '${NOW}','${NOW}')" $DATABASE
 
-COURSE_ID=$(mysql -NBe "select id from course where name='BACHATA 2'" $DATABASE)
+COURSE_ID=$($MYSQL -NBe "select id from course where name='BACHATA 2'" $DATABASE)
 for all in "$(date --date="monday -7 days 19:00" "${FORMAT}")" "$(date --date="monday 19:00" "${FORMAT}")" "$(date --date="monday +7 days 19:00" "${FORMAT}")" "$(date --date="monday +14 days 19:00" "${FORMAT}")"; do
-	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 60)" $DATABASE
+	$MYSQL -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 60)" $DATABASE
 done
 
-COURSE_ID=$(mysql -NBe "select id from course where name='WORKOUT 3'" $DATABASE)
+COURSE_ID=$($MYSQL -NBe "select id from course where name='WORKOUT 3'" $DATABASE)
 for all in "$(date --date="monday -7 days 19:30" "${FORMAT}")" "$(date --date="monday 19:30" "${FORMAT}")" "$(date --date="monday +7 days 19:30" "${FORMAT}")" "$(date --date="monday +14 days 19:30" "${FORMAT}")"; do
-	mysql -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 45)" $DATABASE
+	$MYSQL -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 45)" $DATABASE
 done
 
 
 # participant data
-mysql -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz', 'female', 'pair', 'alois netanecnik', 'wire-transfer', NULL, '${NOW}','${NOW}')" $DATABASE
+$MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz', 'female', 'pair', 'alois netanecnik', 'wire-transfer', NULL, '${NOW}','${NOW}')" $DATABASE
 
