@@ -38,7 +38,7 @@ class Course {
 	private $level;
 
 	/**
-	 * @ORM\Column(name="description", type="string", length=65535, nullable=true)
+	 * @ORM\Column(name="description", type="text", nullable=true)
 	 */
 	private $description;
 	
@@ -73,7 +73,7 @@ class Course {
 	private $color;
 	
 	/**
-	 * @ORM\Column(name="appl_email_text", type="string", length=65535)
+	 * @ORM\Column(name="appl_email_text", type="text")
 	 */
 	private $applEmailText;
 	
