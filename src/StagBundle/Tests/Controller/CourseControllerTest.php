@@ -19,9 +19,6 @@ class CourseControllerTest extends StagWebTestCase {
 		$tmp->setLecturer("ucitel");
 		$tmp->setPlace("tanecni sal");
 		$tmp->setType("regular");
-		$tmp->setPair(true);
-		$tmp->setPriceSingle(130);
-		$tmp->setPricePair(200);
 		$tmp->setColor("#eeffee");
 		return $tmp;
 	}
@@ -68,9 +65,6 @@ class CourseControllerTest extends StagWebTestCase {
             		'course[lecturer]' => $testCourse->getLecturer(),
             		'course[place]' => $testCourse->getPlace(),
 			'course[type]' => $testCourse->getType(),
-            		'course[pair]' => $testCourse->getPair(),
-            		'course[priceSingle]' => $testCourse->getPriceSingle(),
-            		'course[pricePair]' => $testCourse->getPricePair(),
 			'course[color]' => $testCourse->getColor()
         	]);
         	$this->client->submit($form);
@@ -79,7 +73,6 @@ class CourseControllerTest extends StagWebTestCase {
         	$course = $this->courseRepo->findOneByName($testCourse->getName());
         	$this->assertNotNull($course);
         	$this->assertSame($testCourse->getDescription(), $course->getDescription());
-		$this->assertSame($testCourse->getPair(), $course->getPair());
 
 		$this->em->remove($course);
 		$this->em->flush();
@@ -100,8 +93,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/course/edit/{$testCourse->getId()}");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[description]' => "edited description",
-			'course[lecturer]' => "edited lecturer",
-           		'course[pair]' => false,
+			'course[lecturer]' => "edited lecturer"
             	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -113,7 +105,6 @@ class CourseControllerTest extends StagWebTestCase {
         	$this->assertNotNull($course);
         	$this->assertSame("edited description", $course->getDescription());
         	$this->assertSame("edited lecturer", $course->getLecturer());
-		$this->assertSame(false, $course->getPair());
 		
 		$this->em->remove($course);
 		$this->em->flush();
@@ -231,21 +222,6 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
-
-
-	public function testPriceAction() {
-		$testCourse = $this->createTestCourse();
-		$testCourse->setName($testCourse->getName()." price ".mt_rand());
-		$this->em->persist($testCourse);
-		$this->em->flush();
-		
-				
-		$crawler = $this->client->request("GET", "/course/price/{$testCourse->getId()}/single");
-		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-		
-		$this->em->remove($testCourse);
-		$this->em->flush();
-	}
 
 
 

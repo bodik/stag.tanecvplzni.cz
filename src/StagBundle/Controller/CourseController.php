@@ -207,23 +207,7 @@ class CourseController extends Controller {
 
 
 
-	/**
-	 * @Route("/course/price/{id}/{paired}", name="course_price")
-	 */
-	public function priceAction(Request $request, $id, $paired) {
-		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		if ($course) {
-			if ( $paired == "single" ) {
-				return new Response("{$course->getPriceSingle()},-");
-			} elseif ($paired == "pair") {
-				return new Response("{$course->getPricePair()},-");
-			}
-		}
-		return new Response("error");
-	}
-	
-	
-	
+
 	/**
 	 * @Route("/course/show/{id}", name="course_show")
 	 */

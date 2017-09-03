@@ -16,11 +16,6 @@
 		<li><strong>Lecturer:</strong> {{course.lecturer}}</li>
 		<li><strong>Place:</strong> {{course.place}}</li>
 		<li><strong>Type:</strong> {{course.type}}</li>
-		<li><strong>Pair:</strong> {% if course.pair %}yes{% else %}no{% endif %}</li>
-		<li><strong>Price single:</strong> {{course.priceSingle}},-</li>
-		{% if course.pair %}
-		<li><strong>Price pair:</strong> {{course.pricePair}},-</li>
-		{% endif %}
 		<li><strong>No. lessons:</strong> {{course.lessons|length}}</li>
 		<li><strong>Lessons:</strong> 
 			{% for tmp in course.lessons %}{{ tmp.time|date("c") }}; {% endfor %}

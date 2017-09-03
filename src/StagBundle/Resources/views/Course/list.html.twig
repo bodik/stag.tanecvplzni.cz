@@ -48,9 +48,6 @@
 			<th>description</th>
 			<th>lecturer</th>
 			<th>place</th>
-			<th>pair</th>
-			<th>priceSingle</th>
-			<th>pricePair</th>
 			<th>color</th>
 			<th>applEmailText</th>
 			<th>pictureRef</th>
@@ -70,21 +67,6 @@
 			<td>{{ course.lecturer }}</td>
 			<td>{{ course.place }}</td>
 			
-			<td>
-				{% if course.pair %}
-					<span title="pair" class="fa fa-male"></span>
-					<span title="pair" class="fa fa-female"></span>
-				{% else %}
-					<span title="single" class="fa fa-qq"></span>
-				{% endif %}
-			</td>
-			
-			<td>{{ course.priceSingle }},-</td>
-			<td>
-				{% if not course.pair %}<del>{% endif %}
-				{{ course.pricePair }},-
-				{% if not course.pair %}</del>{% endif %}
-			</td>
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
 			<td>{{ course.applEmailText[0:20] }}...</td>
 			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 100px;">{% endif %}</td>

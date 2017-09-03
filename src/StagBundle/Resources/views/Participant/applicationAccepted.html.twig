@@ -18,8 +18,6 @@
 		<tr><td>Úroveň</td><td>{{participant.courseRef.level}}</td></tr>
 		<tr><td>Lektor</td><td>{{participant.courseRef.lecturer}}</td></tr>
 		<tr><td>Místo</td><td>{{participant.courseRef.place}}</td></tr>
-		<tr><td>Typ přihlášky</td><td>{% for key, value in constant('StagBundle\\Entity\\Participant::ALL_PAIRS') %}{% if value == participant.paired %}{{ key }}{% endif %}{% endfor %}</td></tr>
-		<tr><td>Cena</td><td>{% if (participant.paired) %}{{participant.courseRef.pricePair}}{% else %}{{participant.courseRef.priceSingle}}{% endif %},-</td></tr>
 		<tr><td>Rozpis lekcí</td><td>
 			<ul>
 			{% for lesson in participant.CourseRef.lessons %}

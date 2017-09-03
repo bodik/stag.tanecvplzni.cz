@@ -7,9 +7,6 @@ Kurz: {{participant.CourseRef.name}}
 Úroveň: {{participant.CourseRef.level}}
 Lektor: {{participant.CourseRef.lecturer}}
 Místo: {{participant.CourseRef.place}}
-Typ přihlášky: {% for key, value in constant('StagBundle\\Entity\\Participant::ALL_PAIRS') %}{% if value == participant.paired %}{{ key }}{% endif %}{% endfor %}
-
-Cena: {% if (participant.paired) %}{{participant.courseRef.pricePair}}{% else %}{{participant.courseRef.priceSingle}}{% endif %},-
 
 Rozpis lekcí: 
 {% for lesson in participant.CourseRef.lessons %}

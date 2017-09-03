@@ -29,10 +29,6 @@ class CourseType extends AbstractType {
 		$builder->add('lecturer');
 		$builder->add('place');
 
-		$builder->add('pair', CheckboxType::class, ["required" => false]);
-		
-		$builder->add('priceSingle');
-		$builder->add('pricePair');
 		$builder->add('color', TextType::class, ["attr" => ["class" => "jscolor {hash:true, uppercase:false}"]]);
 		$builder->add('applEmailText', TextareaType::class, ["attr" => [ "rows" => 10] ]);
 
