@@ -15,7 +15,6 @@ class Course {
 	const ALL_TYPES = [
 		"regular" => "regular",
 		"workshop" => "workshop",
-		"openclass" => "openclass",
 		"party" => "party"
 	];
 	
