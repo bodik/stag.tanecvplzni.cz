@@ -64,19 +64,7 @@
                 <tr>
                 	<td>{{ course.id }}</td>
 			<td><a  href="{{ path('course_book', {'id': course.id}) }}">{{ course.name }}</a></td>
-
-			<td>
-				{% if course.type == "regular" %}
-					<span class="glyphicon glyphicon-repeat" title="{{ course.type }}"></span>
-				{% elseif course.type == "workshop" %}
-					<span class="glyphicon glyphicon-record" title="{{ course.type }}"></span>
-				{% elseif course.type == "party" %}
-					<span class="glyphicon glyphicon-glass" title="{{ course.type }}"></span>
-				{% else %}
-					{{ course.type }}
-				{% endif %}
-			</td>
-
+			<td>{% include 'StagBundle:Course:icon.html.twig' %}</td>
 			<td>{{ course.level }}</td>
 			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.lecturer }}</td>

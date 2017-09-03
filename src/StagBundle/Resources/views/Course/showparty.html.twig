@@ -42,15 +42,7 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 	
 		<div class="well col-md-4">
 			<h2 class="text-center">
-				{% if course.type == "regular" %}
-					<span class="glyphicon glyphicon-repeat" style="color: {{course.color}};" title="Kurz"></span>
-				{% elseif course.type == "workshop" %}
-					<span class="glyphicon glyphicon-record" style="color: {{course.color}};" title="Workshop"></span>
-				{% elseif course.type == "party" %}
-					<span class="glyphicon glyphicon-glass" style="color: {{course.color}};" title="Tančírna"></span>
-				{% else %}
-					<span class="glyphicon glyphicon-th" style="color: {{course.color}};" title="{{course.type}}"></span>
-				{% endif %}
+				{% include 'StagBundle:Course:icon.html.twig' %}
 				&nbsp;{{course.name}}
 			</h2>
 			
