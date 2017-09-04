@@ -68,6 +68,8 @@ $MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partne
 $MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz', 'female', 'pair', 'alois netanecnik', 'wire-transfer', NULL, '${NOW}','${NOW}')" $DATABASE
 
 
+# workshop
+
 TEXTL="Luděk se k tanci dostal po středoškolských tanečních, kdy se začal věnovat soutěžnímu 
 tancování a vytancoval si mezinárodní třídu M ve standardních tancích. Již po pár letech 
 se stal vedoucím tanečního klubu v Přerově, trenérem soutěžních párů a také lektorem 
@@ -89,7 +91,18 @@ cestování, fotografování a dobré jídlo"
 $MYSQL -NBe "insert into course (name,type,description,lecturer,place,color,appl_email_text,picture_ref_id) values ('Zouk s Luďkem Lužným', 'workshop', '${TEXTL}', 'Ludek Luzny', 'Masala Ghar', '#527dce', '${TEXT1}', 2)" $DATABASE
 COURSE_ID=$($MYSQL -NBe "select id from course where name='Zouk s Luďkem Lužným'" $DATABASE)
 
-
 $MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 10:30" "${FORMAT}")', 45, 'zacatecnici', 'Ludek Luzny a Tanecnice z Brna', 'zaklady zouku')" $DATABASE
 $MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 12:30" "${FORMAT}")', 45, 'pokrocili', 'Ludek Luzny a Tanecnice z Brna', 'otocky, zvedacky, padacky')" $DATABASE
 $MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 14:30" "${FORMAT}")', 45, 'vsechny urovne', 'Ludek Luzny', 'muzikalita')" $DATABASE
+
+
+
+# party
+
+TEXTSN="Zveme vás na pravidelnou úterní tančírnu - salsy, bachaty, kizomby a zouku do Kalikováku. Od 20.30-21h se bude hrát kizomba, zouk. Od 21h pomalá salsa a bachata a tempo se bude postupně zrychlovat a nebo taky ne :)
+
+DJ Martin Mareška
+Vstupné: 20,-Kč"
+$MYSQL -NBe "insert into course (name,type,description,level,lecturer,place,color,appl_email_text,picture_ref_id) values ('SALSA NIGHT v Kalikováku', 'party', '${TEXTSN}', 'salsa, bachata, zouk, kizomba', 'DJ Mareska', 'Kalikovsky mlyn', '#ff0000', '', 1)" $DATABASE
+
+

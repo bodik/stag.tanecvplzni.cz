@@ -237,7 +237,7 @@ class CourseController extends Controller {
 		
 		$data = [];
 		foreach ($courses as $tmp) {
-
+			$timespan = "";
 			switch ( $tmp->getType() ) {
 				default:
 					$oneLesson = $tmp->getLessons()[0];
