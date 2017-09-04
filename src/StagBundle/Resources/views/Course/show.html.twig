@@ -14,17 +14,7 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 	
 		<div class="col-md-6">
 
-			{% if is_granted('ROLE_ADMIN') %}
-			<div class="text-center hidden-print well">
-				Admin:
-				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>
-				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-				<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
-				<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>
-				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>
-				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
-			</div>
-			{% endif %}
+			{% include 'StagBundle:Course:toolbox.html.twig' %}
 		
 			{% if course.pictureRef %}
 			<div class="text-center padded">
@@ -57,18 +47,26 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 			{% endif %}
 
 			<table class="table">
-				<tr><td><strong>Úroveň</strong></td><td>{{course.level}}</td></tr>
-				<tr><td><strong>Lektor</strong></td><td>{{course.lecturer}}</td></tr>
-				<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
-				<tr><td><strong>Počet lekcí</strong></td><td>{{course.lessons|length}}</td></tr>
+				{% if course.level %}<tr><td><strong>Úroveň</strong></td><td>{{course.level}}</td></tr>{% endif %}
+				{% if course.lecturer %}<tr><td><strong>Lektor</strong></td><td>{{course.lecturer}}</td></tr>{% endif %}
+				{% if course.place %}<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>{% endif %}
 			</table>
 			
 			<div class="panel panel-info">
-				<div class="panel-heading">Rozvrh lekcí</div>
+				<div class="panel-heading">Rozvrh</div>
 				<div class="panel-body">
 					<ul class="list-group">
 					{% for lesson in course.lessons %}
-						<li class="list-group-item">{{lesson.time|date('d.m.Y H:i T')}}</li>
+						<li class="list-group-item">
+							<div>
+								{{lesson.time|date('d.m.Y H:i')}}
+								-
+								{{ lesson.time|date_modify(lesson.length~" minutes")|date('H:i') }}
+							</div>
+							{% if lesson.level %}<div class="text-right">{{ lesson.level }}</div>{% endif %}
+							{% if lesson.lecturer %}<div class="text-right">{{ lesson.lecturer }}</div>{% endif %}
+							{% if lesson.description %}<div class="text-right">{{ lesson.description }}</div>{% endif %}
+						</li>
 					{% endfor %}
 					</ul>
 				</div>

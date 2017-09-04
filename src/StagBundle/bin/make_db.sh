@@ -51,7 +51,6 @@ COURSE_ID=$($MYSQL -NBe "select id from course where name='SALSA 1'" $DATABASE)
 for all in "$(date --date="monday -7 days 18:00" "${FORMAT}")" "$(date --date="monday 18:00" "${FORMAT}")" "$(date --date="monday +7 days 18:00" "${FORMAT}")" "$(date --date="monday +14 days 18:00" "${FORMAT}")"; do
 	$MYSQL -NBe "insert into lesson (course_id,time,length) values (${COURSE_ID}, '${all}', 90)" $DATABASE
 done
-$MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 'cash', 'cash', '${NOW}','${NOW}')" $DATABASE
 
 COURSE_ID=$($MYSQL -NBe "select id from course where name='BACHATA 2'" $DATABASE)
 for all in "$(date --date="monday -7 days 19:00" "${FORMAT}")" "$(date --date="monday 19:00" "${FORMAT}")" "$(date --date="monday +7 days 19:00" "${FORMAT}")" "$(date --date="monday +14 days 19:00" "${FORMAT}")"; do
@@ -65,5 +64,32 @@ done
 
 
 # participant data
+$MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnik', 'josef', 'josef.tanecnik@tanecvplzni.cz','male','single', NULL, 'cash', 'cash', '${NOW}','${NOW}')" $DATABASE
 $MYSQL -NBe "insert into participant (course_id,sn,gn,email,gender,paired,partner,deposit,payment,created,modified) values (${COURSE_ID}, 'tanecnice', 'eva', 'eva.tanecnice@tanecvplzni.cz', 'female', 'pair', 'alois netanecnik', 'wire-transfer', NULL, '${NOW}','${NOW}')" $DATABASE
 
+
+TEXTL="Luděk se k tanci dostal po středoškolských tanečních, kdy se začal věnovat soutěžnímu 
+tancování a vytancoval si mezinárodní třídu M ve standardních tancích. Již po pár letech 
+se stal vedoucím tanečního klubu v Přerově, trenérem soutěžních párů a také lektorem 
+středoškolských tanečních. Ke konci soutěžní kariéry poznal karibské tance salsa, bachata 
+a merengue, kterým se po krátké době taktéž začal věnovat i lektorsky. Jeho velkou láskou se pak 
+ale staly brazilské tance, zejména zouk, ve kterém si vybudoval uznávané jméno po celém světě a jezdí 
+učit na mezinárodní festivaly. Se svojí ženou Pavlou založili před pár lety taneční studio Stolárna, 
+ve kterém rozdávají lásku ke všem uvedeným tancům spoustě lidem :-)
+
+### Které tance u nás Luděk učí
+zouk, kizomba, společenské tance
+
+### Jaké další tance má rád
+všechny, které mají techniku a systém
+
+### Co ještě má rád kromě tance
+cestování, fotografování a dobré jídlo"
+
+$MYSQL -NBe "insert into course (name,type,description,lecturer,place,color,appl_email_text,picture_ref_id) values ('Zouk s Luďkem Lužným', 'workshop', '${TEXTL}', 'Ludek Luzny', 'Masala Ghar', '#527dce', '${TEXT1}', 2)" $DATABASE
+COURSE_ID=$($MYSQL -NBe "select id from course where name='Zouk s Luďkem Lužným'" $DATABASE)
+
+
+$MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 10:30" "${FORMAT}")', 45, 'zacatecnici', 'Ludek Luzny a Tanecnice z Brna', 'zaklady zouku')" $DATABASE
+$MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 12:30" "${FORMAT}")', 45, 'pokrocili', 'Ludek Luzny a Tanecnice z Brna', 'otocky, zvedacky, padacky')" $DATABASE
+$MYSQL -NBe "insert into lesson (course_id,time,length,level,lecturer,description) values (${COURSE_ID}, '$(date --date="saturday 14:30" "${FORMAT}")', 45, 'vsechny urovne', 'Ludek Luzny', 'muzikalita')" $DATABASE

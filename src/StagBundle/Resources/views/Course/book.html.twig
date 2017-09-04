@@ -2,14 +2,8 @@
 
 {% block body %}
 <div class="courses">
-	<div class="hidden-print" style="padding-bottom:1em;">
-		<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>				
-		<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-		<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
-		<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>				
-		<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>				
-		{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
-	</div>
+
+	{% include 'StagBundle:Course:toolbox.html.twig' %}
 	
 	<ul class="list-inline well">
 		<li><strong>Course:</strong> {{course.name}}</li>
@@ -17,10 +11,37 @@
 		<li><strong>Place:</strong> {{course.place}}</li>
 		<li><strong>Type:</strong> {{course.type}}</li>
 		<li><strong>No. lessons:</strong> {{course.lessons|length}}</li>
-		<li><strong>Lessons:</strong> 
-			{% for tmp in course.lessons %}{{ tmp.time|date("c") }}; {% endfor %}
-		</li>
+
 	</ul>
+
+	<div style="padding-bottom:1em;">
+		<table class="table table-stripped">
+			<thead>
+			<tr>
+				<th>cas</th>
+				<th>level</th>
+				<th>lecturer</th>
+				<th>description</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+		{% for tmp in course.lessons %}
+			<tr>
+				<td>{{ tmp.time|date('d.m.Y H:i') }} - {{ tmp.time|date_modify(tmp.length~" minutes")|date('H:i') }}</td>
+				<td>{{ tmp.level }}</dt>
+				<td>{{ tmp.lecturer }}</dt>
+				<td>{{ tmp.description }}</dt>
+				<td>
+					<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+					{{ render(controller("StagBundle:Lesson:delete", {'id': tmp.id})) }}
+				</td>
+			</tr>
+		{% endfor %}
+			</tbody>
+		</table>
+	</div>
+
 	
 	<table class="table">
 		<tr>

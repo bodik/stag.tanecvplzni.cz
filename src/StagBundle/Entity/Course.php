@@ -47,7 +47,7 @@ class Course {
 	private $description;
 	
 	/**
-	 * @ORM\Column(name="lecturer", type="string", length=1024, nullable=true))
+	 * @ORM\Column(name="lecturer", type="string", length=1024, nullable=true)
 	 */
 	private $lecturer;
 

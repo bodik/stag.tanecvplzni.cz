@@ -11,7 +11,9 @@
 			<th>courseRef</th>
 			<th>time</th>
 			<th>length</th>
-			<th>note</th>
+			<th>level</th>
+			<th>lecturer</th>
+			<th>description</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -22,7 +24,9 @@
 			<td><a  href="{{ path('course_book', {'id': lesson.courseRef.id}) }}">{{ lesson.courseRef.name }}</a></td>
 			<td>{{ lesson.time|date('c') }}</td>
 			<td>{{ lesson.length }}</td>
-			<td>{{ lesson.note }}</td>
+			<td>{{ lesson.level }}</td>
+			<td>{{ lesson.lecturer }}</td>
+			<td>{{ lesson.description }}</td>
 			<td>
 				<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': lesson.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
 				{{ render(controller("StagBundle:Lesson:delete", {'id': lesson.id})) }}

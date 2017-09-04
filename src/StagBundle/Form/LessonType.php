@@ -21,7 +21,9 @@ class LessonType extends AbstractType {
 		
 		$builder->add('time', DateTimeType::class, [ 'widget' => 'single_text',]);
 		$builder->add('length');
-		$builder->add('note', TextType::class, ["required" => false]);
+		$builder->add('level', TextType::class, ["required" => false]);
+		$builder->add('lecturer', TextType::class, ["required" => false]);
+		$builder->add('description', TextType::class, ["required" => false]);
 
 		$builder->add('save', SubmitType::class);
 	}

@@ -30,11 +30,21 @@ class Lesson {
 	 * @Assert\Range(min = 0)
 	 */
 	private $length;
+
+	/**
+	 * @ORM\Column(name="level", type="string", length=1024, nullable=true)
+	 */
+	private $level;
+
+	/**
+	 * @ORM\Column(name="lecturer", type="string", length=1024, nullable=true)
+	 */
+	private $lecturer;
 	
 	/**
-	 * @ORM\Column(name="note", type="string", length=255, nullable=true)
+	 * @ORM\Column(name="description", type="string", length=255, nullable=true)
 	 */
-	private $note;
+	private $description;
 
 
 	/**
@@ -56,8 +66,14 @@ class Lesson {
 	public function getLength() { return $this->length; }
 	public function setLength($length) { $this->length = $length; return $this; }
 	
-	public function getNote() { return $this->note; }
-	public function setNote($note) { $this->note = $note; return $this; }
+	public function getLevel() { return $this->level; }
+	public function setLevel($level) { $this->level = $level; return $this; }
+
+	public function getLecturer() { return $this->lecturer; }
+	public function setLecturer($lecturer) { $this->lecturer = $lecturer; return $this; }
+
+	public function getDescription() { return $this->description; }
+	public function setDescription($description) { $this->description = $description; return $this; }
 	
 	public function getCourseRef() { return $this->courseRef; }
 	public function setCourseRef($courseRef) { $this->courseRef = $courseRef; return $this; }	

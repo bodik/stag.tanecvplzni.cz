@@ -50,7 +50,7 @@ class LessonController extends Controller {
 			$this->em->flush();
 
 			$this->addFlash("success","Lesson {$lesson->getId()} was created");
-			return $this->redirectToRoute("lesson_list");
+			return $this->redirectToRoute("course_book",["id" => $lesson->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle:Lesson:addedit.html.twig", array("form" => $form->createView(),));
@@ -72,7 +72,7 @@ class LessonController extends Controller {
 			$this->em->flush();
 
 			$this->addFlash("success","Lesson {$lesson->getId()} was saved");
-            		return $this->redirectToRoute("lesson_list");
+			return $this->redirectToRoute("course_book",["id" => $lesson->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle:Lesson:addedit.html.twig", array("form" => $form->createView(),));
@@ -100,7 +100,7 @@ class LessonController extends Controller {
 			} else {
 				$this->addFlash("error","Lesson with ID {$id} does not exits");
 			}
-			return $this->redirectToRoute("lesson_list");
+			return $this->redirectToRoute("course_book",["id" => $lesson->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));

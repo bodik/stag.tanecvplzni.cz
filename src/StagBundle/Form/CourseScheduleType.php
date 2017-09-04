@@ -17,7 +17,6 @@ class CourseScheduleType extends AbstractType {
 			"data" => 60,
 			"constraints" => new Range(["min" => 0]),
 			]);
-		$builder->add("note", TextType::class, ["required" => false]);
 		$builder->add("schedule",TextareaType::class, [ "attr" => ["rows" => 15]] );
 		$builder->add('save', SubmitType::class);
 	}

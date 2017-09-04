@@ -156,7 +156,6 @@ class CourseController extends Controller {
 		foreach ( explode("\n", $data["schedule"]) as $date ) {
 			$tmp = new Lesson();
 			$tmp->setLength($data["length"]);
-			$tmp->setNote($data["note"]);
 			$t = \DateTime::createFromFormat('d.m.Y H:i',trim($date));
 			if($t) { $tmp->setTime($t); } else { return null; } # not so nice, but works for validation
 			$newLessons[] = $tmp;
@@ -213,10 +212,13 @@ class CourseController extends Controller {
 	 */
 	public function showAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->findOneById($id);
-		if ( $course->getType() == "party" ) {
-			return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
-		} else {
-			return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+		switch($course->getType()) {
+			case "party":
+				return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
+				break;
+			default:
+				return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+				break;
 		}
 	}
 
@@ -235,20 +237,34 @@ class CourseController extends Controller {
 		
 		$data = [];
 		foreach ($courses as $tmp) {
-			$oneLesson = $tmp->getLessons()[0];
-			if($oneLesson) {			
-				$currentLocale = setlocale(LC_TIME, 0);	
-				setlocale(LC_TIME, 'cs_CZ.UTF-8');
-				$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
-				setlocale(LC_TIME, $currentLocale);
+
+			switch ( $tmp->getType() ) {
+				default:
+					$oneLesson = $tmp->getLessons()[0];
+					if($oneLesson) {
+						# get day in czech locale
+						$currentLocale = setlocale(LC_TIME, 0);
+						setlocale(LC_TIME, 'cs_CZ.UTF-8');
+						$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
+						setlocale(LC_TIME, $currentLocale);
 				
-				$begin = $oneLesson->getTime()->format('H:i');
-				$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
-				$timespan = "{$day} {$begin} - {$end}";
-			} else {
-				$timespan = "";
+						$begin = $oneLesson->getTime()->format('H:i');
+						$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
+						$timespan = "{$day} {$begin} - {$end}";
+					}
+					break;
+				case "workshop":
+					$firstLesson = $tmp->getLessons()[0];
+					$lastLesson = $tmp->getLessons()[count($tmp->getLessons())-1];
+					if ( !empty($firstLesson) && !empty($lastLesson) ) {
+						$begin = $firstLesson->getTime()->format('d.m.Y H:i');
+						$end = $lastLesson->getTime()->format('H:i');
+						$timespan = "{$begin} - {$end}";
+					}
+					break;
 			}
-			
+			if ( empty($timespan) ) { $timespan = ""; }
+
 			$data[] = [
 				"id" => $tmp->getId(),
 				"name" => $tmp->getName(),
