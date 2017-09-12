@@ -75,12 +75,11 @@ class Course {
 	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
-
+	
 	/**
-	 * @ORM\OneToMany(targetEntity="Participant", mappedBy="courseRef")
+	 * @ORM\OneToMany(targetEntity="Ticket", mappedBy="courseRef")
 	 */
-	private $participants;
-
+	private $tickets;
 
 
 	public function __construct() {
@@ -89,7 +88,7 @@ class Course {
 		$this->color = "#cccccc";
 		$this->applEmailText = "Vaše přihláška byla prijata\nstag.tanecvplzni.cz";
 		$this->lessons = new ArrayCollection();
-		$this->participants = new ArrayCollection();
+		$this->tickets = new ArrayCollection();
 	}
 
 	public function getId() { return $this->id; }
@@ -123,6 +122,9 @@ class Course {
 	
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }
+	
+	public function getTickets() { return $this->tickets; }
+	public function setTickets($tickets) { $this->tickets = $tickets; return $this; }
 	
 	public function getParticipants() { return $this->participants; }
 	public function setparticipants($participants) { $this->participants = $participants; return $this; }

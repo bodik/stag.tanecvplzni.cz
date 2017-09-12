@@ -8,20 +8,29 @@
 	</div>
 	
 	<div class="row" style="padding-bottom:2em;">
-	Na vámi zadanou emailovou adresu byla odeslána zpráva s dalšími instrukcemi pro dokončení přihlášky.
+	Na vámi zadanou emailovou adresu byla odeslána zpráva s dalšími instrukcemi pro platbu a dokončení přihlášky.
 	</div>
 		
 	<div class="row col-md-6">
 		<table class="table">
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
-		<tr><td>Kurz</td><td><a href="{{ path('course_show', {'id': participant.courseRef.id})}}">{{participant.courseRef.name}}</a></td></tr>
-		<tr><td>Úroveň</td><td>{{participant.courseRef.level}}</td></tr>
-		<tr><td>Lektor</td><td>{{participant.courseRef.lecturer}}</td></tr>
-		<tr><td>Místo</td><td>{{participant.courseRef.place}}</td></tr>
+		<tr><td>Kurz</td><td><a href="{{ path('course_show', {'id': participant.ticketRef.courseRef.id})}}">{{participant.ticketRef.courseRef.name}} - {{participant.ticketRef.name}}</a></td></tr>
+		{% if participant.ticketRef.courseRef.level %}<tr><td>Úroveň</td><td>{{participant.ticketRef.courseRef.level}}</td></tr>{% endif %}
+		{% if participant.ticketRef.courseRef.lecturer %}<tr><td>Lektor</td><td>{{participant.ticketRef.courseRef.lecturer}}</td></tr>{% endif %}
+		<tr><td>Místo</td><td>{{participant.ticketRef.courseRef.place}}</td></tr>
 		<tr><td>Rozpis lekcí</td><td>
 			<ul>
-			{% for lesson in participant.CourseRef.lessons %}
-				<li>{{lesson.time|date('d.m.Y H:i T')}}</li>
+			{% for lesson in participant.ticketRef.courseRef.lessons %}
+				<li class="list-group-item">
+					<div>
+						{{lesson.time|date('d.m.Y H:i')}}
+						-
+						{{ lesson.time|date_modify(lesson.length~" minutes")|date('H:i') }}
+					</div>
+					{% if lesson.level %}<div class="text-right">{{ lesson.level }}</div>{% endif %}
+					{% if lesson.lecturer %}<div class="text-right">{{ lesson.lecturer }}</div>{% endif %}
+					{% if lesson.description %}<div class="text-right">{{ lesson.description }}</div>{% endif %}
+				</li>
 			{% endfor %}
 			</ul>
 		</td></tr>

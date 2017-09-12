@@ -29,6 +29,11 @@ class ParticipantController extends Controller {
 	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function listAction(Request $request) {
+		
+		//CAVEAT: participants list outofmemory in profiler during dev stage, probably by participant.ticketRef.courseRef.ticket_id cycle dump in twig
+		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
+		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }
+
         	$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
 		return $this->render("StagBundle:Participant:list.html.twig", [ "participants" => $participants ] );
 	}
@@ -97,11 +102,11 @@ class ParticipantController extends Controller {
 				$this->em->remove($participant);
 				$this->em->flush();
 
-				$this->addFlash("success","Participant {$participant->getSn()} was deleted from {$participant->getCourseRef()->getName()}");
+				$this->addFlash("success","Participant {$participant->getSn()} was deleted from {$participant->getTicketRef()->getCourseRef()->getName()}");
 			} else {
 				$this->addFlash("error","Participant with ID {$id} does not exits");
 			}
-			return $this->redirectToRoute("participant_list");
+			return $this->redirect($request->server->get('HTTP_REFERER'));
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
@@ -169,11 +174,11 @@ class ParticipantController extends Controller {
 
 
 	/**
-	 * @Route("/participant/application/{course_id}", name="participant_application", defaults={"course_id" = null})
+	 * @Route("/participant/application/{ticket_id}", name="participant_application", defaults={"ticket_id" = null})
 	 */
-	public function applicationAction(Request $request, $course_id) {
+	public function applicationAction(Request $request, $ticket_id) {
 		$participant = new Participant();
-		$participant->setCourseRef($this->em->getRepository("StagBundle:Course")->findOneById($course_id));
+		$participant->setTicketRef($this->em->getRepository("StagBundle:Ticket")->findOneById($ticket_id));
 		$form = $this->createForm(ParticipantApplicationType::class, $participant);
 		
 		$form->handleRequest($request);
@@ -192,18 +197,18 @@ class ParticipantController extends Controller {
 			}
 		}
 
-		return $this->render("StagBundle:Participant:application.html.twig", array("form" => $form->createView(),));
+		return $this->render("StagBundle:Participant:application.html.twig", ["form" => $form->createView(), "course" => $participant->getTicketRef()->getCourseRef(), ]);
 	}
 	
 	public function _sendApplicationAcceptedEmail($participant) {
 		# send email
-		$message = (new \Swift_Message("{$this->appName}: Přihláška č. {$participant->getId()} (kurz {$participant->getCourseRef()->getName()}) byla přijata"));
+		$message = (new \Swift_Message("{$this->appName}: Přihláška č. {$participant->getId()} (kurz {$participant->getTicketRef()->getCourseRef()->getName()} - {$participant->getTicketRef()->getName()}) byla přijata"));
 		$message->setFrom( ($this->container->getParameter('mailer_user') ? $this->container->getParameter('mailer_user') : "noreply@{$this->appName}") );
 		$message->setReplyTo("info@tanecvplzni.cz");
 		$message->setBcc("info@tanecvplzni.cz");
 
 		$message->setTo($participant->getEmail());
-		$text = $participant->getCourseRef()->getApplEmailText();
+		$text = $participant->getTicketRef()->getCourseRef()->getApplEmailText();
 		$text .= $this->renderView("StagBundle:Participant:applicationAcceptedEmailFooter.html.twig", ["participant" => $participant]);
 		$message->setBody($text, "text/plain");
 

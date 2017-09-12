@@ -26,15 +26,17 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 				{{course.description|markdown}}
 			</div>
 			
+			{% if course.tickets is not empty %}
 			<div class="text-center padded">
 				<a class="btn btn-lg btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}">Přihlásit se</a>
 			</div>
+			{% endif %}
 
 		</div>
 		<div class="col-md-2">
 		</div>
 	
-		<div class="well col-md-4">
+		<div class="well col-md-4"><!-- side panel -->
 			<h2 class="text-center">
 				{% include 'StagBundle:Course:icon.html.twig' %}
 				&nbsp;{{course.name}}
@@ -47,11 +49,43 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 			{% endif %}
 
 			<table class="table">
-				{% if course.level %}<tr><td><strong>Úroveň</strong></td><td>{{course.level}}</td></tr>{% endif %}
-				{% if course.lecturer %}<tr><td><strong>Lektor</strong></td><td>{{course.lecturer}}</td></tr>{% endif %}
-				{% if course.place %}<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>{% endif %}
+				{% if course.level %}
+					<tr><td><strong>
+						{% if course.type == "party" %}Tance{% else %}Úroveň{% endif %}
+					</strong></td><td>{{course.level}}</td></tr>
+				{% endif %}
+				
+				{% if course.lecturer %}
+					<tr><td><strong>
+						{% if course.type == "party" %}DJ{% else %}Lektor{% endif %}
+					</strong></td><td>{{course.lecturer}}</td></tr>
+				{% endif %}
+				
+				{% if course.place %}
+					<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
+				{% endif %}
 			</table>
 			
+			{% if course.tickets is not empty %}
+			<div class="panel panel-info">
+				<div class="panel-heading">Ceny</div>
+				<div class="panel-body">
+					<ul class="list-group">
+					{% for ticket in course.tickets %}
+						<li class="list-group-item">
+							{{ ticket.name }}
+							<span class="pull-right">
+								{{ticket.price}},-
+								<a class="btn btn-xs btn-default" href="{{ path('participant_application', {'ticket_id': ticket.id}) }}"><span class="glyphicon glyphicon-film"></span> Přihlásit</a>
+							</span>						
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+			{% endif %}
+
+			{% if course.lessons is not empty %}
 			<div class="panel panel-info">
 				<div class="panel-heading">Rozvrh</div>
 				<div class="panel-body">
@@ -71,7 +105,9 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 					</ul>
 				</div>
 			</div>
-  		</div>
+			{% endif %}
+			
+  		</div><!-- side panel -->
 	</div>
 </div>
 {% endblock %}

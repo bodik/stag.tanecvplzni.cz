@@ -171,6 +171,11 @@ class CourseController extends Controller {
 	 * @Security("has_role('ROLE_ADMIN')")
 	 */
 	public function bookAction(Request $request, $id) {
+		
+		//CAVEAT: participants list outofmemory in profiler during dev stage, probably by participant.ticketRef.courseRef.ticket_id cycle dump in twig
+		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
+		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }		
+		
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
 	}
@@ -212,14 +217,15 @@ class CourseController extends Controller {
 	 */
 	public function showAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->findOneById($id);
-		switch($course->getType()) {
-			case "party":
-				return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
-				break;
-			default:
-				return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
-				break;
-		}
+		#switch($course->getType()) {
+		#	case "party":
+		#		return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
+		#		break;
+		#	default:
+		#		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
+		#		break;
+		#}
+		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
 	}
 
 

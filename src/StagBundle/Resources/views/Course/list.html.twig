@@ -52,6 +52,7 @@
 			<th>applEmailText</th>
 			<th>pictureRef</th>
 			<th>No. lessons</th>
+			<th>No. tickets</th>
 			<th>No. participants</th>
 			<th></th>
 		</tr>
@@ -69,16 +70,17 @@
 			
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
 			<td>{{ course.applEmailText[0:20] }}...</td>
-			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 100px;">{% endif %}</td>
+			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 70px;">{% endif %}</td>
 			<td>{{ course.lessons|length }}</td>
-			<td>{{ course.participants|length }}</td>
+			<td>{{ course.tickets|length }}</td>
 			<td>
-				<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>				
-				<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-				<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
-				<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>				
-				<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>				
-				{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
+				{% set counter = 0 %}
+				{% for ticket in course.tickets %}{% set counter = counter + ticket.participants|length %}{% endfor %}
+				{{ counter }}
+			</td>
+			
+			<td>
+				{% include 'StagBundle:Course:toolbox.html.twig' %}			
 			</td>
 		</tr>
     		{% endfor %}

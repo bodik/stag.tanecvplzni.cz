@@ -14,7 +14,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Participant {
 	const ALL_GENDERS = ["muž" => "male", "žena" => "female"];
-	const ALL_PAIRS = ["samostatně" => "single", "v páru" => "pair"];
 	
 	/**
 	 * @ORM\Column(name="id", type="integer")
@@ -50,11 +49,6 @@ class Participant {
 	private $gender;
 	
 	/**
-	 * @ORM\Column(name="paired", type="string", length=255)
-	 */
-	private $paired;
-
-	/**
 	 * @ORM\Column(name="partner", type="string", length=255, nullable=true)
 	 */
 	private $partner;
@@ -80,10 +74,10 @@ class Participant {
 	private $payment;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="Course", inversedBy="participants")
-	 * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=false)
+	 * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="tickets")
+	 * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", nullable=false)
 	 */
-	private $courseRef;
+	private $ticketRef;
 	
 	/**
 	 * @ORM\Column(name="created", type="datetime")
@@ -98,7 +92,6 @@ class Participant {
 
 
 	public function __construct() {
-		$this->paid = false;
 	}
 
 	public function getId() { return $this->id; }
@@ -136,8 +129,8 @@ class Participant {
 	public function getPayment() { return $this->payment; }
 	public function setPayment($payment) { $this->payment = $payment; return $this; }
 	
-	public function getCourseRef() { return $this->courseRef; }
-	public function setCourseRef($courseRef) { $this->courseRef = $courseRef; return $this; }
+	public function getTicketRef() { return $this->ticketRef; }
+	public function setTicketRef($ticketRef) { $this->ticketRef = $ticketRef; return $this; }
 	
 	public function getCreated() { return $this->created; }
 	public function getModified() { return $this->modified; }

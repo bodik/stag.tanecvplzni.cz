@@ -3,7 +3,7 @@
 namespace StagBundle\Form;
 
 use StagBundle\Entity\Participant;
-use StagBundle\Repository\CourseRepository;
+use StagBundle\Repository\TicketRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -14,15 +14,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ParticipantApplicationType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add("courseRef", EntityType::class, [
-			"label" => "Kurz",
-			"class" => "StagBundle:Course",
-			"choice_label" => "name",
-			"expanded" => false,
-			"multiple" => false,
-			'query_builder' => function(CourseRepository $er){return $er->createQueryBuilder('c')->where("c.type != 'party'");},
-			]);
-
 		$builder->add("gn", TextType::class, ["label" => "Jméno"]);
 
 		$builder->add("sn", TextType::class, ["label" => "Příjmení"]);
@@ -40,13 +31,6 @@ class ParticipantApplicationType extends AbstractType {
 			"choice_label" => function ($value, $key, $index) { return $key; },
 			"expanded" => true,
 			));
-
-		$builder->add("paired", ChoiceType::class, [
-			"label" => "Typ přihlášky",
-			"choices" => Participant::ALL_PAIRS,
-			"choice_label" => function ($value, $key, $index) { return $key; },
-			"expanded" => true,
-			]);
 
 		$builder->add("partner", TextType::class, [
 			"label" => "Partner",

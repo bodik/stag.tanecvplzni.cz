@@ -14,23 +14,19 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ParticipantType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('courseRef', EntityType::class, array(
-			'class' => 'StagBundle:Course',
+		$builder->add('ticketRef', EntityType::class, array(
+			'class' => 'StagBundle:Ticket',
 			'choice_label' => 'name',
 			'expanded' => false,
 			'multiple' => false
 			));
+
 		$builder->add('gn');
 		$builder->add('sn');
 		$builder->add('email');
 		$builder->add('phoneNumber');
 		$builder->add('gender', ChoiceType::class, array(
 			'choices' => Participant::ALL_GENDERS,
-			'choice_label' => function ($value, $key, $index) { return $key; },
-			'expanded' => true,
-			));
-		$builder->add('paired', ChoiceType::class, array(
-			'choices' => Participant::ALL_PAIRS,
 			'choice_label' => function ($value, $key, $index) { return $key; },
 			'expanded' => true,
 			));

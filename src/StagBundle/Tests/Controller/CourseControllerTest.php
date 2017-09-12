@@ -12,7 +12,7 @@ class CourseControllerTest extends StagWebTestCase {
 	protected $em = null;
 	protected $courseRepo = null;
 
-	public function createTestCourse() {
+	public function createTestCourse($em) {
 		$tmp = new Course();
         	$tmp->setName("kurz test");
 		$tmp->setDescription("kurz test popis");
@@ -54,7 +54,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testAddAction() {
 		$this->logIn();
 		
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." add ".mt_rand());
 
 
@@ -83,7 +83,7 @@ class CourseControllerTest extends StagWebTestCase {
     	public function testEditAction() {
     		$this->logIn();
     		
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." edit ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -116,7 +116,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testDeleteAction() {
 		$this->logIn();
 		
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." delete ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -136,7 +136,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testScheduleAction() {
 		$this->logIn();
 
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." schedule ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -166,7 +166,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testBookAction() {
 		$this->logIn();
 
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." book ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -185,7 +185,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testSuggestPlaceAction() {
 		$this->logIn();
 
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." suggest_place ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -204,7 +204,7 @@ class CourseControllerTest extends StagWebTestCase {
 	public function testSuggestLecturerAction() {
 		$this->logIn();
 
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." suggest_lecturer ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -226,7 +226,7 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 	public function testShowAction() {
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." show ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
@@ -242,7 +242,7 @@ class CourseControllerTest extends StagWebTestCase {
 	}
 	
 	public function testGridAction() {
-		$testCourse = $this->createTestCourse();
+		$testCourse = $this->createTestCourse($this->em);
 		$testCourse->setName($testCourse->getName()." grid ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();

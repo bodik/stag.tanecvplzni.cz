@@ -2,52 +2,86 @@
 
 {% block body %}
 <div class="participants">
-	<h1 class="text-center padded">Přihláška na kurzy, workshopy Tanec v Plzni</h1>
+	<h1 class="text-center padded">Přihláška na kurzy, workshopy Tanec v Plzni</h1>	
+	
 	{{ form_start(form) }}
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label">Přihláška</label>
+		<div class="col-sm-10 well">
+			<table class="table table-condensed">
+				<tr><td><strong>Kurz</strong></td><td>
+					<a href="{{ path('course_show', {'id': course.id }) }}">
+						{% include 'StagBundle:Course:icon.html.twig' %} {{course.name}}
+					</a>
+					<br/>
+					{% if course.lessons is not empty %}{{ attribute(course.lessons|first, 'time')|date('d.m.Y') }} - {{ attribute(course.lessons|last, 'time')|date('d.m.Y') }}{% endif %}
+					<br/>
+					<strong>
+						{{ form.vars["value"].ticketRef.name }}
+						<br/>
+						{{ form.vars["value"].ticketRef.price }},-
+					</strong>
+				</td></tr>
+				{% if course.level %}
+					<tr><td><strong>
+						{% if course.type == "party" %}Tance{% else %}Úroveň{% endif %}
+					</strong></td><td>{{course.level}}</td></tr>
+				{% endif %}
+				
+				{% if course.lecturer %}
+					<tr><td><strong>
+						{% if course.type == "party" %}DJ{% else %}Lektor{% endif %}
+					</strong></td><td>{{course.lecturer}}</td></tr>
+				{% endif %}
+				
+				{% if course.place %}
+					<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
+				{% endif %}
+			</table>
+			
 
-	{{ form_row(form.courseRef) }}
+			{% if course.lessons is not empty %}
+			<div class="panel panel-info">
+				<div class="panel-heading">Rozvrh</div>
+				<div class="panel-body">
+					<ul class="list-group">
+					{% for lesson in course.lessons %}
+						<li class="list-group-item">
+							<div>
+								{{lesson.time|date('d.m.Y H:i')}}
+								-
+								{{ lesson.time|date_modify(lesson.length~" minutes")|date('H:i') }}
+							</div>
+							{% if lesson.level %}<div class="text-right">{{ lesson.level }}</div>{% endif %}
+							{% if lesson.lecturer %}<div class="text-right">{{ lesson.lecturer }}</div>{% endif %}
+							{% if lesson.description %}<div class="text-right">{{ lesson.description }}</div>{% endif %}
+						</li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+			{% endif %}
+
+		</div>
+	</div>
+
 	{{ form_row(form.gn) }}
 	{{ form_row(form.sn) }}
 	{{ form_row(form.email) }}
 	{{ form_row(form.phoneNumber) }}
 	{{ form_row(form.gender) }}
 
-	{{ form_row(form.paired) }}
 	{{ form_row(form.partner) }}
-	<div class="bg-warning form-group">
-		<label class="col-sm-2 control-label price">Cena:</label>
-		<label id="priceval" class="col-sm-10 price"><span class="warning">Zvolte typ přihlášky</span></label>
-	</div>
-
 	{{ form_row(form.reference) }}
 	{{ form_row(form.note) }}
 
 	{{ form_end(form) }}
 </div>
 
-
-<script type="text/javascript">
-	function updatePrice() {
-		baseUrl = "{{ app.request.getBaseURL() }}"
-		if ( $("#participant_application_paired_0").is(":checked") ) {
-			$("#priceval").load( baseUrl +"/course/price/" +$("#participant_application_courseRef").val()+ "/" +$("#participant_application_paired_0").val() );
-		}
-		if ( $("#participant_application_paired_1").is(":checked") ) {
-			$("#priceval").load( baseUrl +"/course/price/" +$("#participant_application_courseRef").val()+ "/" +$("#participant_application_paired_1").val() );
-		}
-	}
-	$(document).ready(updatePrice);
-	$("#participant_application_courseRef").change(updatePrice);
-	$("#participant_application_paired_0").change(updatePrice);
-	$("#participant_application_paired_1").change(updatePrice);
-	console.log("{{ app.request.getBaseURL() }}");
-</script>
-<style>
-	.price { font-size: x-large; padding-top: 7px; margin-bottom: 0;}
-<style>
-
-
 {% endblock %}
 
 {% block stylesheets %}
+<style>
+</style>
 {% endblock %}

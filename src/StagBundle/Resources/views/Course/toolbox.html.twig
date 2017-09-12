@@ -2,11 +2,14 @@
 	<div class="text-center hidden-print well">
 		Admin:
 		<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Show</a>
+		<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>
 		<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+
 		<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Schedule</a>
 		<a class="btn btn-xs btn-warning" href="{{ path('lesson_add', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Add lesson</a>
-		<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Book</a>
-		<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enrol</a>
+
+		<a class="btn btn-xs btn-info" href="{{ path('ticket_add', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Add ticket</a>
+
 		{{ render(controller("StagBundle:Course:delete", {'id': course.id})) }}
 	</div>
 {% endif %}

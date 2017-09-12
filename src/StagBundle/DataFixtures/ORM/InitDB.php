@@ -5,8 +5,9 @@ namespace StagBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use StagBundle\Entity\Blob;
-use StagBundle\Entity\Lesson;
 use StagBundle\Entity\Course;
+use StagBundle\Entity\Lesson;
+use StagBundle\Entity\Ticket;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -116,6 +117,19 @@ cestování, fotografování a dobré jídlo";
 			$manager->persist($lesson);
 			$manager->flush();
 		}
+		
+		$ticket = new Ticket();
+		$ticket->setName("Jednotlivec");
+		$ticket->setPrice(100);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+		$ticket = new Ticket();
+		$ticket->setName("Taneční pár");
+		$ticket->setPrice(90);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
 
 
 
@@ -145,6 +159,18 @@ cestování, fotografování a dobré jídlo";
 			$manager->persist($lesson);
 			$manager->flush();
 		}
+
+		$ticket = new Ticket();
+		$ticket->setName("Jednotlivec");
+		$ticket->setPrice(100);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+		$ticket = new Ticket();
+		$ticket->setName("Taneční pár");
+		$ticket->setPrice(90);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
 		$manager->flush();
 
 
@@ -175,6 +201,20 @@ cestování, fotografování a dobré jídlo";
 			$manager->persist($lesson);
 			$manager->flush();
 		}
+
+		$ticket = new Ticket();
+		$ticket->setName("Jednotlivec");
+		$ticket->setPrice(100);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+		$ticket = new Ticket();
+		$ticket->setName("Taneční pár");
+		$ticket->setPrice(90);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+
 
 
 
@@ -226,7 +266,27 @@ cestování, fotografování a dobré jídlo";
 		$manager->persist($lesson);
 		$manager->flush();
 		
+		$ticket = new Ticket();
+		$ticket->setName("FullPass");
+		$ticket->setPrice(500);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
 		
+		$ticket = new Ticket();
+		$ticket->setName("1 lekce");
+		$ticket->setPrice(300);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+		
+		$ticket = new Ticket();
+		$ticket->setName("2 lekce");
+		$ticket->setPrice(400);
+		$ticket->setCourseRef($course);
+		$manager->persist($ticket);
+		$manager->flush();
+
 		
 		
 		

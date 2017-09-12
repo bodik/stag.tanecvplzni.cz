@@ -3,14 +3,27 @@
 ------------------------------
 Číslo přihlášky: {{participant.id}}
 
-Kurz: {{participant.CourseRef.name}}
-Úroveň: {{participant.CourseRef.level}}
-Lektor: {{participant.CourseRef.lecturer}}
-Místo: {{participant.CourseRef.place}}
+Kurz: {{participant.ticketRef.courseRef.name}}
+{% if participant.ticketRef.courseRef.level %}
+Úroveň: {{participant.ticketRef.courseRef.level}}
+{% endif %}
+{% if participant.ticketRef.courseRef.lecturer %}
+Lektor: {{participant.ticketRef.courseRef.lecturer}}
+{% endif %}
+Místo: {{participant.ticketRef.courseRef.place}}
 
 Rozpis lekcí: 
-{% for lesson in participant.CourseRef.lessons %}
-* {{lesson.time|date('d.m.Y H:i T')}}
+{% for lesson in participant.ticketRef.courseRef.lessons %}
+* {{lesson.time|date('d.m.Y H:i')}} - {{ lesson.time|date_modify(lesson.length~" minutes")|date('H:i') }}
+{% if lesson.level %}
+	{{lesson.level}}
+{% endif %}
+{% if lesson.lecturer %}
+	{{lesson.lecturer}}
+{% endif %}
+{% if lesson.description %}
+	{{lesson.description}}
+{% endif %}
 {% endfor %}
 ------------------------------
 

@@ -14,15 +14,18 @@ class LessonControllerTest extends StagWebTestCase {
 	protected $em;
 	protected $lessonRepo;
 
-	protected $testCourse;
-	public function createTestLesson() {
+	public $testCourse;
+	public function createTestLesson($em) {
         	$tmp = new Lesson();
         	$tmp->setTime(new \DateTime("2012-01-01 22:22:22"));
         	$tmp->setLength(60);
 		$tmp->setLevel("zacatecnici");
 		$tmp->setLecturer("Mamka");
 		$tmp->setDescription("kratky popis lekce");
-		$tmp->setCourseRef($this->courseRepo->findOneById($this->testCourse->getId()));
+
+		$courseRepo = $em->getRepository("StagBundle:Course");
+		$tmp->setCourseRef($courseRepo->findOneById($this->testCourse->getId()));
+
 		return $tmp;
 	}
 
@@ -37,16 +40,16 @@ class LessonControllerTest extends StagWebTestCase {
 		if(!$this->em) { $this->em = static::$kernel->getContainer()->get("doctrine")->getManager(); }
 		
 		$this->lessonRepo = $this->em->getRepository("StagBundle:Lesson");
-		$this->courseRepo = $this->em->getRepository("StagBundle:Course");
 		
-		$this->testCourse = (new CourseControllerTest())->createTestCourse();
+		$this->testCourse = (new CourseControllerTest())->createTestCourse($this->em);
 		$this->em->persist($this->testCourse);
 		$this->em->flush();
 	}
 	protected function tearDown() {
 		parent::tearDown();
 		
-		$this->em->remove($this->courseRepo->findOneById($this->testCourse->getId()));
+		$courseRepo = $this->em->getRepository("StagBundle:Course");
+		$this->em->remove($courseRepo->findOneById($this->testCourse->getId()));
 		$this->em->flush();
 	}
 
@@ -67,7 +70,7 @@ class LessonControllerTest extends StagWebTestCase {
 	public function testAddAction() {
 		$this->logIn();		
 		
-		$testLesson = $this->createTestLesson();
+		$testLesson = $this->createTestLesson($this->em);
 		$testLesson->setDescription($testLesson->getDescription()." add ".mt_rand());
 						
 		$crawler = $this->client->request("GET", "/lesson/add");
@@ -94,7 +97,7 @@ class LessonControllerTest extends StagWebTestCase {
     	public function testEditAction() {
 		$this->logIn();    		
     		
-		$testLesson = $this->createTestLesson();
+		$testLesson = $this->createTestLesson($this->em);
 		$testLesson->setDescription($testLesson->getDescription()." edit ".mt_rand());
 		$this->em->persist($testLesson);
 		$this->em->flush();
@@ -124,7 +127,7 @@ class LessonControllerTest extends StagWebTestCase {
 	public function testDeleteAction() {
 		$this->logIn();
 		
-		$testLesson = $this->createTestLesson();
+		$testLesson = $this->createTestLesson($this->em);
 		$testLesson->setDescription($testLesson->getDescription()." delete ".mt_rand());
 		$this->em->persist($testLesson);
 		$this->em->flush();
@@ -150,7 +153,7 @@ class LessonControllerTest extends StagWebTestCase {
 
 
 	public function testEventsAction() {
-		$testLesson = $this->createTestLesson();
+		$testLesson = $this->createTestLesson($this->em);
 		$testLesson->setDescription($testLesson->getDescription()." events ".mt_rand());
 		$this->em->persist($testLesson);
 		$this->em->flush();
