@@ -71,6 +71,7 @@
 	<table class="table">
 		<tr>
 			<th>id</td>
+			<th>gn</th>
 			<th>sn</th>
 			<th>email</th>
 			<th>phoneNumber</th>
@@ -87,6 +88,7 @@
 		{% for participant in ticket.participants %}
 		<tr>
 			<td>{{ participant.id }}</td>
+			<td>{{ participant.gn }}</td>
 			<td>{{ participant.sn }}</td>
 			<td>{{ participant.email }}</td>
 			<td>{{ participant.phoneNumber }}</td>
