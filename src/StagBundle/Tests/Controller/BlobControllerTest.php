@@ -24,7 +24,6 @@ class BlobControllerTest extends StagWebTestCase {
 
 
 
-
 	protected function setUp() {
 		parent::setUp();
 		if(!$this->client) { $this->client = static::createClient(); }
@@ -41,12 +40,13 @@ class BlobControllerTest extends StagWebTestCase {
 
 
 
-	public function testList() {
+	public function testListAction() {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/blob/list');
 	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Blobs")')->count());
 	}
+
 
 
 	public function testAddAction() {
@@ -71,25 +71,6 @@ class BlobControllerTest extends StagWebTestCase {
     	
     	
     	
-    	public function testGetAction() {
-		
-		$testBlob = $this->createTestBlob(getcwd()."/var/data-stagbundle-blob/testblob_get_".mt_rand().".jpg");
-		$this->em->persist($testBlob);
-		$this->em->flush();
-						
-		$crawler = $this->client->request("GET", "/blob/get/{$testBlob->getId()}");
-        	$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-
-		$crawler = $this->client->request("GET", "/blob/get/{$testBlob->getFileName()}");
-        	$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
-
-        	
-        	$blob = $this->blobRepo->findOneByFileName($testBlob->getFileName());
-		$this->em->remove($blob);
-		$this->em->flush();
-    	}
-    	
-    	
 	public function testDeleteAction() {
 		$this->logIn();
 		
@@ -107,6 +88,25 @@ class BlobControllerTest extends StagWebTestCase {
 		$this->assertNull($blob);
     	}
 
+
+
+	public function testGetAction() {
+		
+		$testBlob = $this->createTestBlob(getcwd()."/var/data-stagbundle-blob/testblob_get_".mt_rand().".jpg");
+		$this->em->persist($testBlob);
+		$this->em->flush();
+						
+		$crawler = $this->client->request("GET", "/blob/get/{$testBlob->getId()}");
+        	$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+		$crawler = $this->client->request("GET", "/blob/get/{$testBlob->getFileName()}");
+        	$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+        	
+        	$blob = $this->blobRepo->findOneByFileName($testBlob->getFileName());
+		$this->em->remove($blob);
+		$this->em->flush();
+    	}
 }
 
 ?>
