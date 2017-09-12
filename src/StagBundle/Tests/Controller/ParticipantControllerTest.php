@@ -87,7 +87,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 
 
 
-	public function testList() {
+	public function testListAction() {
 		$this->logIn();
 
         	$crawler = $this->client->request('GET', '/participant/list');
