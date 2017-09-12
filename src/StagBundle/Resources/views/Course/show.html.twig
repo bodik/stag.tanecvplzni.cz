@@ -26,12 +26,6 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 				{{course.description|markdown}}
 			</div>
 			
-			{% if course.tickets is not empty %}
-			<div class="text-center padded">
-				<a class="btn btn-lg btn-info" href="{{ path('participant_application', {'course_id': course.id}) }}">Přihlásit se</a>
-			</div>
-			{% endif %}
-
 		</div>
 		<div class="col-md-2">
 		</div>
@@ -73,11 +67,17 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 					<ul class="list-group">
 					{% for ticket in course.tickets %}
 						<li class="list-group-item">
-							{{ ticket.name }}
-							<span class="pull-right">
-								{{ticket.price}},-
-								<a class="btn btn-xs btn-default" href="{{ path('participant_application', {'ticket_id': ticket.id}) }}"><span class="glyphicon glyphicon-film"></span> Přihlásit</a>
-							</span>						
+							<div class="row">
+								<div class="col-xs-6">
+									{{ ticket.name }}
+								</div>
+								<div class="col-xs-6">
+									<div class="pull-right">
+										{{ticket.price}},-
+										<a class="btn btn-xs btn-danger" style="margin-left:1em;" href="{{ path('participant_application', {'ticket_id': ticket.id}) }}"><span class="glyphicon glyphicon-film"></span> Přihlásit</a>
+									</div>
+								</div>
+							</div>
 						</li>
 					{% endfor %}
 					</ul>

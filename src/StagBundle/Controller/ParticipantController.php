@@ -174,7 +174,7 @@ class ParticipantController extends Controller {
 
 
 	/**
-	 * @Route("/participant/application/{ticket_id}", name="participant_application", defaults={"ticket_id" = null})
+	 * @Route("/participant/application/{ticket_id}", name="participant_application")
 	 */
 	public function applicationAction(Request $request, $ticket_id) {
 		$participant = new Participant();
