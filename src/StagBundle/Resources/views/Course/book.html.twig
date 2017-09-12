@@ -15,54 +15,67 @@
 	
 	<div class="row" style="padding-bottom: 1em">
 		<div class="col-md-6">
-			<table class="table table-stripped">
-				<thead><tr>
-					<th>cas</th>
-					<th>level</th>
-					<th>lecturer</th>
-					<th>description</th>
-					<th></th>
-				</tr></thead>
-				
-				<tbody>
-				{% for tmp in course.lessons %}
-					<tr>
-					<td>{{ tmp.time|date('d.m.Y H:i') }} - {{ tmp.time|date_modify(tmp.length~" minutes")|date('H:i') }}</td>
-					<td>{{ tmp.level }}</dt>
-					<td>{{ tmp.lecturer }}</dt>
-					<td>{{ tmp.description }}</dt>
-					<td>
-						<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-						{{ render(controller("StagBundle:Lesson:delete", {'id': tmp.id})) }}
-					</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">Lessons</div>
+				<div class="panel-body">
+					<table class="table table-stripped">
+						<thead><tr>
+							<th>time</th>
+							<th>level</th>
+							<th>lecturer</th>
+							<th>description</th>
+							<th></th>
+						</tr></thead>
+
+						<tbody>
+						{% for tmp in course.lessons %}
+							<tr>
+							<td>{{ tmp.time|date('d.m.Y H:i') }} - {{ tmp.time|date_modify(tmp.length~" minutes")|date('H:i') }}</td>
+							<td>{{ tmp.level }}</dt>
+							<td>{{ tmp.lecturer }}</dt>
+							<td>{{ tmp.description }}</dt>
+							<td>
+								<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+								{{ render(controller("StagBundle:Lesson:delete", {'id': tmp.id})) }}
+							</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
+
 		</div>
 		
 		<div class="col-md-6">
-			<table class="table table-stripped">
-				<thead><tr>
-					<th>name</th>
-					<th>price</th>
-					<th></th>
-				</tr></thead>
-				
-				<tbody>
-				{% for tmp in course.tickets %}
-					<tr>
-					<td>{{ tmp.name }}</dt>
-					<td>{{ tmp.price }}</dt>
-					<td>
-						<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enroll</a>						
-						<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
-						{{ render(controller("StagBundle:Ticket:delete", {'id': tmp.id})) }}
-					</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
+			<div class="panel panel-default">
+				<div class="panel-heading">Tickets</div>
+				<div class="panel-body">
+
+					<table class="table table-stripped">
+						<thead><tr>
+							<th>name</th>
+							<th>price</th>
+							<th></th>
+						</tr></thead>
+
+						<tbody>
+						{% for tmp in course.tickets %}
+							<tr>
+							<td>{{ tmp.name }}</dt>
+							<td>{{ tmp.price }}</dt>
+							<td>
+								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enroll</a>
+								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+								{{ render(controller("StagBundle:Ticket:delete", {'id': tmp.id})) }}
+							</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 	
 	</div><!-- lessons and tickets row -->
