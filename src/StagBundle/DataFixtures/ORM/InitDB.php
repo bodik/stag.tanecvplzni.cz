@@ -76,7 +76,9 @@ cestování, fotografování a dobré jídlo";
 
 	public function load(ObjectManager $manager) {
 
-		$datadir = realpath($this->container->get('kernel')->getRootDir()."/../var/data-stagbundle-blob");
+		$datadir = $this->container->get('kernel')->getRootDir()."/../var/data-stagbundle-blob";
+		mkdir($datadir, 0755, true);
+		$datadir = realpath($datadir);
 		foreach (new \DirectoryIterator(dirname(__FILE__)."/../../bin") as $fileInfo) {
 			if($fileInfo->isFile() and $fileInfo->getExtension() == "jpg") {
 				$blob = new Blob();
