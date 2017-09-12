@@ -55,7 +55,7 @@ class TicketControllerTest extends StagWebTestCase {
 
 
 
-	public function testList() {
+	public function testListAction() {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/ticket/list');
