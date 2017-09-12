@@ -64,7 +64,7 @@
 						{% for tmp in course.tickets %}
 							<tr>
 							<td>{{ tmp.name }}</dt>
-							<td>{{ tmp.price }}</dt>
+							<td>{{ tmp.price }},-</dt>
 							<td>
 								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enroll</a>
 								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
