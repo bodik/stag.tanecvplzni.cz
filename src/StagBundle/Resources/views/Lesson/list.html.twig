@@ -2,18 +2,18 @@
 
 {% block body %}
 <div class="lessons">
-	<h1>Lessons</h1>
-	<a class="btn btn-success" href="{{ path('lesson_add') }}">Add</a>
+	<h1>Lekce <a class="btn btn-success" href="{{ path('lesson_add') }}">Přidat</a></h1>
+	
 	<table class="table table-responsive">
 	<thead>
 		<tr>
-			<th>id</th>
-			<th>courseRef</th>
-			<th>time</th>
-			<th>length</th>
-			<th>level</th>
-			<th>lecturer</th>
-			<th>description</th>
+			<th>Id</th>
+			<th>Kurz</th>
+			<th>Čas</th>
+			<th>Délka</th>
+			<th>Úroveň</th>
+			<th>Lektor</th>
+			<th>Popis</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -28,7 +28,7 @@
 			<td>{{ lesson.lecturer }}</td>
 			<td>{{ lesson.description }}</td>
 			<td>
-				<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': lesson.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': lesson.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 				{{ render(controller("StagBundle:Lesson:delete", {'id': lesson.id})) }}
 			</td>
 		</tr>

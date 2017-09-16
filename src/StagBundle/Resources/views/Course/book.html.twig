@@ -6,25 +6,34 @@
 	{% include 'StagBundle:Course:toolbox.html.twig' %}
 	
 	<ul class="list-inline well">
-		<li><strong>Course:</strong> {{course.name}}</li>
-		<li><strong>Type:</strong> {{course.type}}</li>
-		<li><strong>Level:</strong> {{course.level}}</li>
-		<li><strong>Lecturer:</strong> {{course.lecturer}}</li>
-		<li><strong>Place:</strong> {{course.place}}</li>
+		<li><strong>Kurz:</strong> {{course.name}}</li>
+		<li><strong>Typ:</strong> {{course.type}}</li>
+		<li><strong>Úroveň:</strong> {{course.level}}</li>
+		<li><strong>Lektor:</strong> {{course.lecturer}}</li>
+		<li><strong>Místo:</strong> {{course.place}}</li>
 	</ul>
 	
 	<div class="row" style="padding-bottom: 1em">
 		<div class="col-md-6">
 
 			<div class="panel panel-default">
-				<div class="panel-heading">Lessons</div>
-				<div class="panel-body">
+				<div class="panel-heading">Lekce</div>
+				<div class="panel-body"><!-- lessons panel body -->
+				
+					{% if course.lessons is empty %}
+						<div class="padded">Žádné lekce.</div>
+						<div>
+							<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Naplánovat kurz</a>
+							nebo						
+							<a class="btn btn-xs btn-warning" href="{{ path('lesson_add', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Přidat lekci</a>
+						</div>
+					{% else %}
 					<table class="table table-stripped">
 						<thead><tr>
-							<th>time</th>
-							<th>level</th>
-							<th>lecturer</th>
-							<th>description</th>
+							<th>Čas</th>
+							<th>Úroveň</th>
+							<th>Lektor</th>
+							<th>Popis</th>
 							<th></th>
 						</tr></thead>
 
@@ -36,27 +45,36 @@
 							<td>{{ tmp.lecturer }}</dt>
 							<td>{{ tmp.description }}</dt>
 							<td>
-								<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+								<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 								{{ render(controller("StagBundle:Lesson:delete", {'id': tmp.id})) }}
 							</td>
 							</tr>
 						{% endfor %}
 						</tbody>
 					</table>
-				</div>
+					{% endif %}
+					
+				</div><!-- lessons panel body -->
 			</div>
 
 		</div>
 		
 		<div class="col-md-6">
 			<div class="panel panel-default">
-				<div class="panel-heading">Tickets</div>
-				<div class="panel-body">
+				<div class="panel-heading">Vstupy</div>
+				<div class="panel-body"><!-- tickets panel body -->
+				
+					{% if course.tickets is empty %}
+						<div class="padded">Žádné vstupy.</div>
+						<div>
+									<a class="btn btn-xs btn-info" href="{{ path('ticket_add', {'course_id': course.id}) }}"><span class="glyphicon glyphicon-plus"></span> Přidat vstup</a>
+						</div>
+					{% else %}
 
 					<table class="table table-stripped">
 						<thead><tr>
-							<th>name</th>
-							<th>price</th>
+							<th>Jméno</th>
+							<th>Cena</th>
 							<th></th>
 						</tr></thead>
 
@@ -66,15 +84,17 @@
 							<td>{{ tmp.name }}</dt>
 							<td>{{ tmp.price }},-</dt>
 							<td>
-								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Enroll</a>
-								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Přihlásit</a>
+								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 								{{ render(controller("StagBundle:Ticket:delete", {'id': tmp.id})) }}
 							</td>
 							</tr>
 						{% endfor %}
 						</tbody>
 					</table>
-				</div>
+					{% endif %}
+					
+				</div><!-- tickets panel body -->
 			</div>
 		</div>
 	
@@ -83,17 +103,18 @@
 
 	<table class="table">
 		<tr>
-			<th>id</td>
-			<th>gn</th>
-			<th>sn</th>
-			<th>email</th>
-			<th>phoneNumber</th>
-			<th>gender</th>
-			<th>partner</th>
-			<th>note</th>
-			<th>deposit</th>
-			<th>payment</th>
-			<th>created</th>
+			<th>Id</td>
+			<th>Jméno</th>
+			<th>Přijmení</th>
+			<th>Email</th>
+			<th>Telefon</th>
+			<th>Pohlaví</th>
+			<th>Partner</th>
+			<th>Poznámka</th>
+			<th>Vstup</th>
+			<th>Záloha</th>
+			<th>Platba</th>
+			<th>Vytvořeno</th>
 			<th class="hidden-print"></th>
 		<tr>
 		
@@ -108,40 +129,15 @@
 			<td>{{ participant.gender }}</td>
 			<td>{{ participant.partner }}</td>
 			<td>{{ participant.note }}</td>
+			<td>{{ participant.ticketRef.name }}</td>
 
 			<td>
-				{% if participant.deposit == "wire" %}
-					<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
-				{% elseif participant.deposit == "cash" %}
-					<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
-				{% else %}
-					{{ participant.deposit }}
-				{% endif %}
-
-				{% if participant.deposit %}
-					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': null})) }}
-				{% else %}
-					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': 'wire'})) }}
-					{{ render(controller("StagBundle:Participant:deposit", {'id': participant.id, 'value': 'cash'})) }}
-				{% endif %}
+				{% include 'StagBundle:Participant:boxDeposit.html.twig' %}
 			</td>
 
 
 			<td>
-				{% if participant.payment == "wire" %}
-					<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
-				{% elseif participant.payment == "cash" %}
-					<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
-				{% else %}
-					{{ participant.payment }}
-				{% endif %}
-
-				{% if participant.payment %}
-					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': null})) }}
-				{% else %}
-					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'wire'})) }}
-					{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'cash'})) }}
-				{% endif %}
+				{% include 'StagBundle:Participant:boxPayment.html.twig' %}
 			</td>
 
 

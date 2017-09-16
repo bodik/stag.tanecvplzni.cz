@@ -1,0 +1,14 @@
+{% if participant.payment == "wire" %}
+	<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
+{% elseif participant.payment == "cash" %}
+	<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
+{% else %}
+	{{ participant.payment }}
+{% endif %}
+
+{% if participant.payment %}
+	{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': null})) }}
+{% else %}
+	{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'wire'})) }}
+	{{ render(controller("StagBundle:Participant:payment", {'id': participant.id, 'value': 'cash'})) }}
+{% endif %}

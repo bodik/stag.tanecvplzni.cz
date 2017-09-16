@@ -19,7 +19,7 @@
 
 {% block body %}
 <div class="courses">
-	<h1>Course add</h1>
+	<h1>Přidat / Upravit kurz</h1>
 	{{ form_start(form) }}
 
 	{{ form_row(form.name) }}
@@ -30,7 +30,7 @@
 		{{ form_errors(form.level) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.level) }}
-			<div class="help-block">Fill in a dances when editing a "party".</div>
+			<div class="help-block">Pro "párty" vyplňte seznam tanců za celou dobu pořádané akce.</div>
 		</div>
 	</div>
 
@@ -39,7 +39,7 @@
 		{{ form_errors(form.description) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.description) }}
-			<div class="help-block">Supports markdown.</div>
+			<div class="help-block">Podporuje sazbu <a href="https://www.google.com/search?q=nápověda+k+markdown">markdown</a>.</div>
 		</div>
 	</div>
 
@@ -48,7 +48,7 @@
 		{{ form_errors(form.lecturer) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.lecturer) }}
-			<div class="help-block">Supports search and select from already existing items. Fill in a DJs when editing a "party".</div>
+			<div class="help-block">Pro "párty" vyplňte vystupujícího diskžokeje. Pole podporuje doplňování z existujících položek.</div>
 		</div>
 	</div>
 
@@ -57,7 +57,7 @@
 		{{ form_errors(form.place) }}
 		<div class="col-sm-10">
 			{{ form_widget(form.place) }}
-			<div class="help-block">Supports search and select from already existing items.</div>
+			<div class="help-block">Pole podporuje doplňování z existujících položek.</div>
 		</div>
 	</div>
 
@@ -66,7 +66,7 @@
 
         {% do form.pictureRef.setRendered %}
 	<div class="form-group">
-		<label class="col-sm-2 control-label required" for="course_pictureRef">PictureRef</label>
+		<label class="col-sm-2 control-label required" for="course_pictureRef">Obrázek</label>
 		<div class="col-sm-10">
 			<select id="image-picker" class="image-picker show-html" name="course[pictureRef]">
 				<option value=""></option>
@@ -84,7 +84,7 @@
 	{% do form.save.setRendered %}
 	<div class="form-group">
 		<div class="col-sm-2"></div>
-		<div class="col-sm-10"><button type="submit" id="course_save" name="course[save]" class="btn-default btn">Save</button></div>
+		<div class="col-sm-10"><button type="submit" id="course_save" name="course[save]" class="btn-default btn">Uložit</button></div>
 	</div>
 
 	{{ form_end(form) }}

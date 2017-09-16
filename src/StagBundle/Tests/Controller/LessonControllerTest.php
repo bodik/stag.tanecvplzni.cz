@@ -17,7 +17,7 @@ class LessonControllerTest extends StagWebTestCase {
 	public $testCourse;
 	public function createTestLesson($em) {
         	$tmp = new Lesson();
-        	$tmp->setTime(new \DateTime("2012-01-01 22:22:22"));
+        	$tmp->setTime(new \DateTime("2012-01-01 22:22:00"));
         	$tmp->setLength(60);
 		$tmp->setLevel("zacatecnici");
 		$tmp->setLecturer("Mamka");
@@ -62,7 +62,7 @@ class LessonControllerTest extends StagWebTestCase {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/lesson/list');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Lessons")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Lekce")')->count());
 	}
 
 
@@ -76,7 +76,7 @@ class LessonControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/lesson/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
 			'lesson[courseRef]' => $this->testCourse->getId(),
-		        'lesson[time]' => $testLesson->getTime()->format("c"),
+		        'lesson[time]' => $testLesson->getTime()->format("d.m.Y H:i"),
 		        'lesson[length]' => $testLesson->getLength(),
 			'lesson[description]' => $testLesson->getDescription(),
         	]);

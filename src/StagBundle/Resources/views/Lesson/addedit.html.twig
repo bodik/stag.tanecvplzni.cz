@@ -2,9 +2,29 @@
 
 {% block body %}
 <div class="lessons">
-	<h1>Lesson add</h1>
+	<h1>Přidat / Upravit lekci</h1>
 	{{ form_start(form) }}
-        {{ form_widget(form) }}	
+	
+        {{ form_row(form.courseRef) }}
+
+        <div class="form-group">
+		{{ form_label(form.time) }}
+		{{ form_errors(form.time) }}
+		<div class="col-sm-10">
+			{{ form_widget(form.time) }}
+			<div class="help-block">Datum a čas začátku lekce ve formátu '6.7.1415 02:03'.</div>
+		</div>
+	</div>
+	
+        <div class="form-group">
+		{{ form_label(form.length) }}
+		{{ form_errors(form.length) }}
+		<div class="col-sm-10">
+			{{ form_widget(form.length) }}
+			<div class="help-block">Délka lekce v minutách.</div>
+		</div>
+	</div>
+	
         {{ form_end(form) }}
 	
 </div>

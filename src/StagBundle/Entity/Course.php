@@ -13,9 +13,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Course {
 	const ALL_TYPES = [
-		"regular" => "regular",
+		"běžný" => "regular",
 		"workshop" => "workshop",
-		"party" => "party"
+		"párty" => "party"
 	];
 	
 	
@@ -84,7 +84,7 @@ class Course {
 
 	public function __construct() {
 		$this->pair = false;
-		$this->type = self::ALL_TYPES["regular"];
+		$this->type = "regular";
 		$this->color = "#cccccc";
 		$this->applEmailText = "Vaše přihláška byla prijata\nstag.tanecvplzni.cz";
 		$this->lessons = new ArrayCollection();

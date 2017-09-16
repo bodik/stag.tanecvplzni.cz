@@ -46,7 +46,7 @@ class CourseControllerTest extends StagWebTestCase {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/course/list');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Courses")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Kurzy")')->count());
 	}
 
 

@@ -5,7 +5,7 @@
 {% do form.submit.setRendered %}
 
 {% if value is empty %}
-	<button type="submit" class="btn btn-xs btn-default" title="Remove"><span class="glyphicon glyphicon-remove"></span></button>
+	<button type="submit" class="btn btn-xs btn-default hidden-print" title="Remove"><span class="glyphicon glyphicon-remove"></span></button>
 {% elseif value == "wire" %}
 	<button type="submit" class="btn btn-xs btn-primary" title="Wire-transfer"><span class="glyphicon glyphicon-retweet"></span></button>
 {% elseif value == "cash" %}
