@@ -44,7 +44,7 @@ class BlobControllerTest extends StagWebTestCase {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/blob/list');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Blobs")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Obrázky")')->count());
 	}
 
 

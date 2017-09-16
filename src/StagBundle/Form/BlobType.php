@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 class BlobType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		
-		$builder->add('fileHandler', FileType::class);
-		$builder->add('save', SubmitType::class);
+		$builder->add('fileHandler', FileType::class, ["label" => "Soubor"]);
+		$builder->add('save', SubmitType::class, ["label" => "Uložit"]);
 	}
 }
