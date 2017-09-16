@@ -48,12 +48,12 @@
 			<ul class="nav navbar-nav navbar-right">
 		
 				{% if is_granted('ROLE_ADMIN') %}
-				<li><a href="{{ path('course_list') }}">Courses</a></li>
-				<li><a href="{{ path('lesson_list') }}">Lessons</a></li>
-				<li><a href="{{ path('ticket_list') }}">Tickets</a></li>
-				<li><a href="{{ path('participant_list') }}">Participants</a></li>
-				<li><a href="{{ path('blob_list') }}">Blobs</a></li>
-				<li><a href="{{ path('user_list') }}">Users</a></li>
+				<li><a href="{{ path('course_list') }}">Kurzy</a></li>
+				<li><a href="{{ path('lesson_list') }}">Lekce</a></li>
+				<li><a href="{{ path('ticket_list') }}">Vstupy</a></li>
+				<li><a href="{{ path('participant_list') }}">Účastníci</a></li>
+				<li><a href="{{ path('blob_list') }}">Obrázky</a></li>
+				
 				{% endif %}
 				
 				<li class="dropdown">
@@ -63,14 +63,16 @@
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="{{ path('user_changepassword') }}">Change password</a></li>
-						<li><a href="{{ path('logout') }}">Logout</a></li>
+						<li><a href="{{ path('user_list') }}">Uživatelé</a></li>
+						<li role="separator" class="divider"></li>
+						<li><a href="{{ path('user_changepassword') }}">Změna hesla</a></li>
+						<li><a href="{{ path('logout') }}">Odhlášení</a></li>
 					</ul>
 				</li>
 			</ul>
 			{% else %}
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="{{ path('login') }}">Login</a></li>
+				<li><a href="{{ path('login') }}">Přihlášení</a></li>
 			</ul>
 			{% endif %}
 

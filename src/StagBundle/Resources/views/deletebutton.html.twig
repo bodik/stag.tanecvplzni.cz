@@ -1,7 +1,7 @@
 {{ form_start(form, {"attr": {"style": "display:inline;"}}) }}
 
 {# templating just parts of the form does not worked, #}
-<button type="submit" class="btn btn-xs btn-danger" onClick="return confirm('Really delete the item?')"><span class="glyphicon glyphicon-remove"></span> Delete</button>
+<button type="submit" class="btn btn-xs btn-danger" onClick="return confirm('Opravdu smazat?')"><span class="glyphicon glyphicon-remove"></span> Smazat</button>
 {% do form.delete.setRendered %}
 
 {{ form_end(form) }}
