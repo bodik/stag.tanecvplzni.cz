@@ -5,25 +5,24 @@
 
 {% block body %}
 <div class="participants">
-	<h1>Participants</h1>
-	<a class="btn btn-success" href="{{ path('participant_add') }}">Add</a>
+	<h1>Účastníci <a class="btn btn-success" href="{{ path('participant_add') }}">Přidat účastníka</a></h1>
 	<table class="table table-responsive">
 	<thead>
 		<tr>
-			<th>id</th>
-			<th>gn</th>
-			<th>sn</th>
-			<th>email</th>
-			<th>phoneNumber</th>
-			<th>gender</th>
-			<th>partner</th>
-			<th>reference</th>
-			<th>note</th>
-			<th>deposit</th>
-			<th>payment</th>
-			<th>courseRef</th>
-			<th>created</th>
-			<th>modified</th>
+			<th>Id</th>
+			<th>Jméno</th>
+			<th>Přijmení</th>
+			<th>Email</th>
+			<th>Telefon</th>
+			<th>Pohlaví</th>
+			<th>Partner</th>
+			<th>Reference</th>
+			<th>Poznámka</th>
+			<th>Záloha</th>
+			<th>Platba</th>
+			<th>Kurz</th>
+			<th>Vytvořeno</th>
+			<th>Upraveno</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -55,7 +54,7 @@
 			<td>{{ participant.created|date('c')[0:10] }}</td>
 			<td>{{ participant.modified|date('c')[0:10] }}</td>
 			<td>
-				<a class="btn btn-xs btn-primary" href="{{ path('participant_edit', {'id': participant.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-primary" href="{{ path('participant_edit', {'id': participant.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 				{{ render(controller("StagBundle:Participant:delete", {'id': participant.id})) }}
 			</td>
 		</tr>

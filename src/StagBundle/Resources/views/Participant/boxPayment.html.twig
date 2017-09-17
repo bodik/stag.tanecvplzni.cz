@@ -1,7 +1,7 @@
 {% if participant.payment == "wire" %}
-	<span class="glyphicon glyphicon-retweet text-success" title="Wire-transfer"></span>
+	<span class="glyphicon glyphicon-retweet text-success" title="Převodem"></span>
 {% elseif participant.payment == "cash" %}
-	<span class="glyphicon glyphicon-hand-right text-success" title="Cash"></span>
+	<span class="glyphicon glyphicon-hand-right text-success" title="Hotově"></span>
 {% else %}
 	{{ participant.payment }}
 {% endif %}

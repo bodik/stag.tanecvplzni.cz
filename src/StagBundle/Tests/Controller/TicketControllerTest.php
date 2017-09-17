@@ -59,7 +59,7 @@ class TicketControllerTest extends StagWebTestCase {
 		$this->logIn();
 		
         	$crawler = $this->client->request('GET', '/ticket/list');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Tickets")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Vstupy")')->count());
 	}
 
 

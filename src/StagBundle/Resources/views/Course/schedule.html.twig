@@ -7,8 +7,8 @@
 function generateSchedule() {
 	var schedule = [];
 
-	var numberOfLessons = prompt("Number of lessons", "10");
-	var firstLesson = prompt("Starting at date", document.getElementById("course_schedule_schedule").value.split("\n")[0]);
+	var numberOfLessons = prompt("Počet lekcí", "10");
+	var firstLesson = prompt("První lekce", document.getElementById("course_schedule_schedule").value.split("\n")[0]);
 	var firstDate = moment(firstLesson, 'DD.MM.YYYY HH:mm');
 
 	for( var i = 0; i < numberOfLessons; i++) {
@@ -21,17 +21,32 @@ function generateSchedule() {
 
 {% block body %}
 <div class="courses">
-	<h1>Course schedule {{course.name}}</h1>
+	<h1>Naplánovat kurz {{course.name}}</h1>
 
 	{{ form_start(form) }}
 
-        {{ form_row(form.length) }}
+        <div class="form-group">
+		{{ form_label(form.length) }}
+		<div class="col-sm-10">
+			{{ form_errors(form.length) }}
+			{{ form_widget(form.length) }}
+			<div class="help-block">Délka lekce v minutách.</div>
+		</div>
+	</div>
 
         <div class="form-group">
 		<label class="col-sm-2 control-label"></label>
-		<div class="col-sm-10"><a href="javascript:generateSchedule();">Generate schedule</a></div>
+		<div class="col-sm-10"><a href="javascript:generateSchedule();">Vytvořit rozvrh</a></div>
 	</div>
-        {{ form_row(form.schedule) }}
+	
+        <div class="form-group">
+		{{ form_label(form.schedule) }}
+		<div class="col-sm-10">
+			{{ form_errors(form.schedule) }}
+			{{ form_widget(form.schedule) }}
+			<div class="help-block">Datumy a časy začátků lekcí ve formátu '6.7.1415 02:03'.</div>
+		</div>
+	</div>
 
         {{ form_end(form) }}
 </div>

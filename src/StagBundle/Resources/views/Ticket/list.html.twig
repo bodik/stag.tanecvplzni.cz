@@ -2,15 +2,14 @@
 
 {% block body %}
 <div class="tickets">
-	<h1>Tickets</h1>
-	<a class="btn btn-success" href="{{ path('ticket_add') }}">Add</a>
+	<h1>Vstupy <a class="btn btn-success" href="{{ path('ticket_add') }}">Přidat vstup</a></h1>
 	<table class="table table-responsive">
 	<thead>
 		<tr>
-			<th>id</th>
-			<th>courseRef</th>
-			<th>name</th>
-			<th>price</th>
+			<th>Id</th>
+			<th>Kurz</th>
+			<th>Název</th>
+			<th>Cena</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -20,9 +19,9 @@
                 	<td>{{ ticket.id }}</td>
 			<td><a  href="{{ path('course_book', {'id': ticket.courseRef.id}) }}">{{ ticket.courseRef.name }}</a></td>
 			<td>{{ ticket.name }}</td>
-			<td>{{ ticket.price }}</td>
+			<td>{{ ticket.price }},-</td>
 			<td>
-				<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+				<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 				{{ render(controller("StagBundle:Ticket:delete", {'id': ticket.id})) }}
 			</td>
 		</tr>

@@ -15,12 +15,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class CourseType extends AbstractType {
 	public function buildForm(FormBuilderInterface $builder, array $options) {
-		$builder->add('name', TextType::class, ["label" => "Jméno"]);
+		$builder->add('name', TextType::class, ["label" => "Název"]);
 
 		$builder->add('type', ChoiceType::class, [
 			"label" => "Typ",
 			"choices" => Course::ALL_TYPES,
-			"choice_label" => function ($value, $key, $index) { return $key; },
+			####"choice_label" => function ($value, $key, $index) { return $key; },
 			"expanded" => true,
 			]
 		);

@@ -2,9 +2,20 @@
 
 {% block body %}
 <div class="tickets">
-	<h1>Ticket add</h1>
+	<h1>Přidat / Upravit vstup</h1>
 	{{ form_start(form) }}
-        {{ form_widget(form) }}	
+
+        {{ form_row(form.courseRef) }}
+        {{ form_row(form.name) }}	
+        
+	<div class="form-group">
+		{{ form_label(form.price) }}
+		<div class="col-sm-10">
+			{{ form_errors(form.price) }}
+			{{ form_widget(form.price) }}
+			<div class="help-block">Cena v korunách bez uvedení haléřů a měny.</div>
+		</div>
+	</div>
         {{ form_end(form) }}
 	
 </div>

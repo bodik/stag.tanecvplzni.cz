@@ -91,7 +91,7 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$this->logIn();
 
         	$crawler = $this->client->request('GET', '/participant/list');
-	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Participants")')->count());
+	        $this->assertGreaterThan(0, $crawler->filter('html:contains("Účastníci")')->count());
 	}
 
 
