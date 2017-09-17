@@ -59,13 +59,18 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 					<tr><td><strong>Místo</strong></td><td>{{course.place}}</td></tr>
 				{% endif %}
 			</table>
-			
-			{% if course.tickets is not empty %}
+
+
+			{% set activeTickets = [] %}
+			{% for ticket in course.tickets %}{% if ticket.active %}{% set activeTickets = activeTickets|merge([ticket]) %}{% endif %}{% endfor %}
+			{% if activeTickets is not empty %}
 			<div class="panel panel-info">
 				<div class="panel-heading">Ceny</div>
 				<div class="panel-body">
 					<ul class="list-group">
-					{% for ticket in course.tickets %}
+					{% for ticket in activeTickets %}
+
+						{% if ticket.active %}
 						<li class="list-group-item">
 							<div class="row">
 								<div class="col-xs-6">
@@ -79,6 +84,7 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 								</div>
 							</div>
 						</li>
+						{% endif %}
 					{% endfor %}
 					</ul>
 				</div>

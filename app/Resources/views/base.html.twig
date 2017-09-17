@@ -16,12 +16,24 @@
 	<script src="{{ asset('js/bootstrap.min.js') }}"></script>
 	<script src="{{ asset('js/toastr.min.js') }}"></script>
 	<style>
+		/* menu image */
 		.navbar-brand { padding: 0px; }
 		.navbar-brand img { height: 100%; padding: 5px; width: auto; }
 
-		/* globals */
+		/* some items needs to be padded */
 		.padded { margin-bottom: 1em; }
+
+		/* required items on forms */
 		label.control-label.required:after { content:"*"; color:red; }
+
+		/* disables ahref targets when printing the page */
+		@media print { a[href]:after { content: none !important; } }
+
+		/* inactive */
+		.inactive {
+			opacity: 0.5;
+			text-decoration: line-through;
+		}
 	</style>
 	{% block stylesheets %}{% endblock %}
 </head>

@@ -4,6 +4,7 @@ namespace StagBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -22,6 +23,7 @@ class TicketType extends AbstractType {
 		
 		$builder->add("name", TextType::class, ["label" => "Název"]);
 		$builder->add("price", IntegerType::class, ["label" => "Cena"]);
+		$builder->add("active", CheckboxType::class, ["label" => "Aktivní", "required" => false]);
 
 		$builder->add("save", SubmitType::class, ["label" => "Uložit"]);
 	}

@@ -31,11 +31,16 @@ class Ticket {
 	private $price;
 	
 	/**
+	 * @ORM\Column(name="active", type="boolean", nullable=true)
+	 */
+	private $active;
+
+	/**
 	 * @ORM\ManyToOne(targetEntity="Course", inversedBy="tickets")
 	 * @ORM\JoinColumn(name="course_id", referencedColumnName="id", nullable=false)
 	 */
 	private $courseRef;
-	
+
 	/**
 	 * @ORM\OneToMany(targetEntity="Participant", mappedBy="ticketRef")
 	 */
@@ -44,6 +49,7 @@ class Ticket {
 	
 
 	public function __construct() {
+		$this->active = true;
 		$this->participants = new ArrayCollection();
 	}
 
@@ -54,6 +60,9 @@ class Ticket {
 
 	public function getPrice() { return $this->price; }
 	public function setPrice($price) { $this->price = $price; return $this; }
+
+	public function getActive() { return $this->active; }
+	public function setActive($active) { $this->active = $active; return $this; }
 	
 	public function getCourseRef() { return $this->courseRef; }
 	public function setCourseRef($courseRef) { $this->courseRef = $courseRef; return $this; }

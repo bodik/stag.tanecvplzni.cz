@@ -19,6 +19,7 @@ class TicketControllerTest extends StagWebTestCase {
         	$tmp = new Ticket();
         	$tmp->setName("Jednotlivec");
         	$tmp->setPrice(60);
+		$tmp->setActive(true);
         	
 		$courseRepo = $em->getRepository("StagBundle:Course");
 		$tmp->setCourseRef($courseRepo->findOneById($this->testCourse->getId()));
@@ -75,6 +76,7 @@ class TicketControllerTest extends StagWebTestCase {
 			'ticket[courseRef]' => $this->testCourse->getId(),
 		        'ticket[name]' => $testTicket->getName(),
 		        'ticket[price]' => $testTicket->getPrice(),
+		        'ticket[active]' => $testTicket->getActive(),
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -83,6 +85,7 @@ class TicketControllerTest extends StagWebTestCase {
         	$this->assertNotNull($ticket);
         	$this->assertSame($testTicket->getName(), $ticket->getName());
 		$this->assertSame($testTicket->getPrice(), $ticket->getPrice());
+		$this->assertSame($testTicket->getActive(), $ticket->getActive());
 
 		$this->em->remove($ticket);
 		$this->em->flush();
@@ -135,6 +138,29 @@ class TicketControllerTest extends StagWebTestCase {
 
 		$ticket = $this->ticketRepo->findOneByName($testTicket->getName());
 		$this->assertNull($ticket);
+	}
+
+
+
+	public function testActiveAction() {
+		$this->logIn();
+
+		$testTicket = $this->createTestTicket($this->em);
+		$testTicket->setName($testTicket->getName()." active ".mt_rand());
+		$this->em->persist($testTicket);
+		$this->em->flush();
+		$this->em->clear();
+
+		$crawler = $this->client->request("GET", "/ticket/active/{$testTicket->getId()}");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$ticket = $this->ticketRepo->findOneByName($testTicket->getName());
+		$this->assertSame(!$testTicket->getActive(), $ticket->getActive());
+
+		$this->em->remove($ticket);
+		$this->em->flush();
 	}
 
 

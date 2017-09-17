@@ -83,18 +83,20 @@
 						<thead><tr>
 							<th>Jméno</th>
 							<th>Cena</th>
+							<th>Aktivní</th>
 							<th></th>
 						</tr></thead>
 
 						<tbody>
-						{% for tmp in course.tickets %}
-							<tr>
-							<td>{{ tmp.name }}</dt>
-							<td>{{ tmp.price }},-</dt>
+						{% for ticket in course.tickets %}
+							<tr class="{% if not ticket.active %}inactive{% endif %}">
+							<td>{{ ticket.name }}</dt>
+							<td>{{ ticket.price }},-</dt>
+							<td>{{ render(controller("StagBundle:Ticket:active", {'id': ticket.id})) }}</td>
 							<td>
-								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': tmp.id}) }}"><span class="glyphicon glyphicon-plus"></span> Přihlásit</a>
-								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
-								{{ render(controller("StagBundle:Ticket:delete", {'id': tmp.id})) }}
+								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': ticket.id}) }}"><span class="glyphicon glyphicon-plus"></span> Přihlásit</a>
+								<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
+								{{ render(controller("StagBundle:Ticket:delete", {'id': ticket.id})) }}
 							</td>
 							</tr>
 						{% endfor %}
@@ -147,7 +149,6 @@
 			<td>
 				{% include 'StagBundle:Participant:boxPayment.html.twig' %}
 			</td>
-
 
 			<td>{{ participant.created|date('c')[0:10] }}</td>
 			<td class="hidden-print">

@@ -7,6 +7,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Ticket;
 use StagBundle\Form\DeleteButtonType;
+use StagBundle\Form\TicketActiveButtonType;
 use StagBundle\Form\TicketType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -103,5 +104,33 @@ class TicketController extends Controller {
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));
+	}
+
+
+	/**
+	 * @Route("/ticket/active/{id}", name="ticket_active")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function activeAction(Request $request, $id) {
+		$ticket = $this->em->getRepository("StagBundle:Ticket")->find($id);
+		$form = $this->createForm(TicketActiveButtonType::class, $ticket,
+			array("action" => $this->generateUrl("ticket_active", ["id" => $id]))
+		);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			if($ticket) {
+				$ticket->setActive( !$ticket->getActive() );
+				$this->em->flush();
+
+				$this->addFlash("success", "Ticket {$ticket->getName()} active toggle.");
+			} else {
+				$this->addFlash("error","Ticket with ID {$id} does not exits");
+			}
+
+			return $this->redirect($request->server->get('HTTP_REFERER'));
+		}
+
+		return $this->render("StagBundle:Ticket:activebutton.html.twig", ["form" => $form->createView(), "ticket" => $ticket]);
 	}
 }

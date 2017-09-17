@@ -10,16 +10,18 @@
 			<th>Kurz</th>
 			<th>Název</th>
 			<th>Cena</th>
+			<th>Aktivní</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for ticket in tickets %}
-                <tr>
+                <tr class="{% if not ticket.active %}inactive{% endif %}">
                 	<td>{{ ticket.id }}</td>
 			<td><a  href="{{ path('course_book', {'id': ticket.courseRef.id}) }}">{{ ticket.courseRef.name }}</a></td>
 			<td>{{ ticket.name }}</td>
 			<td>{{ ticket.price }},-</td>
+			<td>{{ render(controller("StagBundle:Ticket:active", {'id': ticket.id})) }}</td>
 			<td>
 				<a class="btn btn-xs btn-primary" href="{{ path('ticket_edit', {'id': ticket.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 				{{ render(controller("StagBundle:Ticket:delete", {'id': ticket.id})) }}
