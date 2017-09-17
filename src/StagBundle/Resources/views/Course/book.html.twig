@@ -1,5 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+<style>
+.panel-heading { padding: 0.5em 0.5em; }
+.panel-body { padding: 0.5em; }
+.table { margin-bottom: 0; }
+</style>
+{% endblock %}
+
 {% block body %}
 <div class="courses">
 
@@ -13,7 +21,7 @@
 		<li><strong>Místo:</strong> {{course.place}}</li>
 	</ul>
 	
-	<div class="row" style="padding-bottom: 1em">
+	<div class="row">
 		<div class="col-md-6">
 
 			<div class="panel panel-default">
@@ -153,7 +161,4 @@
 
 
 </div>
-{% endblock %}
-
-{% block stylesheets %}
 {% endblock %}
