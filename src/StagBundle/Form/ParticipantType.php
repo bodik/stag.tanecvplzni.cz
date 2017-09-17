@@ -17,7 +17,7 @@ class ParticipantType extends AbstractType {
 		$builder->add('ticketRef', EntityType::class, [
 			"label" => "Vstup",
 			"class" => "StagBundle:Ticket",
-			"choice_label" => "name",
+    			'choice_label' => function ($ticket) { return $ticket->getCourseRef()->getName() ." - ".$ticket->getName(); },
 			"expanded" => false,
 			"multiple" => false
 		]);
