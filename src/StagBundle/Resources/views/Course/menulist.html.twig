@@ -1,0 +1,6 @@
+{% for course in courses %}
+	<li>
+		
+		<a href="{{ path('course_book', {'id': course.id}) }}">{% include 'StagBundle:Course:icon.html.twig' %}{{course.name}}</a>
+	</li>
+{% endfor %}

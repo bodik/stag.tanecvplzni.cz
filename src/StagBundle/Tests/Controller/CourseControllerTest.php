@@ -221,6 +221,15 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
+	public function testMenuListAction() {
+		$this->logIn();
+
+		$crawler = $this->client->request("GET", "/course/menulist");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+	}
+
+
+
 
 
 

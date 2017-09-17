@@ -206,6 +206,15 @@ class CourseController extends Controller {
 		}
 		return new JsonResponse($data);
 	}
+	
+	/**
+	 * @Route("/course/menulist", name="course_menulist")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function menuListAction(Request $request) {
+        	$courses = $this->em->getRepository("StagBundle:Course")->findAll();
+		return $this->render("StagBundle:Course:menulist.html.twig", [ "courses" => $courses ] );
+	}
 
 
 
