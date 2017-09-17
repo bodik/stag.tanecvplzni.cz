@@ -73,6 +73,16 @@ class InitDB implements FixtureInterface, ContainerAwareInterface {
 		$manager->persist($user);
 		$manager->flush();			
 		
+		
+		$user = new User();
+		$user->setUsername("viktorvasina");
+		$user->setRoles(["ROLE_ADMIN", "ROLE_OPERATOR"]);
+		$user->setActive(true);
+		$user->setLocked(false);
+		$user->setEmail("viktor.vasina@gmail.com");
+		$user->setFailedLoginCount(0);
+		$manager->persist($user);
+		$manager->flush();		
 	}
 }
 
