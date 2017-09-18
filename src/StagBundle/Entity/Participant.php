@@ -74,7 +74,7 @@ class Participant {
 	private $payment;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="tickets")
+	 * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="participants")
 	 * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", nullable=false)
 	 */
 	private $ticketRef;
