@@ -4,11 +4,8 @@
 <div class="participants">
 	<h1 class="text-center padded">Přihláška na kurzy, workshopy Tanec v Plzni</h1>
 
-	{% if not form.vars["value"].ticketRef.active %}
-	<div class="alert alert-danger text-center">
-		Tento typ vstupného není aktivní, Vaše přihláška bude neplatná.
-	</div>
-	{% endif %}
+	{% if not form.vars["value"].ticketRef.courseRef.active %}<div class="alert alert-danger text-center">Tento kurz není aktivní.</div>{% endif %}
+	{% if not form.vars["value"].ticketRef.active %}<div class="alert alert-danger text-center">Tento typ vstupného není aktivní.</div>{% endif %}
 
 	{{ form_start(form) }}
 	

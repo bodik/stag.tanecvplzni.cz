@@ -41,15 +41,15 @@
 			<th>Barva</th>
 			<th>Email odpovědi</th>
 			<th>Obrázek</th>
-			<th>Počet lekcí</th>
-			<th>Počet vstupů</th>
-			<th>Počet účastníků</th>
+			<th>FB událost / skupina</th>
+			<th>Aktivní</th>
+			<th>Počet lekcí/vstupů/účastníků</th>
 			<th></th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for course in courses %}
-                <tr>
+                <tr class="{% if not course.active %}inactive{% endif %}">
                 	<td>{{ course.id }}</td>
 			<td><a  href="{{ path('course_book', {'id': course.id}) }}">{{ course.name }}</a></td>
 			<td>{% include 'StagBundle:Course:icon.html.twig' %}</td>
@@ -60,13 +60,16 @@
 			
 			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
 			<td>{{ course.applEmailText[0:20] }}...</td>
-			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 70px;">{% endif %}</td>
-			<td>{{ course.lessons|length }}</td>
-			<td>{{ course.tickets|length }}</td>
+			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 50px;">{% endif %}</td>
+			<td>
+				{% if course.fbEventUrl %}<a href="{{ course.fbEventUrl }}"><span class="fa fa-calendar"</span></a>{% endif %}
+				{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"</span></a>{% endif %}
+			</td>
+			<td>{{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</td>
 			<td>
 				{% set counter = 0 %}
 				{% for ticket in course.tickets %}{% set counter = counter + ticket.participants|length %}{% endfor %}
-				{{ counter }}
+				{{ course.lessons|length }} / {{ course.tickets|length }} / {{ counter }}
 			</td>
 			
 			<td>

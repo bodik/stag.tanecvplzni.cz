@@ -177,8 +177,18 @@ class ParticipantController extends Controller {
 	 * @Route("/participant/application/{ticket_id}", name="participant_application")
 	 */
 	public function applicationAction(Request $request, $ticket_id) {
+
+		$ticket = $this->em->getRepository("StagBundle:Ticket")->findOneById($ticket_id);
+		if ( !$ticket ) { throw $this->createNotFoundException(); }
+
+		# deny non-active tickets or non-active courses to non-admin user
+		if (
+			( ($ticket->getActive() == false) || ($ticket->getCourseRef()->getActive() == false) ) &&
+			( !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') )
+		) { throw $this->createAccessDeniedException(); }
+
 		$participant = new Participant();
-		$participant->setTicketRef($this->em->getRepository("StagBundle:Ticket")->findOneById($ticket_id));
+		$participant->setTicketRef($ticket);
 		$form = $this->createForm(ParticipantApplicationType::class, $participant);
 		
 		$form->handleRequest($request);

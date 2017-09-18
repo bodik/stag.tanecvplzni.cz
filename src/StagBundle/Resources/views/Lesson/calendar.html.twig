@@ -52,6 +52,7 @@ $(document).ready(function() {
 		eventRender: function(event, element) {
 			var title = element.find(".fc-title").text();
    			element.find(".fc-title").html("<strong>"+title+"</strong>" + "<br/>" + event.place);
+			if ( ! event.active ) {	element.addClass("inactive"); }
 		} 
 	});
 	

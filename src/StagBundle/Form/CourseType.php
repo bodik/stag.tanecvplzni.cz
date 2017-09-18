@@ -40,7 +40,12 @@ class CourseType extends AbstractType {
 			"expanded" => false,
 			"multiple" => false
 			]);		
+
+		$builder->add('fbEventUrl', TextType::class, ["label" => "FB událost", "required" => false]);
+		$builder->add('fbGroupUrl', TextType::class, ["label" => "FB skupina", "required" => false]);
 		
+		$builder->add('active', CheckboxType::class, ["label" => "Aktivní", "required" => false]);
+
 		$builder->add("save", SubmitType::class, ["label" => "Uložit"]);
 	}
 }

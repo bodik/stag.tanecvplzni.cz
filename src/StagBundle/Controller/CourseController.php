@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Course;
 use StagBundle\Entity\Lesson;
+use StagBundle\Form\CourseActiveButtonType;
 use StagBundle\Form\CourseScheduleType;
 use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
@@ -179,8 +180,9 @@ class CourseController extends Controller {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
 	}
-	
-	
+
+
+
 	/**
 	 * @Route("/course/suggest/place", name="course_suggest_place")
 	 * @Security("has_role('ROLE_ADMIN')")
@@ -193,7 +195,9 @@ class CourseController extends Controller {
 		}
 		return new JsonResponse($data);
 	}
-	
+
+
+
 	/**
 	 * @Route("/course/suggest/lecturer", name="course_suggest_lecturer")
 	 * @Security("has_role('ROLE_ADMIN')")
@@ -206,7 +210,9 @@ class CourseController extends Controller {
 		}
 		return new JsonResponse($data);
 	}
-	
+
+
+
 	/**
 	 * @Route("/course/menulist", name="course_menulist")
 	 * @Security("has_role('ROLE_ADMIN')")
@@ -218,6 +224,32 @@ class CourseController extends Controller {
 
 
 
+	/**
+	 * @Route("/course/active/{id}", name="course_active")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function activeAction(Request $request, $id) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		$form = $this->createForm(CourseActiveButtonType::class, $course,
+			array("action" => $this->generateUrl("course_active", ["id" => $id]))
+		);
+
+		$form->handleRequest($request);
+		if ($form->isSubmitted() && $form->isValid()) {
+			if($course) {
+				$course->setActive( !$course->getActive() );
+				$this->em->flush();
+
+				$this->addFlash("success", "Course {$course->getName()} active toggle.");
+			} else {
+				$this->addFlash("error","Course with ID {$id} does not exits");
+			}
+
+			return $this->redirect($request->server->get('HTTP_REFERER'));
+		}
+
+		return $this->render("StagBundle:Course:activebutton.html.twig", ["form" => $form->createView(), "course" => $course]);
+	}
 
 
 
@@ -225,30 +257,33 @@ class CourseController extends Controller {
 	 * @Route("/course/show/{id}", name="course_show")
 	 */
 	public function showAction(Request $request, $id) {
+
 		$course = $this->em->getRepository("StagBundle:Course")->findOneById($id);
-		#switch($course->getType()) {
-		#	case "party":
-		#		return $this->render("StagBundle:Course:showparty.html.twig", ["course" => $course]);
-		#		break;
-		#	default:
-		#		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
-		#		break;
-		#}
+		if ( !$course ) { throw $this->createNotFoundException(); }
+
+		# deny non-active courses to non-admin user
+		if (
+			( ($course->getActive() == false) ) &&
+			( !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') )
+		) { throw $this->createAccessDeniedException(); }
+
 		return $this->render("StagBundle:Course:show.html.twig", ["course" => $course]);
 	}
 
 
 
 	/**
-	 * @Route("/course/grid/{type}", name="course_grid", defaults={"type" = "all"})
-	 * @Route("/", name="default_index", defaults={"type" = "all"})
+	 * @Route("/course/grid/{type}", name="course_grid", defaults={"type" = null})
+	 * @Route("/", name="default_index", defaults={"type" = null})
 	 */
 	public function gridAction(Request $request, $type) {
-		if($type == "all") {
-			$courses = $this->em->getRepository("StagBundle:Course")->findAll();
-		} else {
-			$courses = $this->em->getRepository("StagBundle:Course")->findByType($type);
-		}
+		$query = [];
+
+		# deny non-active courses to non-admin user
+		if ( !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ) { $query["active"] = true; }
+
+		if ($type) { $query["type"] = $type; }
+		$courses = $this->em->getRepository("StagBundle:Course")->findBy($query);
 		
 		$data = [];
 		foreach ($courses as $tmp) {
@@ -290,6 +325,7 @@ class CourseController extends Controller {
 				"color" => $tmp->getColor(),
 				"timespan" => $timespan,
 				"pictureRef" => $tmp->getPictureRef(),
+				"active" => $tmp->getActive(),
 			];
 		}		
 		

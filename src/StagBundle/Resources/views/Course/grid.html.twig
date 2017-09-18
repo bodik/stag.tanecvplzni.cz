@@ -51,8 +51,8 @@ td { border: 0; padding-left: 0.5em; padding-right: 0.5em; padding-top: 0; paddi
 				{% else %}
 				<a href="{{ path('course_show', {'id': course.id}) }}"><!-- single course box -->
 				{% endif %}
-				
-				<div class="col-md-3 col-centered panel panel-default"><div class="panel-body"><!-- panel -->
+
+				<div class="col-md-3 col-centered panel panel-default {% if not course.active %}inactive{% endif %}"><div class="panel-body"><!-- panel -->
 				
 
 					<table>

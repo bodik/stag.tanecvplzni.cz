@@ -13,12 +13,19 @@
 
 	{% include 'StagBundle:Course:toolbox.html.twig' %}
 	
-	<ul class="list-inline well">
+	{% if not course.active %}<div class="alert alert-danger text-center">Tento kurz není aktivní.</div>{% endif %}
+
+	<ul class="list-inline well {% if not course.active %}inactive{% endif %}">
 		<li><strong>Kurz:</strong> {{course.name}}</li>
 		<li><strong>Typ:</strong> {{course.type}}</li>
 		<li><strong>Úroveň:</strong> {{course.level}}</li>
 		<li><strong>Lektor:</strong> {{course.lecturer}}</li>
 		<li><strong>Místo:</strong> {{course.place}}</li>
+		<li><strong>FB:</strong>
+			{% if course.fbEventUrl %}<a href="{{ course.fbEventUrl }}"><span class="fa fa-calendar"</span></a>{% endif %}
+			{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"</span></a>{% endif %}
+		</li>
+		<li><strong>Aktivní:</strong> {{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</li>
 	</ul>
 	
 	<div class="row">

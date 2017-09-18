@@ -107,6 +107,9 @@ cestování, fotografování a dobré jídlo";
 		$course->setColor("#527dce");
 		$course->setApplEmailText($this->text1);
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("salsa1.jpg"));
+		$course->setFbEventUrl("https://www.facebook.com/groups/".str_shuffle("1188703337868985")."/");
+		$course->setFbGroupUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
+		$course->setActive(true);
 		$manager->persist($course);
 		$manager->flush();
 
@@ -158,6 +161,7 @@ cestování, fotografování a dobré jídlo";
 		$course->setColor("#a874cc");
 		$course->setApplEmailText($this->text1);
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("bachata1.jpg"));
+		$course->setActive(false);
 		$manager->persist($course);
 		$manager->flush();
 		
@@ -202,6 +206,7 @@ cestování, fotografování a dobré jídlo";
 		$course->setColor("#ffac5e");
 		$course->setApplEmailText($this->text1);
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("workout1.jpg"));
+		$course->setActive(true);
 		$manager->persist($course);
 		$manager->flush();
 
@@ -253,6 +258,7 @@ cestování, fotografování a dobré jídlo";
 		$course->setColor("#aabbcc");
 		$course->setApplEmailText($this->text1);
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("testblob.jpg"));
+		$course->setActive(true);
 		$manager->persist($course);
 		$manager->flush();
 		
@@ -325,6 +331,7 @@ cestování, fotografování a dobré jídlo";
 		$course->setPlace("Kalikovský mlýn");
 		$course->setColor("#ff0000");
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("workout1.jpg"));
+		$course->setActive(true);
 		$manager->persist($course);
 		$manager->flush();
 

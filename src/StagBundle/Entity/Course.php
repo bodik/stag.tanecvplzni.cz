@@ -72,6 +72,20 @@ class Course {
 	private $pictureRef;
 	
 	/**
+	 * @ORM\Column(name="fbEventUrl", type="string", length=1024, nullable=true)
+	 */
+	private $fbEventUrl;
+	/**
+	 * @ORM\Column(name="fbGroupUrl", type="string", length=1024, nullable=true)
+	 */
+	private $fbGroupUrl;
+
+	/**
+	 * @ORM\Column(name="active", type="boolean")
+	 */
+	private $active;
+
+	/**
 	 * @ORM\OneToMany(targetEntity="Lesson", mappedBy="courseRef")
 	 */
 	private $lessons;
@@ -83,8 +97,8 @@ class Course {
 
 
 	public function __construct() {
-		$this->pair = false;
 		$this->type = "regular";
+		$this->active = true;
 		$this->color = "#cccccc";
 		$this->applEmailText = "Vaše přihláška byla prijata\nstag.tanecvplzni.cz";
 		$this->lessons = new ArrayCollection();
@@ -116,17 +130,23 @@ class Course {
 	
 	public function getApplEmailText() { return $this->applEmailText; }
 	public function setApplEmailText($applEmailText) { $this->applEmailText = $applEmailText; return $this; }
-	
+
 	public function getPictureRef() { return $this->pictureRef; }
 	public function setPictureRef($pictureRef) { $this->pictureRef = $pictureRef; return $this; }
+
+	public function getFbEventUrl() { return $this->fbEventUrl; }
+	public function setFbEventUrl($fbEventUrl) { $this->fbEventUrl = $fbEventUrl; return $this; }
 	
+	public function getFbGroupUrl() { return $this->fbGroupUrl; }
+	public function setFbGroupUrl($fbGroupUrl) { $this->fbGroupUrl = $fbGroupUrl; return $this; }
+
+	public function getActive() { return (bool) $this->active; }
+	public function setActive($active) { $this->active = $active; return $this; }
+
 	public function getLessons() { return $this->lessons; }
 	public function setLessons($lessons) { $this->lessons = $lessons; return $this; }
 	
 	public function getTickets() { return $this->tickets; }
 	public function setTickets($tickets) { $this->tickets = $tickets; return $this; }
-	
-	public function getParticipants() { return $this->participants; }
-	public function setparticipants($participants) { $this->participants = $participants; return $this; }
 	
 }

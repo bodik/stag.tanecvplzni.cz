@@ -1,0 +1,13 @@
+{{ form_start(form, {"attr": {"style": "display:inline;"}}) }}
+
+{# templating just parts of the form does not worked, #}
+
+{% do form.submit.setRendered %}
+
+{% if course.active %}
+	<button type="submit" class="btn btn-xs btn-success hidden-print" title="Aktivní"><span class="glyphicon glyphicon-ok"></span></button>
+{% else %}
+	<button type="submit" class="btn btn-xs btn-danger" title="Neaktivní"><span class="glyphicon glyphicon-remove"></span></button>
+{% endif %}
+
+{{ form_end(form) }}

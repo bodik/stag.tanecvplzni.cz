@@ -120,7 +120,29 @@ class LessonController extends Controller {
 	 */
 	public function eventsAction(Request $request) {
 		$data = [];
-		$lessons = $this->em->getRepository("StagBundle:Lesson")->findAll();
+
+		# old plan -- return all to anyone
+		#$lessons = $this->em->getRepository("StagBundle:Lesson")->findBy($query);
+
+#		# planB -- deny non-active courses to non-admin user
+#		$query = [];
+#		if ( !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ) { $query["active"] = true; }
+#		$courses = $this->em->getRepository("StagBundle:Course")->findBy($query);
+#		$course_refs = array_map( function($c){return $c->getId();}, $courses);
+#		$lessons = $this->em->getRepository("StagBundle:Lesson")->findBy(["courseRef" => $course_refs]);
+
+		# planA -- deny non-active courses to non-admin user
+		$qb = $this->em->createQueryBuilder();
+		$qb->select("l");
+		$qb->from('StagBundle:Lesson', 'l');
+		if ( !$this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ) {
+			$qb->join('StagBundle:Course', 'c', 'WITH', 'l.courseRef = c.id');
+			$qb->where('c.active = true');
+		}
+		$lessons = $qb->getQuery()->getResult();
+#		#dump($lessons);
+
+
 		foreach ($lessons as $tmp) {
 			#{'title': 'Meeting','start': '2017-05-12T14:30:00'}
 			$data[] = [
@@ -129,6 +151,7 @@ class LessonController extends Controller {
 				"end" => $tmp->getTime()->add(new \DateInterval("PT".$tmp->getLength()."M"))->format('c'),
 				"color" => $tmp->getCourseRef()->getColor(),
 				"place" => $tmp->getCourseRef()->getPlace(),
+				"active" => $tmp->getCourseRef()->getActive(),
 				"url" => $this->generateUrl('course_show', ["id" => $tmp->getCourseRef()->getId()]),
 			];
 		}

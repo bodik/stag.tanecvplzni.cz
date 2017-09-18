@@ -167,6 +167,31 @@ class LessonControllerTest extends StagWebTestCase {
 		$this->em->remove($testLesson);
 		$this->em->flush();
 	}
+
+
+
+	public function testUnauthenticatedInactiveCourseEventsAction() {
+		$testCourse = (new CourseControllerTest())->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." unauth inactive course events ".mt_rand());
+		$testCourse->setActive(false);
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$tl = new LessonControllerTest();
+		$tl->testCourse = $testCourse;
+		$testLesson = $tl->createTestLesson($this->em);
+		$this->em->persist($testLesson);
+		$this->em->flush();
+
+
+		$crawler = $this->client->request("GET", "/lesson/events");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$this->assertSame(0, preg_match("/\"title\":\"{$testCourse->getName()}\"/", $this->client->getResponse()->getContent()));
+
+		$this->em->remove($testLesson);
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
 	
 
 }

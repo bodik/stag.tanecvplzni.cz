@@ -286,9 +286,56 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$this->em->remove($participant);
 		$this->em->flush();
     	}
-	
 
 
+
+	public function testUnauthenticatedInactiveCourseApplicationAction() {
+		$testCourse = (new CourseControllerTest())->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." unauth inactive course application ".mt_rand());
+		$testCourse->setActive(false);
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$tk = new TicketControllerTest();
+		$tk->testCourse = $testCourse;
+		$testTicket = $tk->createTestTicket($this->em);
+		$this->em->persist($testTicket);
+		$this->em->flush();
+
+		$crawler = $this->client->request("GET", "/participant/application/{$testTicket->getId()}");
+		# existing but inacive course returns denied which leads to login
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+		$this->assertRegExp("/\/login$/", $this->client->getResponse()->headers->get("location"));
+
+		$this->em->remove($testTicket);
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+
+	public function testUnauthenticatedInactiveTicketApplicationAction() {
+		$testCourse = (new CourseControllerTest())->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." unauth inactive ticket application ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$tk = new TicketControllerTest();
+		$tk->testCourse = $testCourse;
+		$testTicket = $tk->createTestTicket($this->em);
+		$testTicket->setActive(false);
+		$this->em->persist($testTicket);
+		$this->em->flush();
+
+		$crawler = $this->client->request("GET", "/participant/application/{$testTicket->getId()}");
+		# existing but inacive course returns denied which leads to login
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+		$this->assertRegExp("/\/login$/", $this->client->getResponse()->headers->get("location"));
+
+		$this->em->remove($testTicket);
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
 }
 
 ?>

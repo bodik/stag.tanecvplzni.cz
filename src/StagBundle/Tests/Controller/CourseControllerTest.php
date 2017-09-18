@@ -15,11 +15,15 @@ class CourseControllerTest extends StagWebTestCase {
 	public function createTestCourse($em) {
 		$tmp = new Course();
         	$tmp->setName("kurz test");
+		$tmp->setType("regular");
+		$tmp->setLevel("zacatecnici");
 		$tmp->setDescription("kurz test popis");
 		$tmp->setLecturer("ucitel");
 		$tmp->setPlace("tanecni sal");
-		$tmp->setType("regular");
 		$tmp->setColor("#eeffee");
+		$tmp->setFbEventUrl("https://www.facebook.com/groups/".str_shuffle("1188703337868985")."/");
+		$tmp->setFbGroupUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
+		$tmp->setActive(true);
 		return $tmp;
 	}
 	
@@ -61,11 +65,13 @@ class CourseControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/course/add");
 		$form = $crawler->filter('button[type="submit"]')->form([
             		'course[name]' => $testCourse->getName(),
+			'course[type]' => $testCourse->getType(),
+			'course[level]' => $testCourse->getLevel(),
             		'course[description]' => $testCourse->getDescription(),
             		'course[lecturer]' => $testCourse->getLecturer(),
             		'course[place]' => $testCourse->getPlace(),
-			'course[type]' => $testCourse->getType(),
-			'course[color]' => $testCourse->getColor()
+			'course[color]' => $testCourse->getColor(),
+			'course[active]' => $testCourse->getActive(),
         	]);
         	$this->client->submit($form);
         	$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
@@ -230,6 +236,29 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
+	public function testActiveAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." active ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+		$this->em->clear();
+
+		$crawler = $this->client->request("GET", "/course/active/{$testCourse->getId()}");
+		$form = $crawler->filter('button[type="submit"]')->form();
+		$this->client->submit($form);
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+
+		$course = $this->courseRepo->findOneByName($testCourse->getName());
+		$this->assertSame(!$testCourse->getActive(), $course->getActive());
+
+		$this->em->remove($course);
+		$this->em->flush();
+	}
+
+
+
 
 
 
@@ -261,6 +290,43 @@ class CourseControllerTest extends StagWebTestCase {
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 		$this->assertGreaterThan(0, $crawler->filter('div:contains("'.$testCourse->getName().'")')->count());
 		
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+
+	public function testUnauthenticatedInactiveCourseShowAction() {
+		$testCourse = $this->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." unauth inactive show ".mt_rand());
+		$testCourse->setActive(false);
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+
+		$crawler = $this->client->request("GET", "/course/show/{$testCourse->getID()}");
+		# existing but inacive course returns denied which leads to login
+		$this->assertSame(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+		$this->assertRegExp("/\/login$/", $this->client->getResponse()->headers->get("location"));
+
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
+
+
+
+	public function testUnauthenticatedInactiveCourseGridAction() {
+		$testCourse = $this->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." unauth inactive grid ".mt_rand());
+		$testCourse->setActive(false);
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+
+		$crawler = $this->client->request("GET", "/course/grid");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+		$this->assertSame(0, $crawler->filter('div:contains("'.$testCourse->getName().'")')->count());
+
 		$this->em->remove($testCourse);
 		$this->em->flush();
 	}
