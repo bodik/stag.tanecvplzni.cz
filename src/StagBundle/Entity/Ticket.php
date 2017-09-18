@@ -31,7 +31,7 @@ class Ticket {
 	private $price;
 	
 	/**
-	 * @ORM\Column(name="active", type="boolean", nullable=true)
+	 * @ORM\Column(name="active", type="boolean")
 	 */
 	private $active;
 
@@ -61,7 +61,7 @@ class Ticket {
 	public function getPrice() { return $this->price; }
 	public function setPrice($price) { $this->price = $price; return $this; }
 
-	public function getActive() { return $this->active; }
+	public function getActive() { return (bool) $this->active; }
 	public function setActive($active) { $this->active = $active; return $this; }
 	
 	public function getCourseRef() { return $this->courseRef; }
