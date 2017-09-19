@@ -30,9 +30,10 @@
 		@media print { a[href]:after { content: none !important; } }
 
 		/* inactive */
-		.inactive {
-			opacity: 0.4;
-		}
+		.inactive { opacity: 0.4; }
+		
+		/* facebook blue */
+		.facebook-blue { color: #8b9dc3; }
 	</style>
 	{% block stylesheets %}{% endblock %}
 </head>
@@ -67,7 +68,8 @@
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="{{ path('course_list') }}">Spravovat</a></li>
+						<li><a href="{{ path('course_list') }}"><span class="glyphicon glyphicon-edit"></span> Spravovat</a></li>
+						<li><a href="{{ path('course_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat kurz</a></li>
 						<li role="separator" class="divider"></li>
 						{{ render(controller("StagBundle:Course:menulist")) }}
 					</ul>

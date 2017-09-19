@@ -64,21 +64,20 @@ td { border: 0; padding-left: 0.5em; padding-right: 0.5em; padding-top: 0; paddi
 							<td>
 								<div>
 									<h4>
-										{% if course.type == "regular" %}
-											<span class="glyphicon glyphicon-repeat" style="color: {{course.color}};" title="Kurz"></span>
-										{% elseif course.type == "workshop" %}
-											<span class="glyphicon glyphicon-record" style="color: {{course.color}};" title="Workshop"></span>
-										{% elseif course.type == "party" %}
-											<span class="glyphicon glyphicon-glass" style="color: {{course.color}};" title="Tančírna"></span>
-										{% else %}
-											<span class="glyphicon glyphicon-th" style="color: {{course.color}};" title="{{course.type}}"></span>
-										{% endif %}
+										{% include 'StagBundle:Course:icon.html.twig' %}
 										&nbsp;{{course.name}}
 									</h4>
 									{{course.level}}<br/>
 									<strong>{{course.lecturer}}</strong><br/>
 									{{course.place}}<br/>
 									<strong>{{course.timespan}}</strong>
+									
+									{% if is_granted('ROLE_ADMIN') %}
+										<div class="pull-right">
+											{{ render(controller("StagBundle:Course:active", {'id': course.id})) }}
+											{% include 'StagBundle:Course:fblinks.html.twig' %}
+										</div>
+									{% endif %}
 								</div>
 							</td>
 						</tr>

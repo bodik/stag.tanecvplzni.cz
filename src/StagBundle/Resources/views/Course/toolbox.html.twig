@@ -1,7 +1,7 @@
 {% if is_granted('ROLE_ADMIN') %}
 	<div class="text-center hidden-print well">
-		<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Ukázka</a>
-		<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Správa</a>
+		<a class="btn btn-xs btn-default" href="{{ path('course_show', {'id': course.id}) }}"><span class="glyphicon glyphicon-film"></span> Ukázat</a>
+		<a class="btn btn-xs btn-default" href="{{ path('course_book', {'id': course.id}) }}"><span class="glyphicon glyphicon-education"></span> Spravovat</a>
 		<a class="btn btn-xs btn-primary" href="{{ path('course_edit', {'id': course.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 
 		<a class="btn btn-xs btn-warning" href="{{ path('course_schedule', {'id': course.id}) }}"><span class="glyphicon glyphicon-list-alt"></span> Naplánovat kurz</a>

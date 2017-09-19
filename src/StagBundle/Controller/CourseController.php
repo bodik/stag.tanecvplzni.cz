@@ -325,6 +325,8 @@ class CourseController extends Controller {
 				"color" => $tmp->getColor(),
 				"timespan" => $timespan,
 				"pictureRef" => $tmp->getPictureRef(),
+				"fbEventUrl" => $tmp->getFbEventUrl(),
+				"fbGroupUrl" => $tmp->getFbGroupUrl(),
 				"active" => $tmp->getActive(),
 			];
 		}		

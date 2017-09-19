@@ -21,8 +21,8 @@ class CourseControllerTest extends StagWebTestCase {
 		$tmp->setLecturer("ucitel");
 		$tmp->setPlace("tanecni sal");
 		$tmp->setColor("#eeffee");
-		$tmp->setFbEventUrl("https://www.facebook.com/groups/".str_shuffle("1188703337868985")."/");
-		$tmp->setFbGroupUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
+		$tmp->setFbEventUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
+		$tmp->setFbGroupUrl("https://www.facebook.com/groups/".str_shuffle("1188703337868985")."/");
 		$tmp->setActive(true);
 		return $tmp;
 	}
