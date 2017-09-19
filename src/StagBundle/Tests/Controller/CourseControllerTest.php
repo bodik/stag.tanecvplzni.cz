@@ -71,6 +71,8 @@ class CourseControllerTest extends StagWebTestCase {
             		'course[lecturer]' => $testCourse->getLecturer(),
             		'course[place]' => $testCourse->getPlace(),
 			'course[color]' => $testCourse->getColor(),
+			'course[fbEventUrl]' => $testCourse->getFbEventUrl(),
+			'course[fbGroupUrl]' => $testCourse->getFbGroupUrl(),
 			'course[active]' => $testCourse->getActive(),
         	]);
         	$this->client->submit($form);

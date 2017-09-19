@@ -35,7 +35,7 @@ class Blob {
 
 	/**
 	 * Virtual field used for handling the file
-	 * @Assert\File()
+	 * @Assert\File(maxSize = "20M")
 	 */
 	private $fileHandler;
 	
