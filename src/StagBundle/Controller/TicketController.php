@@ -50,7 +50,7 @@ class TicketController extends Controller {
 			$this->em->flush();
 
 			$this->addFlash("success","Ticket {$ticket->getId()} was created");
-			return $this->redirectToRoute("course_book",["id" => $ticket->getCourseRef()->getId()]);
+			return $this->redirectToRoute("course_manage",["id" => $ticket->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle:Ticket:addedit.html.twig", array("form" => $form->createView(),));
@@ -72,7 +72,7 @@ class TicketController extends Controller {
 			$this->em->flush();
 
 			$this->addFlash("success","Ticket {$ticket->getId()} was saved");
-			return $this->redirectToRoute("course_book",["id" => $ticket->getCourseRef()->getId()]);
+			return $this->redirectToRoute("course_manage",["id" => $ticket->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle:Ticket:addedit.html.twig", array("form" => $form->createView(),));
@@ -100,7 +100,7 @@ class TicketController extends Controller {
 			} else {
 				$this->addFlash("error","Ticket with ID {$id} does not exits");
 			}
-			return $this->redirectToRoute("course_book",["id" => $ticket->getCourseRef()->getId()]);
+			return $this->redirectToRoute("course_manage",["id" => $ticket->getCourseRef()->getId()]);
 		}
 
 		return $this->render("StagBundle::deletebutton.html.twig", array("form" => $form->createView(),));

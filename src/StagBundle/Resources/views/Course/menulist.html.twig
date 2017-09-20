@@ -1,5 +1,5 @@
 {% for course in courses %}
 	<li class="{% if not course.active %}inactive{% endif %}">
-		<a href="{{ path('course_book', {'id': course.id}) }}">{% include 'StagBundle:Course:icon.html.twig' %}{{course.name}}</a>
+		<a href="{{ path('course_manage', {'id': course.id}) }}">{% include 'StagBundle:Course:icon.html.twig' %}{{course.name}}</a>
 	</li>
 {% endfor %}

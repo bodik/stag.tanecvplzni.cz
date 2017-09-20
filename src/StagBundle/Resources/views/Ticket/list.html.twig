@@ -18,7 +18,7 @@
 		{% for ticket in tickets %}
                 <tr class="{% if not ticket.active %}inactive{% endif %}">
                 	<td>{{ ticket.id }}</td>
-			<td><a  href="{{ path('course_book', {'id': ticket.courseRef.id}) }}">{{ ticket.courseRef.name }}</a></td>
+			<td><a  href="{{ path('course_manage', {'id': ticket.courseRef.id}) }}">{{ ticket.courseRef.name }}</a></td>
 			<td>{{ ticket.name }}</td>
 			<td>{{ ticket.price }},-</td>
 			<td>{{ render(controller("StagBundle:Ticket:active", {'id': ticket.id})) }}</td>

@@ -21,7 +21,7 @@
 		{% for lesson in lessons %}
                 <tr>
                 	<td>{{ lesson.id }}</td>
-			<td><a  href="{{ path('course_book', {'id': lesson.courseRef.id}) }}">{{ lesson.courseRef.name }}</a></td>
+			<td><a  href="{{ path('course_manage', {'id': lesson.courseRef.id}) }}">{{ lesson.courseRef.name }}</a></td>
 			<td>{{ lesson.time|date('c') }}</td>
 			<td>{{ lesson.length }}</td>
 			<td>{{ lesson.level }}</td>

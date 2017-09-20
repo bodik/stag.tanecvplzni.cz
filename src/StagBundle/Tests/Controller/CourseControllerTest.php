@@ -171,16 +171,16 @@ class CourseControllerTest extends StagWebTestCase {
 	
 	
 	
-	public function testBookAction() {
+	public function testManageAction() {
 		$this->logIn();
 
 		$testCourse = $this->createTestCourse($this->em);
-		$testCourse->setName($testCourse->getName()." book ".mt_rand());
+		$testCourse->setName($testCourse->getName()." manage ".mt_rand());
 		$this->em->persist($testCourse);
 		$this->em->flush();
 
 
-		$crawler = $this->client->request("GET", "/course/book/{$testCourse->getID()}");
+		$crawler = $this->client->request("GET", "/course/manage/{$testCourse->getID()}");
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());		
 		$this->assertGreaterThan(0, $crawler->filter("li:contains('{$testCourse->getName()}')")->count());
 

@@ -51,7 +51,7 @@
 		{% for course in courses %}
                 <tr class="{% if not course.active %}inactive{% endif %}">
                 	<td>{{ course.id }}</td>
-			<td><a  href="{{ path('course_book', {'id': course.id}) }}">{{ course.name }}</a></td>
+			<td><a  href="{{ path('course_manage', {'id': course.id}) }}">{{ course.name }}</a></td>
 			<td>{% include 'StagBundle:Course:icon.html.twig' %}</td>
 			<td>{{ course.level }}</td>
 			<td>{{ course.description[0:20] }}...</td>

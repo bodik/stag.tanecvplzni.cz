@@ -143,7 +143,7 @@ class CourseController extends Controller {
 				}
 				$this->em->flush();
 				$this->addFlash("success","Course {$course->getName()} was scheduled");
-				return $this->redirectToRoute("course_book", ["id" => $course->getId()]);
+				return $this->redirectToRoute("course_manage", ["id" => $course->getId()]);
 			} else {
 				$this->addFlash("error","Course schedule not valid");
 			}
@@ -168,17 +168,17 @@ class CourseController extends Controller {
 
 
 	/**
-	 * @Route("/course/book/{id}", name="course_book")
+	 * @Route("/course/manage/{id}", name="course_manage")
 	 * @Security("has_role('ROLE_ADMIN')")
 	 */
-	public function bookAction(Request $request, $id) {
+	public function manageAction(Request $request, $id) {
 		
 		//CAVEAT: participants list outofmemory in profiler during dev stage, probably by participant.ticketRef.courseRef.ticket_id cycle dump in twig
 		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
 		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }		
 		
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		return $this->render("StagBundle:Course:book.html.twig", ["course" => $course]);
+		return $this->render("StagBundle:Course:manage.html.twig", ["course" => $course]);
 	}
 
 

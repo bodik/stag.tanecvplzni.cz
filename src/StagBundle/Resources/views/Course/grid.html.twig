@@ -47,7 +47,7 @@ td { border: 0; padding-left: 0.5em; padding-right: 0.5em; padding-top: 0; paddi
 			{% for course in row %}
 
 				{% if is_granted('ROLE_ADMIN') %}
-				<a href="{{ path('course_book', {'id': course.id}) }}"><!-- single course box -->
+				<a href="{{ path('course_manage', {'id': course.id}) }}"><!-- single course box -->
 				{% else %}
 				<a href="{{ path('course_show', {'id': course.id}) }}"><!-- single course box -->
 				{% endif %}
