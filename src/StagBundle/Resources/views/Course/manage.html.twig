@@ -21,14 +21,18 @@
 		<li><strong>Úroveň:</strong> {{course.level}}</li>
 		<li><strong>Lektor:</strong> {{course.lecturer}}</li>
 		<li><strong>Místo:</strong> {{course.place}}</li>
+		<li><strong>Popis:</strong>{% include 'StagBundle:Course:descriptionpopover.html.twig' %}</li>
+		<p>
+		<li><strong>Email odpovědi na přihlásku:</strong>{% include 'StagBundle:Course:applemailpopover.html.twig' %}</li>
 		<li><strong>FB:</strong>
 			{% if course.fbEventUrl %}<a href="{{ course.fbEventUrl }}"><span class="fa fa-calendar"</span></a>{% endif %}
 			{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"</span></a>{% endif %}
 		</li>
 		<li><strong>Aktivní:</strong> {{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</li>
+		<li><strong>Poměr ženy:muži:</strong> {{ genders }}</li>
 	</ul>
 	
-	<div class="row">
+	<div class="row hidden-print">
 		<div class="col-md-6">
 
 			<div class="panel panel-default">
@@ -127,6 +131,7 @@
 			<th>Telefon</th>
 			<th>Pohlaví</th>
 			<th>Partner</th>
+			<th>Reference</th>
 			<th>Poznámka</th>
 			<th>Vstup</th>
 			<th>Záloha</th>
@@ -145,6 +150,7 @@
 			<td>{{ participant.phoneNumber }}</td>
 			<td>{{ participant.gender }}</td>
 			<td>{{ participant.partner }}</td>
+			<td>{{ participant.reference }}</td>
 			<td>{{ participant.note }}</td>
 			<td>{{ participant.ticketRef.name }}</td>
 

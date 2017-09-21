@@ -178,7 +178,13 @@ class CourseController extends Controller {
 		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }		
 		
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		return $this->render("StagBundle:Course:manage.html.twig", ["course" => $course]);
+		$tickets = $this->em->getRepository("StagBundle:Ticket")->findBy(["courseRef" => $course]);
+		$ticket_ids = array_map( function($c){return $c->getId();}, $tickets);
+		
+		$males = count($this->em->getRepository("StagBundle:Participant")->findBy(["ticketRef" => $ticket_ids, "gender" => "male"]));
+		$females = count($this->em->getRepository("StagBundle:Participant")->findBy(["ticketRef" => $ticket_ids, "gender" => "female"]));
+		
+		return $this->render("StagBundle:Course:manage.html.twig", ["course" => $course, "genders" => "{$males}:{$females}"]);
 	}
 
 

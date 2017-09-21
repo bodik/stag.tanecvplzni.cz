@@ -10,7 +10,7 @@
 <div class="courses">
 
 	<div class="row legend">
-		<div class="col-xs-2"><h1>Kurzy <a class="btn btn-success" href="{{ path('course_add') }}">Přidat</a></h1></div>
+		<div class="col-xs-2"><h1>Kurzy <a class="btn btn-xs btn-success" href="{{ path('course_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a></h1></div>
 		<div class="col-xs-6 pull-right text-right">
 			Legenda:
 			<span class="label label-info">
@@ -33,17 +33,14 @@
 		<tr>
 			<th>Id</th>
 			<th>Název</th>
-			<th>Typ</th>
+			<th>Typ / Barva</th>
 			<th>Úroveň</th>
 			<th>Popis</th>
 			<th>Lektor</th>
 			<th>Místo</th>
-			<th>Barva</th>
-			<th>Email odpovědi</th>
 			<th>Obrázek</th>
-			<th>FB událost / skupina</th>
+			<th>Email odpovědi / FB</th>
 			<th>Aktivní</th>
-			<th>Počet lekcí/vstupů/účastníků</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -52,22 +49,23 @@
                 <tr class="{% if not course.active %}inactive{% endif %}">
                 	<td>{{ course.id }}</td>
 			<td><a  href="{{ path('course_manage', {'id': course.id}) }}">{{ course.name }}</a></td>
-			<td>{% include 'StagBundle:Course:icon.html.twig' %}</td>
+			<td>
+				{% include 'StagBundle:Course:icon.html.twig' %}
+				<span style="background-color: {{ course.color }};"> &nbsp; &nbsp;<span>
+			</td>
+
 			<td>{{ course.level }}</td>
 			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.lecturer }}</td>
 			<td>{{ course.place }}</td>
-			
-			<td><span style="background-color: {{ course.color }};">{{ course.color }}<span></td>
-			<td>{{ course.applEmailText[0:20] }}...</td>
+
 			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 50px;">{% endif %}</td>
-			<td>{% include 'StagBundle:Course:fblinks.html.twig' %}</td>
-			<td>{{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</td>
 			<td>
-				{% set counter = 0 %}
-				{% for ticket in course.tickets %}{% set counter = counter + ticket.participants|length %}{% endfor %}
-				{{ course.lessons|length }} / {{ course.tickets|length }} / {{ counter }}
+				{% include 'StagBundle:Course:applemailpopover.html.twig' %}
+				&nbsp;
+				{% include 'StagBundle:Course:fblinks.html.twig' %}
 			</td>
+			<td>{{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</td>
 			
 			<td>
 				{% include 'StagBundle:Course:toolbox.html.twig' %}			

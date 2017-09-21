@@ -17,7 +17,15 @@
 		</div>
 	</div>
 
-	{{ form_row(form.active) }}
+	<div class="form-group">
+		{{ form_label(form.active) }}
+		<label class="col-sm-2 control-label required" for="course_active">Aktivní</label>
+		<div class="col-sm-10">
+			{{ form_errors(form.active) }}
+			{{ form_widget(form.active) }}
+			<div class="help-block">Položka určuje viditelnost vstupu/přihlášek pro veřejnost.</div>
+		</div>
+	</div>	
 
         {{ form_end(form) }}
 </div>

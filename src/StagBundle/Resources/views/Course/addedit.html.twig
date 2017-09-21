@@ -39,7 +39,7 @@
 		<div class="col-sm-10">
 			{{ form_errors(form.description) }}
 			{{ form_widget(form.description) }}
-			<div class="help-block">Podporuje sazbu <a href="https://www.google.com/search?q=nápověda+k+markdown">markdown</a>.</div>
+			<div class="help-block">Hlavní blok textových informací o kurzu pro prezentaci veřejnosti. Podporuje sazbu <a href="https://www.google.com/search?q=nápověda+k+markdown">markdown</a>.</div>
 		</div>
 	</div>
 
@@ -61,8 +61,24 @@
 		</div>
 	</div>
 
-	{{ form_row(form.color) }}
-	{{ form_row(form.applEmailText) }}
+	<div class="form-group">
+		{{ form_label(form.color) }}
+		<div class="col-sm-10">
+			{{ form_errors(form.color) }}
+			{{ form_widget(form.color) }}
+			<div class="help-block">Barva pro zobrazení kurzu v rozvrhu.</div>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		{{ form_label(form.applEmailText) }}
+		<div class="col-sm-10">
+			{{ form_errors(form.applEmailText) }}
+			{{ form_widget(form.applEmailText) }}
+			<div class="help-block">Text emailu který bude účastníkovi odeslán po vyplnění přihlášky.</div>
+		</div>
+	</div>
+	
 
         {% do form.pictureRef.setRendered %}
 	<div class="form-group">
@@ -78,6 +94,7 @@
 					value="{{ blob.id }}">{{ blob.fileName }}</option>
 				{% endfor %}
 			</select>
+			<div class="help-block">Obrázek zobrazený s hlavním textem popisu kurzu.</div>
 		</div>
 	</div>
 
@@ -86,7 +103,7 @@
 		<div class="col-sm-10">
 			{{ form_errors(form.fbEventUrl) }}
 			{{ form_widget(form.fbEventUrl) }}
-			<div class="help-block">Odkaz na facebook událost, pouze pro správce.</div>
+			<div class="help-block">Odkaz na facebook událost, pouze pro správce pro rychlejší nalezení správné události.</div>
 		</div>
 	</div>
 
@@ -95,11 +112,20 @@
 		<div class="col-sm-10">
 			{{ form_errors(form.fbGroupUrl) }}
 			{{ form_widget(form.fbGroupUrl) }}
-			<div class="help-block">Odkaz na facebook skupinu, pouze pro správce.</div>
+			<div class="help-block">Odkaz na facebook skupinu, pouze pro správce pro rychlejší nalezení správné skupiny.</div>
 		</div>
 	</div>
 
-	{{ form_row(form.active) }}
+	<div class="form-group">
+		{{ form_label(form.active) }}
+		<label class="col-sm-2 control-label required" for="course_active">Aktivní</label>
+		<div class="col-sm-10">
+			{{ form_errors(form.active) }}
+			{{ form_widget(form.active) }}
+			<div class="help-block">Položka určuje viditelnost kurzu a jeho vstupů/přihlášek pro veřejnost.</div>
+		</div>
+	</div>	
+	
 
 	{% do form.save.setRendered %}
 	<div class="form-group">

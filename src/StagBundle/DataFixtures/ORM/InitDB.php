@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use StagBundle\Entity\Blob;
 use StagBundle\Entity\Course;
 use StagBundle\Entity\Lesson;
+use StagBundle\Entity\Participant;
 use StagBundle\Entity\Ticket;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -131,6 +132,18 @@ cestování, fotografování a dobré jídlo";
 		$ticket->setCourseRef($course);
 		$manager->persist($ticket);
 		$manager->flush();
+		
+		$participant = new Participant();
+		$participant->setGn("Alois");
+		$participant->setSn("Netanecnik");
+		$participant->setEmail("alois.netanecnik@tanecvplzni.cz");
+		$participant->setPhoneNumber("123 456 789");
+		$participant->setGender("male");
+		$participant->setTicketRef($ticket);
+		$manager->persist($participant);
+		$manager->flush();
+
+
 		$ticket = new Ticket();
 		$ticket->setName("Taneční pár");
 		$ticket->setPrice(90);
@@ -138,6 +151,33 @@ cestování, fotografování a dobré jídlo";
 		$ticket->setCourseRef($course);
 		$manager->persist($ticket);
 		$manager->flush();
+
+		$participant = new Participant();
+		$participant->setGn("Josef");
+		$participant->setSn("Tanecnik");
+		$participant->setEmail("josef.tanecnik@tanecvplzni.cz");
+		$participant->setPhoneNumber("666 666 666");
+		$participant->setGender("male");
+		$participant->setPartner("tanecnice eva");
+		$participant->setReference("google");
+		$participant->setNote("nejlepsi tanecnik disco v kraji");
+		$participant->setTicketRef($ticket);
+		$manager->persist($participant);
+		$manager->flush();
+		
+		$participant = new Participant();
+		$participant->setGn("Eva");
+		$participant->setSn("Tanecnice");
+		$participant->setEmail("eva.tanecnice@tanecvplzni.cz");
+		$participant->setPhoneNumber("666 666 667");
+		$participant->setGender("female");
+		$participant->setPartner("tanecnik josef");
+		$participant->setReference("tanecnik josef");
+		$participant->setTicketRef($ticket);
+		$manager->persist($participant);
+		$manager->flush();
+
+
 		$ticket = new Ticket();
 		$ticket->setName("Jednotlivá lekce");
 		$ticket->setPrice(7);
@@ -145,7 +185,6 @@ cestování, fotografování a dobré jídlo";
 		$ticket->setCourseRef($course);
 		$manager->persist($ticket);
 		$manager->flush();
-
 
 
 

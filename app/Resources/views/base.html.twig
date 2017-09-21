@@ -34,6 +34,8 @@
 		
 		/* facebook blue */
 		.facebook-blue { color: #8b9dc3; }
+		
+		.coursetoolbox { padding: 0.5em;}
 	</style>
 	{% block stylesheets %}{% endblock %}
 </head>
@@ -68,7 +70,7 @@
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a href="{{ path('course_list') }}"><span class="glyphicon glyphicon-edit"></span> Spravovat</a></li>
+						<li><a href="{{ path('course_list') }}"><span class="glyphicon glyphicon-list"></span> Seznam kurzů</a></li>
 						<li><a href="{{ path('course_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat kurz</a></li>
 						<li role="separator" class="divider"></li>
 						{{ render(controller("StagBundle:Course:menulist")) }}
@@ -76,6 +78,7 @@
 				</li>
 
 				<li><a href="{{ path('blob_list') }}">Obrázky</a></li>
+				<li><a href="{{ path('default_help') }}">Nápověda</a></li>
 				
 				{% endif %}
 				
@@ -86,6 +89,7 @@
 						<span class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 					<ul class="dropdown-menu">
+						<li><a href="{{ path('course_list') }}">Kurzy</a></li>
 						<li><a href="{{ path('lesson_list') }}">Lekce</a></li>
 						<li><a href="{{ path('ticket_list') }}">Vstupy</a></li>
 						<li><a href="{{ path('participant_list') }}">Účastníci</a></li>
@@ -136,6 +140,12 @@
 			{% endfor %}
 		{% endfor %}
 		{% endblock %}
+	</script>
+	
+	<script>
+		$(document).ready(function(){
+    			$('[data-toggle="popover"]').popover();
+		});
 	</script>
 </body>
 </html>

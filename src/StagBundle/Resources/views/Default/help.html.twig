@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+<style>
+dd { margin-left: 2em; }
+.help ol li { padding-bottom: 2em; }
+</style>
+{% endblock %}
+
+
+{% block body %}
+<div class="help container">
+
+<h1>stag.tanecvplzni.cz</h1>
+
+<h2>Kurzy, lekce, vstupy, účastníci a přihlášky</h2>
+
+<p>
+<strong>Kurz</strong> je akce skládající se z jednotlivých <strong>lekcí</strong>. 
+Vyplněním <strong>přihlášky</strong> na kurz pro některý z dostupných <strong>vstupů</strong> je možné stát se <strong>účastníkem</strong> daného kurzu.
+
+<p>
+<dl>
+	<dt>Kurz</dt>
+	<dd>
+		nese základní informace (název, typ, místo konání, aktivní, ...) a může mít nastaveny volitelné položky 
+		(úroveň účastníků pro které je určen, lektora, popis).
+	</dd>
+
+	<dt>Lekcí</dt>
+	<dd>
+		je jednotlivá událost spadající pod některý kurz, má začátek (datum, hodinu a minutu) a délku v minutách pro generování
+		rozvrhu, a volitelně mohou mít jednotlivé lekce kurzu nastaveny vlastní hodnoty pro úroveň, lektora a popis.
+	</dd>
+
+	<dt>Vstup</dt>
+	<dd>
+		na kurz je vyjádření typu a ceny zápisného na daný kurz (jednotlivec, taneční pár, 2 ze 3 lekcí, fullpass).  
+	</dd>
+
+	<dt>Účastník</dt>
+	<dd>	
+		je podaná přihláška s evidencí o zaplacení a partnerovi.
+	</dd>
+</dl>
+
+Proč jsou některé položky volitelné? Lekce běžného kurzu má stálého lektora a úroveň pro účastníky, narozdíl od workshopu jehož jednotlivé lekce
+mohou být určeny pro různou úroveň účastníků, případně jsou zaměřeny na různé dovednosti (popis) nebo je vede jiná kombinace lektorů.
+<p>
+Povinné položky jsou vždy označeny červenou hvězdičkou <span style="color: red;">*</span>. 
+
+
+<h2>Správa kurzů</h2>
+
+<ol>
+	<li>
+		<p>
+		Vyplněním základního formuláře pro kurz je možné <a class="btn btn-xs btn-success" href="{{ path('course_add') }}"><span class="glyphicon glyphicon-plus"></span>Přidat</a> kurz
+		nebo <a class="btn btn-xs btn-primary" href="#"><span class="glyphicon glyphicon-edit"></span> Upravit</a> jeho vlastnosti.
+		<p>
+		Každý kurz je možné možné označit jako 
+		aktivní <button type="submit" class="btn btn-xs btn-success hidden-print" title="Aktivní"><span class="glyphicon glyphicon-ok"></span></button>
+		nebo neaktivní <button type="submit" class="btn btn-xs btn-danger" title="Neaktivní"><span class="glyphicon glyphicon-remove"></span></button>, 
+		například deaktivovat vybraný kurz po jeho uskutečnění nebo při vyčerpání kapacity. 
+	</li>
+	
+	<li>
+		<p>
+		Po založení nového kurzu je vhodné naplánovat lekce, pokud nemá kurz rozvržené lekce je dostupný veřejnosti, ale není videt konkrétní data konání v kalenáři/rozvrhu.
+		<p>
+		Pro pravidelný kurz je vhodné použít funkcni <a class="btn btn-xs btn-warning" href="#"><span class="glyphicon glyphicon-list-alt"></span> Naplánovat kurz</a>,
+		která vygeneruje určený počet lekcí zadané délky v pravidelném týdením intervalu od počátečního zadání datumu a času první lekce. 
+		<p>
+		Pro workshop se jednotlivé lekce vypisují jednotlivě funkcní <a class="btn btn-xs btn-warning" href="#"><span class="glyphicon glyphicon-list-alt"></span> Přidat lekci</a>
+		včetně podrobného popisu dané lekce (úroveň, lektor, popis, ...)
+		<p>
+		Vypsané lekce všech typů kuzů je možné následně libovolně přidávat, editovat, mazat v hlavním zobrazení <a class="btn btn-xs btn-default" href="#"><span class="glyphicon glyphicon-education"></span> Spravovat</a>. 
+	</li>
+	
+	<li>
+		<p>
+		Ke každému kurzu je možné vypsat jeden nebo více vstupů <a class="btn btn-xs btn-info" href="#"><span class="glyphicon glyphicon-plus"></span> Přidat vstup</a>, 
+		na které se mohou zájemci hlásit formou přihlášky.
+		<p>		
+		Pro pravidelný kurz je vhodné vypsat minimálně 2 typy vstupů: <i>Jednotlivec</i> a <i>Taneční pár</i>
+		<p>
+		Pro workshop se vstupy vypisují dle dispozic pro daný kurz například: <i>Jedna lekce</i>, <i>2 ze 3 lekcí</i> nebo <i>Fullpass</i>.
+		<p>
+		Pro open-class není potřeba vypisovat žádné vstupy, cenu stačí uvést v hlavním textovém popisu kurzu.
+		<p>
+		Jednotlivé vstupy je možné označit jako 
+		aktivní <button type="submit" class="btn btn-xs btn-success hidden-print" title="Aktivní"><span class="glyphicon glyphicon-ok"></span></button>
+		nebo neaktivní <button type="submit" class="btn btn-xs btn-danger" title="Neaktivní"><span class="glyphicon glyphicon-remove"></span></button>, 
+		například deaktivovat vybraný vstup při vyčerpání kapacity. 
+	</li>
+</ol>
+
+</div>
+
+{% endblock %}
