@@ -40,6 +40,7 @@
 			<th>Místo</th>
 			<th>Obrázek</th>
 			<th>Email odpovědi / FB</th>
+			<th>Obsazenost ženy+muži</th>
 			<th>Aktivní</th>
 			<th></th>
 		</tr>
@@ -53,20 +54,18 @@
 				{% include 'StagBundle:Course:icon.html.twig' %}
 				<span style="background-color: {{ course.color }};"> &nbsp; &nbsp;<span>
 			</td>
-
 			<td>{{ course.level }}</td>
 			<td>{{ course.description[0:20] }}...</td>
 			<td>{{ course.lecturer }}</td>
 			<td>{{ course.place }}</td>
-
 			<td>{% if course.pictureRef %}<img src={{ path('blob_get', {'id': course.pictureRef.id}) }} style="height: 50px;">{% endif %}</td>
 			<td>
 				{% include 'StagBundle:Course:applemailpopover.html.twig' %}
 				&nbsp;
 				{% include 'StagBundle:Course:fblinks.html.twig' %}
 			</td>
+			<td>{% include 'StagBundle:Course:occupancy.html.twig' %}</td>
 			<td>{{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</td>
-			
 			<td>
 				{% include 'StagBundle:Course:toolbox.html.twig' %}			
 			</td>

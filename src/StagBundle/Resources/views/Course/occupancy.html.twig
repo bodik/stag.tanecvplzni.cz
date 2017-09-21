@@ -1,0 +1,9 @@
+{% set females = 0 %}
+{% set males = 0 %}
+{% for ticket in course.tickets %}
+	{% for participant in ticket.participants %}
+		{% if participant.gender == "female" %}{% set females = females + 1 %}{% endif %}
+		{% if participant.gender == "male" %}{% set males = males + 1 %}{% endif %}
+	{% endfor %}
+{% endfor %}
+{{ females }}+{{ males }} = {{ females + males }}
