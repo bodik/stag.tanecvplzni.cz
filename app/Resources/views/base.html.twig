@@ -20,22 +20,19 @@
 		.navbar-brand { padding: 0px; }
 		.navbar-brand img { height: 100%; padding: 5px; width: auto; }
 
-		/* some items needs to be padded */
-		.padded { margin-bottom: 1em; }
-
 		/* required items on forms */
 		label.control-label.required:after { content:"*"; color:red; }
 
 		/* disables ahref targets when printing the page */
 		@media print { a[href]:after { content: none !important; } }
 
-		/* inactive */
+		/* other general classes */
 		.inactive { opacity: 0.4; }
-		
-		/* facebook blue */
 		.facebook-blue { color: #8b9dc3; }
-		
 		.coursetoolbox { padding: 0.5em;}
+		.padded { margin-bottom: 1em; }
+		
+		@media print { .pagebreak { page-break-before: always; } }
 	</style>
 	{% block stylesheets %}{% endblock %}
 </head>
