@@ -29,7 +29,7 @@
 			{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"</span></a>{% endif %}
 		</li>
 		<li><strong>Aktivní:</strong> {{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</li>
-		<li><strong>Obsazení ženy + muži = celkem:</strong> {% include 'StagBundle:Course:occupancy.html.twig' %}</li>
+		<li><strong>Obsazenost ženy + muži = celkem:</strong> {% include 'StagBundle:Course:occupancy.html.twig' %}</li>
 	</ul>
 	
 	<div class="row hidden-print">
