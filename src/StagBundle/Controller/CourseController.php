@@ -290,30 +290,19 @@ class CourseController extends Controller {
 			$timespan = "";
 			switch ( $tmp->getType() ) {
 				default:
-					$oneLesson = $tmp->getLessons()[0];
-					if($oneLesson) {
-						# get day in czech locale
-						$currentLocale = setlocale(LC_TIME, 0);
-						setlocale(LC_TIME, 'cs_CZ.UTF-8');
-						$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
-						setlocale(LC_TIME, $currentLocale);
-				
-						$begin = $oneLesson->getTime()->format('H:i');
-						$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
-						$timespan = "{$day} {$begin} - {$end}";
-					}
+					$timespan = $this->_timespanRegular($tmp);
 					break;
 				case "workshop":
-					$firstLesson = $tmp->getLessons()[0];
-					$lastLesson = $tmp->getLessons()[count($tmp->getLessons())-1];
-					if ( !empty($firstLesson) && !empty($lastLesson) ) {
-						$begin = $firstLesson->getTime()->format('d.m.Y H:i');
-						$end = $lastLesson->getTime()->format('H:i');
-						$timespan = "{$begin} - {$end}";
+					$timespan = $this->_timespanWorkshop($tmp);
+					break;
+				case "party":
+					if ( count($tmp->getLessons()) == 1 ) {
+						$timespan = $this->_timespanWorkshop($tmp);
+					} else {
+						$timespan = $this->_timespanRegular($tmp);
 					}
 					break;
 			}
-			if ( empty($timespan) ) { $timespan = ""; }
 
 			$data[] = [
 				"id" => $tmp->getId(),
@@ -329,9 +318,40 @@ class CourseController extends Controller {
 				"fbGroupUrl" => $tmp->getFbGroupUrl(),
 				"active" => $tmp->getActive(),
 			];
-		}		
+		}	
 		
 		return $this->render("StagBundle:Course:grid.html.twig", [ "courses" => $data ] );
 	}
 	
+	public function _timespanRegular($course) {
+		$timespan = "";
+		
+		$oneLesson = $course->getLessons()[0];
+		if($oneLesson) {
+			# get day in czech locale
+			$currentLocale = setlocale(LC_TIME, 0);
+			setlocale(LC_TIME, 'cs_CZ.UTF-8');
+			$day = strtolower(strftime('%A', $oneLesson->getTime()->getTimestamp()));
+			setlocale(LC_TIME, $currentLocale);
+				
+			$begin = $oneLesson->getTime()->format('H:i');
+			$end = $oneLesson->getTime()->add(new \DateInterval("PT".$oneLesson->getLength()."M"))->format('H:i');
+			$timespan = "{$day} {$begin} - {$end}";
+		}
+		return $timespan;
+	}
+	
+	public function _timespanWorkshop($course) {
+		$timespan = "";
+		
+		$firstLesson = $course->getLessons()[0];
+		$lastLesson = $course->getLessons()[count($course->getLessons())-1];
+		if ( !empty($firstLesson) && !empty($lastLesson) ) {
+			$begin = $firstLesson->getTime()->format('d.m.Y H:i');
+			$end = $lastLesson->getTime()->add(new \DateInterval("PT".$lastLesson->getLength()."M"))->format('H:i');
+			$timespan = "{$begin} - {$end}";
+		}
+		
+		return $timespan;
+	}
 }

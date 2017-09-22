@@ -93,7 +93,9 @@ h2 { margin-top: 0; margin-bottom: 0em; }
 
 			{% if course.lessons is not empty %}
 			<div class="panel panel-info">
-				<div class="panel-heading">Rozvrh</div>
+				<div class="panel-heading">
+					{% if course.type == "party" %}Datum konání{% else %}Rozvrh{% endif %}
+				</div>
 				<div class="panel-body">
 					<ul class="list-group">
 					{% for lesson in course.lessons %}
