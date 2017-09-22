@@ -116,7 +116,7 @@ cestování, fotografování a dobré jídlo";
 
 		$d = (new \Datetime())->setTimestamp(strtotime("monday last week 18:00"));
 		for ($i = 0; $i < 4; $i++) {
-			$d->add( new \DateInterval('P'.($i*7).'D'));
+			$d->add( new \DateInterval('P'.(7).'D'));
 			$lesson = new Lesson();
 			$lesson->setTime($d);
 			$lesson->setLength(90);
@@ -208,7 +208,7 @@ cestování, fotografování a dobré jídlo";
 		
 		$d = (new \Datetime())->setTimestamp(strtotime("monday last week 19:00"));
 		for ($i = 0; $i < 4; $i++) {
-			$d->add( new \DateInterval('P'.($i*7).'D'));
+			$d->add( new \DateInterval('P'.(7).'D'));
 			$lesson = new Lesson();
 			$lesson->setTime($d);
 			$lesson->setLength(60);
@@ -255,7 +255,7 @@ cestování, fotografování a dobré jídlo";
 
 		$d = (new \Datetime())->setTimestamp(strtotime("monday last week 19:30"));
 		for ($i = 0; $i < 4; $i++) {
-			$d->add( new \DateInterval('P'.($i*7).'D'));
+			$d->add( new \DateInterval('P'.(7).'D'));
 			$lesson = new Lesson();
 			$lesson->setTime($d);
 			$lesson->setLength(45);
@@ -384,7 +384,7 @@ cestování, fotografování a dobré jídlo";
 
 		$d = (new \Datetime())->setTimestamp(strtotime("tuesday last week 19:30"));
 		for ($i = 0; $i < 10; $i++) {
-			$d->add( new \DateInterval('P'.($i*7).'D'));
+			$d->add( new \DateInterval('P'.(7).'D'));
 			$lesson = new Lesson();
 			$lesson->setTime($d);
 			$lesson->setLength(240);
