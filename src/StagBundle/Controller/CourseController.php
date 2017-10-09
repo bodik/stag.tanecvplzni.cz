@@ -348,7 +348,7 @@ class CourseController extends Controller {
 		$lastLesson = $course->getLessons()[count($course->getLessons())-1];
 		if ( !empty($firstLesson) && !empty($lastLesson) ) {
 			$begin = $firstLesson->getTime()->format('d.m.Y H:i');
-			$end = $lastLesson->getTime()->add(new \DateInterval("PT".$lastLesson->getLength()."M"))->format('H:i');
+			$end = $lastLesson->getTime()->add(new \DateInterval("PT".$lastLesson->getLength()."M"))->format('d.m.Y H:i');
 			$timespan = "{$begin} - {$end}";
 		}
 		
