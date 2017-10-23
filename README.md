@@ -6,6 +6,7 @@ Sometimes it lasts in love but sometimes it hurts instead ...
 ```
 # clone app
 git clone
+sh bin/set_origin.sh
 # install dependencies
 composer install
 # create database
