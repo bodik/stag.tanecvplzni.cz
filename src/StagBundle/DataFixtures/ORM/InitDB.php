@@ -392,6 +392,27 @@ cestování, fotografování a dobré jídlo";
 			$manager->persist($lesson);
 			$manager->flush();
 		}
+
+
+
+
+		$course = new Course();
+		$course->setName("Kurz salsy pro začátečníky od 27.11.17 s Martinem a Janou");
+		$course->setType("regular");
+		$course->setLevel("zacatecnici");
+		$course->setDescription($this->text3);
+		$course->setLecturer("Strejda");
+		$course->setPlace("Masala Ghar, Nám. republiky 21");
+		$course->setColor("#527dce");
+		$course->setApplEmailText($this->text1);
+		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("salsa1.jpg"));
+		$course->setFbEventUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
+		$course->setFbGroupUrl("https://www.facebook.com/groups/".str_shuffle("1188703337868985")."/");
+		$course->setActive(true);
+		$manager->persist($course);
+		$manager->flush();
+
+
 	}
 }
 
