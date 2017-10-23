@@ -156,7 +156,10 @@ class LessonController extends Controller {
 			];
 		}
 
-		return new JsonResponse($data);
+		$response = new JsonResponse($data);
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+
+		return $response;
 	}
 	
 	
