@@ -8,11 +8,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller {
 	/**
-	 * @Route("/", name="homepage")
+	 * NN Route("/", name="homepage")
 	 */
 	public function indexAction(Request $request) {
 		// replace this example code with whatever you need
-		return $this->render('default/index.html.twig', [
+		return $this->render("AppBundle:default:index.html.twig", [
 			'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
 		]);
 	}
