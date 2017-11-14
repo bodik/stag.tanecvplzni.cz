@@ -19,6 +19,10 @@
 
 	<link rel="stylesheet" href="{{ asset('bundles/app/font-awesome/css/font-awesome.min.css') }}" />
 
+	<link rel="stylesheet" type="text/css" href="{{ asset('bundles/app/datatables/dataTables.bootstrap.min.css') }}" />
+	<script type="text/javascript" src="{{ asset('bundles/app/datatables/jquery.dataTables.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/app/datatables/dataTables.bootstrap.min.js') }}"></script>
+
 	<style>
 		/* menu image */
 		.navbar-brand { padding: 0px; }
@@ -146,6 +150,13 @@
 	<script>
 		$(document).ready(function(){
     			$('[data-toggle="popover"]').popover();
+			$('.datatable').DataTable({
+				"columnDefs": [ {
+					"targets": "no-sort",
+					"orderable": false,
+				} ],
+				"paging": false
+			});
 		});
 	</script>
 </body>

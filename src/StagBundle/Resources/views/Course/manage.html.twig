@@ -121,7 +121,8 @@
 	</div><!-- lessons and tickets row -->
 
 
-	<table class="table">
+	<table class="datatable table">
+	<thead>
 		<tr>
 			<th>Id</td>
 			<th>Jméno</th>
@@ -132,13 +133,15 @@
 			<th>Partner</th>
 			<th>Reference</th>
 			<th>Poznámka</th>
-			<th>Vstup</th>
-			<th>Záloha</th>
+			<th class="no-sort">Vstup</th>
+			<th class="no-sort">Záloha</th>
 			<th>Platba</th>
 			<th>Vytvořeno</th>
-			<th class="hidden-print"></th>
-		<tr>
-		
+			<th class="no-sort hidden-print"></th>
+		</tr>
+	</thead>
+
+	<tbody>
 		{% for ticket in course.tickets %}
 		{% for participant in ticket.participants %}
 		<tr>
@@ -167,9 +170,10 @@
 				<a class="btn btn-xs btn-primary" href="{{ path('participant_edit', {'id': participant.id}) }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
 				{{ render(controller("StagBundle:Participant:delete", {'id': participant.id})) }}
 			</td>
-		<tr>
+		</tr>
 		{% endfor %}
 		{% endfor %}
+	</tbody>
 	</table>
 
 

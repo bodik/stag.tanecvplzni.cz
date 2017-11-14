@@ -3,15 +3,15 @@
 {% block body %}
 <div class="tickets">
 	<h1>Vstupy <a class="btn btn-xs btn-success" href="{{ path('ticket_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a></h1>
-	<table class="table table-responsive">
+	<table class="datatable table table-responsive">
 	<thead>
 		<tr>
 			<th>Id</th>
 			<th>Kurz</th>
 			<th>Název</th>
 			<th>Cena</th>
-			<th>Aktivní</th>
-			<th></th>
+			<th class="no-sort">Aktivní</th>
+			<th class="no-sort"></th>
 		</tr>
 	</thead>
 	<tbody>

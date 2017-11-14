@@ -6,7 +6,7 @@
 {% block body %}
 <div class="participants">
 	<h1>Účastníci <a class="btn btn-xs btn-success" href="{{ path('participant_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a></h1>
-	<table class="table table-responsive">
+	<table class="datatable table table-responsive">
 	<thead>
 		<tr>
 			<th>Id</th>
@@ -18,12 +18,12 @@
 			<th>Partner</th>
 			<th>Reference</th>
 			<th>Poznámka</th>
-			<th>Záloha</th>
-			<th>Platba</th>
+			<th class="no-sort">Záloha</th>
+			<th class="no-sort">Platba</th>
 			<th>Kurz</th>
 			<th>Vytvořeno</th>
 			<th>Upraveno</th>
-			<th></th>
+			<th class="no-sort"></th>
 		</tr>
 	</thead>
 	<tbody>
