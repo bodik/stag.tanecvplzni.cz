@@ -272,8 +272,6 @@ class CourseControllerTest extends StagWebTestCase {
 		$crawler = $this->client->request("GET", "/course/export/{$testCourse->getId()}");
 		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
-		$this->assertContains(";\"{$testCourse->getName()}\"", $this->client->getResponse()->getContent());
-
 		$this->em->remove($testCourse);
 		$this->em->flush();
 	}

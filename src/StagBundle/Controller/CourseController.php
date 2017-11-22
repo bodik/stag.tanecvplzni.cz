@@ -2,6 +2,8 @@
 
 namespace StagBundle\Controller;
 
+use Box\Spout\Common\Type;;
+use Box\Spout\Writer\WriterFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -13,10 +15,10 @@ use StagBundle\Form\CourseScheduleType;
 use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
 
 class CourseController extends Controller {
 	private $em;
@@ -259,13 +261,40 @@ class CourseController extends Controller {
 	 */
 	public function exportAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
-		$data = $this->renderView("StagBundle:Course:export.html.twig", ["course" => $course]);
 
-		$response = new Response();
-		$response->headers->set('Content-Type', 'text/csv');
-		$response->headers->set('Content-Disposition', 'attachment; filename='.urlencode($course->getName()).'.csv');
-		$response->setContent(iconv("UTF-8", "ASCII//TRANSLIT", $data));
+		$data[] = ["Kurz", $course->getName()];
+		$data[] = ["Typ", $course->getType()];
+		$data[] = ["Úroveň", $course->getLevel()];
+		$data[] = ["Lektor", $course->getLecturer()];
+		$data[] = ["Místo", $course->getPlace()];
+		$data[] = ["FB událost", $course->getFbEventUrl()];
+		$data[] = ["FB skupina", $course->getFbGroupUrl()];
+		$data[] = ["Aktivní", $course->getActive()];
+		$data[] = [""];
+		$data[] = [
+			"Id", "Jméno", "Přijmení", "Email",
+			"Telefon", "Pohlaví", "Partner", "Reference",
+			"Poznámka", "Vstup", "Záloha", "Platba",
+			"Vytvořeno", "Cena vstupu"
+		];
+		foreach ($course->getTickets() as $ticket) {
+			foreach ($ticket->getParticipants() as $participant) {
+				$data[] = [
+					$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(),
+					$participant->getPhoneNumber(), $participant->getGender(), $participant->getPartner(), $participant->getReference(),
+					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(),
+					$participant->getCreated()->format('d.m.Y H:i'), $ticket->getPrice()
+				];
+			}
+		}
+		$filePath = tempnam(sys_get_temp_dir(), "stagtvp_export_");
+		$writer = WriterFactory::create(Type::XLSX);
+		$writer->openToFile($filePath);
+		foreach($data as $row) { $writer->addRow($row); }
+		$writer->close();
 
+		$response = new BinaryFileResponse($filePath);
+		$response->headers->set('Content-Disposition', 'attachment; filename='.urlencode($course->getName()).'.xlsx');
 		return $response;
 	}
 
