@@ -262,6 +262,18 @@ class CourseController extends Controller {
 	public function exportAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
 
+		#TODO: convert to single aggregated query, next time
+		$females = 0; $males = 0;
+		foreach($course->getTickets() as $ticket) {
+			foreach($ticket->getParticipants() as $participant) {
+				switch ($participant->getGender()) {
+					case "female": $females++; break;
+					case "male": $males++; break;
+				}
+			}
+		}
+		$fm = $females+$males;
+
 		$data[] = ["Kurz", $course->getName()];
 		$data[] = ["Typ", $course->getType()];
 		$data[] = ["Úroveň", $course->getLevel()];
@@ -270,6 +282,7 @@ class CourseController extends Controller {
 		$data[] = ["FB událost", $course->getFbEventUrl()];
 		$data[] = ["FB skupina", $course->getFbGroupUrl()];
 		$data[] = ["Aktivní", $course->getActive()];
+		$data[] = ["Obsazenost ženy + muži = celkem", "{$females}+{$males} = {$fm}"];
 		$data[] = [""];
 		$data[] = [
 			"Id", "Jméno", "Přijmení", "Email",
