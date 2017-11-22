@@ -1,15 +1,16 @@
-"Kurz","{{ course.name }}"
-"Typ","{{ course.type }}"
-"Úroveň","{{ course.level }}"
-"Lektor","{{ course.lecturer }}"
-"Místo","{{ course.place }}"
-"FB událost","{{ course.fbEventUrl }}"
-"FB skupina","{{ course.fbGroupUrl }}"
-"Aktivní","{{ course.active }}"
+sep=;
+"Kurz";"{{ course.name }}"
+"Typ";"{{ course.type }}"
+"Úroveň";"{{ course.level }}"
+"Lektor";"{{ course.lecturer }}"
+"Místo";"{{ course.place }}"
+"FB událost";"{{ course.fbEventUrl }}"
+"FB skupina";"{{ course.fbGroupUrl }}"
+"Aktivní";"{{ course.active }}"
 ""
-"Id","Jméno","Přijmení","Email","Telefon","Pohlaví","Partner","Reference","Poznámka","Vstup","Záloha","Platba","Vytvořeno","Cena Vstupu"
+"Id";"Jméno";"Přijmení";"Email";"Telefon";"Pohlaví";"Partner";"Reference";"Poznámka";"Vstup";"Záloha";"Platba";"Vytvořeno";"Cena Vstupu"
 {% for ticket in course.tickets %}
 {% for participant in ticket.participants %}
-"{{ participant.id }}","{{ participant.gn }}","{{ participant.sn }}","{{ participant.email }}","{{ participant.phoneNumber }}","{{ participant.gender }}","{{ participant.partner }}","{{ participant.reference }}","{{ participant.note }}","{{ participant.ticketRef.name }}","{{ participant.deposit }}","{{ participant.payment }}","{{ participant.created|date('c')[0:10] }}","{{ ticket.price}}"
+"{{ participant.id }}";"{{ participant.gn }}";"{{ participant.sn }}";"{{ participant.email }}";"{{ participant.phoneNumber }}";"{{ participant.gender }}";"{{ participant.partner }}";"{{ participant.reference }}";"{{ participant.note }}";"{{ participant.ticketRef.name }}";"{{ participant.deposit }}";"{{ participant.payment }}";"{{ participant.created|date('c')[0:10] }}";"{{ ticket.price}}"
 {% endfor %}
 {% endfor %}

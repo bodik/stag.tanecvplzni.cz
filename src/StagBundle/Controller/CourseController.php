@@ -264,7 +264,7 @@ class CourseController extends Controller {
 		$response = new Response();
 		$response->headers->set('Content-Type', 'text/csv');
 		$response->headers->set('Content-Disposition', 'attachment; filename='.urlencode($course->getName()).'.csv');
-		$response->setContent($data);
+		$response->setContent(iconv("UTF-8", "ASCII//TRANSLIT", $data));
 
 		return $response;
 	}
