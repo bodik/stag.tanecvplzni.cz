@@ -261,6 +261,22 @@ class CourseControllerTest extends StagWebTestCase {
 
 
 
+	public function testExportAction() {
+		$this->logIn();
+
+		$testCourse = $this->createTestCourse($this->em);
+		$testCourse->setName($testCourse->getName()." export ".mt_rand());
+		$this->em->persist($testCourse);
+		$this->em->flush();
+
+		$crawler = $this->client->request("GET", "/course/export/{$testCourse->getId()}");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+		$this->assertContains(",\"{$testCourse->getName()}\"", $this->client->getResponse()->getContent());
+
+		$this->em->remove($testCourse);
+		$this->em->flush();
+	}
 
 
 

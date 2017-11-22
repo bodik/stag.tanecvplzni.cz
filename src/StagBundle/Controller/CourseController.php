@@ -254,6 +254,25 @@ class CourseController extends Controller {
 
 
 	/**
+	 * @Route("/course/export/{id}", name="course_export")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function exportAction(Request $request, $id) {
+		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+		$data = $this->renderView("StagBundle:Course:export.html.twig", ["course" => $course]);
+
+		$response = new Response();
+		$response->headers->set('Content-Type', 'text/csv');
+		$response->headers->set('Content-Disposition', 'attachment; filename='.urlencode($course->getName()).'.csv');
+		$response->setContent($data);
+
+		return $response;
+	}
+
+
+
+
+	/**
 	 * @Route("/course/show/{id}", name="course_show")
 	 */
 	public function showAction(Request $request, $id) {
