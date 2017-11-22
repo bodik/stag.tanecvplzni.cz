@@ -295,6 +295,7 @@ class CourseController extends Controller {
 
 		$response = new BinaryFileResponse($filePath);
 		$response->headers->set('Content-Disposition', 'attachment; filename='.urlencode($course->getName()).'.xlsx');
+		$response->deleteFileAfterSend(true);
 		return $response;
 	}
 
