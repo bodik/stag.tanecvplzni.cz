@@ -5,7 +5,11 @@
 
 {% block body %}
 <div class="participants">
-	<h1>Účastníci <a class="btn btn-xs btn-success" href="{{ path('participant_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a></h1>
+	<h1>
+		Účastníci
+		<a class="btn btn-xs btn-success" href="{{ path('participant_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a>
+		<a class="btn btn-xs btn-default" href="{{ path('participant_export') }}"><span class="glyphicon glyphicon-export"></span> Exportovat</a>
+	</h1>
 	<table class="datatable table table-responsive">
 	<thead>
 		<tr>

@@ -336,7 +336,22 @@ class ParticipantControllerTest extends StagWebTestCase {
 		$this->em->remove($testCourse);
 		$this->em->flush();
 	}
+
+
+
+	public function testExportAction() {
+		$this->logIn();
+
+		$testParticipant = $this->createTestParticipant($this->em);
+		$testParticipant->setSn($testParticipant->getSn()." export ".mt_rand());
+		$this->em->persist($testParticipant);
+		$this->em->flush();
+
+
+		$crawler = $this->client->request("GET", "/participant/export");
+		$this->assertSame(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+
+		$this->em->remove($testParticipant);
+		$this->em->flush();
+	}
 }
-
-?>
-

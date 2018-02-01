@@ -2,6 +2,8 @@
 
 namespace StagBundle\Controller;
 
+use Box\Spout\Common\Type;;
+use Box\Spout\Writer\WriterFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
@@ -11,6 +13,7 @@ use StagBundle\Form\ParticipantApplicationType;
 use StagBundle\Form\ParticipantDepositPaymentButtonType;
 use StagBundle\Form\ParticipantType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ParticipantController extends Controller {
@@ -226,5 +229,48 @@ class ParticipantController extends Controller {
 
 		return;
 
+	}
+
+
+
+
+	/**
+	 * @Route("/participant/export", name="participant_export")
+	 * @Security("has_role('ROLE_ADMIN')")
+	 */
+	public function exportAction(Request $request) {
+		//CAVEAT: participants list outofmemory in profiler during dev stage, probably by participant.ticketRef.courseRef.ticket_id cycle dump in twig
+		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
+		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }
+
+		$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
+
+		$data[] = [
+			"Id", "Jméno", "Přijmení", "Email", "Telefon", "Pohlaví",
+			"Kurz", "KurzId",
+			"Vstup", "VstupId", "Cena vstupu",
+			"Záloha", "Platba", "Vytvořeno", "Upraveno",
+			"Partner", "Reference", "Poznámka"
+		];
+
+		foreach ($participants as $participant) {
+			$data[] = [
+				$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(), $participant->getPhoneNumber(), $participant->getGender(),
+				$participant->getTicketRef()->getCourseRef()->getName(), $participant->getTicketRef()->getCourseRef()->getId(),
+				$participant->getTicketRef()->getName(), $participant->getTicketRef()->getId(), $participant->getTicketRef()->getPrice(),
+				$participant->getDeposit(), $participant->getPayment(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'),
+				$participant->getPartner(), $participant->getReference(), $participant->getNote()
+			];
+		}
+		$filePath = tempnam(sys_get_temp_dir(), "stagtvp_export_");
+		$writer = WriterFactory::create(Type::XLSX);
+		$writer->openToFile($filePath);
+		foreach($data as $row) { $writer->addRow($row); }
+		$writer->close();
+
+		$response = new BinaryFileResponse($filePath);
+		$response->headers->set('Content-Disposition', 'attachment; filename=participants-'.date("Ymd-His").'.xlsx');
+		$response->deleteFileAfterSend(true);
+		return $response;
 	}
 }
