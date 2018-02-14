@@ -104,6 +104,15 @@ class CourseController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			if ($course) {
+				foreach ($course->getTickets() as $ticket) {
+					foreach ($ticket->getParticipants() as $participant) {
+						$this->em->remove($participant);
+					}
+					$this->em->remove($ticket);
+				}
+				foreach ($course->getLessons() as $lesson) {
+					$this->em->remove($lesson);
+				}
 				$this->em->remove($course);
 				$this->em->flush();
 
