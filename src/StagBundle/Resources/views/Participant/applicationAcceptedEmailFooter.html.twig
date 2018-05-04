@@ -2,7 +2,12 @@
 
 ------------------------------
 {% if participant.ticketRef.courseRef.bankAccount %}
+	{% if participant.id == participant.vs %}
 Číslo přihlášky a variabilní symbol: {{participant.vs}}
+	{% else %}
+Číslo přihlášky: {{participant.id}}
+Variabilní symbol: {{participant.vs}}
+	{% endif %}
 Účet pro zaslání platby: {{participant.ticketRef.courseRef.bankAccount}}
 {% else %}
 Číslo přihlášky: {{participant.id}}
