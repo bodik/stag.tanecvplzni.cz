@@ -13,6 +13,10 @@
 		
 	<div class="row col-md-6">
 		<table class="table">
+		{% if participant.ticketRef.courseRef.bankAccount %}
+		<tr><td>Variabilní symbol</td><td>{{participant.vs}}</td></tr>
+		<tr><td>Číslo bankovního účtu</td><td>{{participant.ticketRef.courseRef.bankAccount}}</td></tr>
+		{% endif %}
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
 		<tr><td>Kurz</td><td><a href="{{ path('course_show', {'id': participant.ticketRef.courseRef.id})}}">{{participant.ticketRef.courseRef.name}} - {{participant.ticketRef.name}}</a></td></tr>
 		{% if participant.ticketRef.courseRef.level %}<tr><td>Úroveň</td><td>{{participant.ticketRef.courseRef.level}}</td></tr>{% endif %}

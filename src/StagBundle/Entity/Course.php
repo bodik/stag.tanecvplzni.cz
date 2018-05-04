@@ -95,6 +95,11 @@ class Course {
 	 */
 	private $tickets;
 
+    /**
+     * @ORM\Column(name="bankAccount", type="string", length=255, nullable=true)
+     */
+	private $bankAccount;
+
 
 	public function __construct() {
 		$this->type = "regular";
@@ -148,5 +153,8 @@ class Course {
 	
 	public function getTickets() { return $this->tickets; }
 	public function setTickets($tickets) { $this->tickets = $tickets; return $this; }
+
+	public function getBankAccount() { return $this->bankAccount; }
+	public function setBankAccount($bankAccount) { $this->bankAccount = $bankAccount; return $this; }
 	
 }

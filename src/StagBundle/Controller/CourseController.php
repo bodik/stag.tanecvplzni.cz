@@ -296,7 +296,7 @@ class CourseController extends Controller {
 		$data[] = [
 			"Id", "Jméno", "Přijmení", "Email",
 			"Telefon", "Pohlaví", "Partner", "Reference",
-			"Poznámka", "Vstup", "Záloha", "Platba",
+			"Poznámka", "Vstup", "Záloha", "Platba", "Variabilní symbol",
 			"Vytvořeno", "Cena vstupu"
 		];
 		foreach ($course->getTickets() as $ticket) {
@@ -304,7 +304,7 @@ class CourseController extends Controller {
 				$data[] = [
 					$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(),
 					$participant->getPhoneNumber(), $participant->getGender(), $participant->getPartner(), $participant->getReference(),
-					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(),
+					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(), $participant->getVs(),
 					$participant->getCreated()->format('d.m.Y H:i'), $ticket->getPrice()
 				];
 			}

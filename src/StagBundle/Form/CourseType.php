@@ -32,6 +32,7 @@ class CourseType extends AbstractType {
 
 		$builder->add('color', TextType::class, ["label" => "Barva", "attr" => ["class" => "jscolor {hash:true, uppercase:false}"]]);
 		$builder->add('applEmailText', TextareaType::class, ["label" => "Email odpovědi", "attr" => [ "rows" => 10] ]);
+		$builder->add('bankAccount', TextType::class, ["label" => "Číslo bankovního účtu", "required" => false]);
 
 		$builder->add('pictureRef', EntityType::class, [
 			"label" => "Obrázek",
