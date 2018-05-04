@@ -54,6 +54,7 @@ class ParticipantController extends Controller {
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$participant = $form->getData();
+			$participant->setVs($this->_generateParticipantVs());
 			
 			$this->em->persist($participant);
 			$this->em->flush();
@@ -64,6 +65,16 @@ class ParticipantController extends Controller {
 
 		return $this->render("StagBundle:Participant:addedit.html.twig", array("form" => $form->createView(),));
 	}
+
+	private function _generateParticipantVs() {
+        $vs = time();
+        $usedVs = $this->em->getRepository(Participant::class)->findByVs($vs);
+        if (empty($usedVs)) {
+            return $vs;
+        } else {
+	        return self::_generateParticipantVs();
+        }
+    }
 
 
 
@@ -198,6 +209,7 @@ class ParticipantController extends Controller {
 		if ($form->isSubmitted() && $form->isValid()) {
 			if ($form->get('tosagreed')->getData() == 1) {
 				$participant = $form->getData();
+                $participant->setVs($this->_generateParticipantVs());
 				$this->em->persist($participant);
 				$this->em->flush();
 
@@ -222,9 +234,15 @@ class ParticipantController extends Controller {
 
 		$message->setTo($participant->getEmail());
 		$text = $participant->getTicketRef()->getCourseRef()->getApplEmailText();
-		$text .= $this->renderView("StagBundle:Participant:applicationAcceptedEmailFooter.html.twig", ["participant" => $participant]);
-		$message->setBody($text, "text/plain");
+        $text .= $this->renderView("StagBundle:Participant:applicationAcceptedEmailFooter.html.twig", ["participant" => $participant]);
 
+        $text = str_replace(
+            ['{{vs}}'],
+            [empty($participant->getVs()) ? "" : $participant->getVs()],
+            $text
+        );
+
+        $message->setBody($text, "text/plain");
 		$this->get("mailer")->send($message);
 
 		return;
@@ -249,7 +267,7 @@ class ParticipantController extends Controller {
 			"Id", "Jméno", "Přijmení", "Email", "Telefon", "Pohlaví",
 			"Kurz", "KurzId",
 			"Vstup", "VstupId", "Cena vstupu",
-			"Záloha", "Platba", "Vytvořeno", "Upraveno",
+			"Záloha", "Platba", "Vytvořeno", "Upraveno", "Variabilní symbol",
 			"Partner", "Reference", "Poznámka"
 		];
 
@@ -258,7 +276,7 @@ class ParticipantController extends Controller {
 				$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(), $participant->getPhoneNumber(), $participant->getGender(),
 				$participant->getTicketRef()->getCourseRef()->getName(), $participant->getTicketRef()->getCourseRef()->getId(),
 				$participant->getTicketRef()->getName(), $participant->getTicketRef()->getId(), $participant->getTicketRef()->getPrice(),
-				$participant->getDeposit(), $participant->getPayment(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'),
+				$participant->getDeposit(), $participant->getPayment(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'), $participant->getVs(),
 				$participant->getPartner(), $participant->getReference(), $participant->getNote()
 			];
 		}

@@ -24,8 +24,8 @@
 		<p>
 		<li><strong>Email odpovědi na přihlásku:</strong>{% include 'StagBundle:Course:applemailpopover.html.twig' %}</li>
 		<li><strong>FB:</strong>
-			{% if course.fbEventUrl %}<a href="{{ course.fbEventUrl }}"><span class="fa fa-calendar"</span></a>{% endif %}
-			{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"</span></a>{% endif %}
+			{% if course.fbEventUrl %}<a href="{{ course.fbEventUrl }}"><span class="fa fa-calendar"></span></a>{% endif %}
+			{% if course.fbGroupUrl %}<a href="{{ course.fbGroupUrl }}"><span class="fa fa-group"></span></a>{% endif %}
 		</li>
 		<li><strong>Aktivní:</strong> {{ render(controller("StagBundle:Course:active", {'id': course.id})) }}</li>
 		<li><strong>Obsazenost ženy + muži = celkem:</strong> {% include 'StagBundle:Course:occupancy.html.twig' %}</li>
@@ -59,9 +59,9 @@
 						{% for tmp in course.lessons %}
 							<tr>
 							<td>{{ tmp.time|date('d.m.Y H:i') }} - {{ tmp.time|date_modify(tmp.length~" minutes")|date('H:i') }}</td>
-							<td>{{ tmp.level }}</dt>
-							<td>{{ tmp.lecturer }}</dt>
-							<td>{{ tmp.description }}</dt>
+							<td>{{ tmp.level }}</td>
+							<td>{{ tmp.lecturer }}</td>
+							<td>{{ tmp.description }}</td>
 							<td>
 								<a class="btn btn-xs btn-primary" href="{{ path('lesson_edit', {'id': tmp.id}) }}"><span class="glyphicon glyphicon-edit"></span> Upravit</a>
 								{{ render(controller("StagBundle:Lesson:delete", {'id': tmp.id})) }}
@@ -100,8 +100,8 @@
 						<tbody>
 						{% for ticket in course.tickets %}
 							<tr class="{% if not ticket.active %}inactive{% endif %}">
-							<td>{{ ticket.name }}</dt>
-							<td>{{ ticket.price }},-</dt>
+							<td>{{ ticket.name }}</td>
+							<td>{{ ticket.price }},-</td>
 							<td>{{ render(controller("StagBundle:Ticket:active", {'id': ticket.id})) }}</td>
 							<td>
 								<a class="btn btn-xs btn-info" href="{{ path('participant_application', {'ticket_id': ticket.id}) }}"><span class="glyphicon glyphicon-plus"></span> Přihlásit</a>

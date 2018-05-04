@@ -75,7 +75,9 @@
 		<div class="col-sm-10">
 			{{ form_errors(form.applEmailText) }}
 			{{ form_widget(form.applEmailText) }}
-			<div class="help-block">Text emailu který je účastníkovi odeslán po vyplnění přihlášky.</div>
+			<div class="help-block">Text emailu který je účastníkovi odeslán po vyplnění přihlášky.
+				Pro použití unikátního variabilního symbolu, vlož {{ "{{vs}}"|escape }}
+			</div>
 		</div>
 	</div>
 	
