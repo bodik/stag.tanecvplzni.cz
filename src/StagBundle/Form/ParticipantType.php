@@ -38,6 +38,7 @@ class ParticipantType extends AbstractType {
 
 		$builder->add("deposit", TextType::class, ["label" => "Záloha", "required" => false,]);
 		$builder->add("payment", TextType::class, ["label" => "Platba", "required" => false,]);
+		$builder->add("paymentReference", TextType::class, ["label" => "Vs platby", "required" => false,]);
 
 		$builder->add("save", SubmitType::class, ["label" => "Uložit"]);
 	}
