@@ -54,6 +54,6 @@ class ParticipantApplicationType extends AbstractType {
 			"mapped" => false,
 		]);
 		
-		$builder->add('save', SubmitType::class);
+		$builder->add('save', SubmitType::class, ["label" => "Odeslat přihlášku"]);
 	}
 }
