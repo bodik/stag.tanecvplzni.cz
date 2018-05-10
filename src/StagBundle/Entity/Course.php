@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Course {
 	const ALL_TYPES = [
-		"běžný" => "regular",
+		"pravidelný" => "regular",
 		"workshop" => "workshop",
 		"párty" => "party"
 	];
