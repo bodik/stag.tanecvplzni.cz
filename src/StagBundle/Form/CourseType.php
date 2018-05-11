@@ -31,7 +31,7 @@ class CourseType extends AbstractType {
 		$builder->add('place', TextType::class, ["label" => "Místo"]);
 
 		$builder->add('color', TextType::class, ["label" => "Barva", "attr" => ["class" => "jscolor {hash:true, uppercase:false}"]]);
-		$builder->add('paymentInfo', TextType::class, ["label" => "Platební informace"]);
+		$builder->add('paymentInfo', TextType::class, ["label" => "Platební informace", "required" => false]);
 		$builder->add('applEmailText', TextareaType::class, ["label" => "Email odpovědi", "attr" => [ "rows" => 10] ]);
 
 		$builder->add('pictureRef', EntityType::class, [
