@@ -15,7 +15,7 @@
 		<table class="table">
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
 		{% if participant.ticketRef.courseRef.paymentInfo %}
-		<tr><td>Platební informace:</td><td>{{ participant.ticketRef.courseRef.paymentInfo }}, variabilní symbol {{ participant.paymentReference }}</td></tr>
+		<tr><td>Platební informace:</td><td>{{ participant.ticketRef.courseRef.paymentInfo }}, variabilní symbol {{ participant.paymentReferenceNumber }}</td></tr>
 		{% endif %}
 		<tr><td>Kurz</td><td><a href="{{ path('course_show', {'id': participant.ticketRef.courseRef.id})}}">{{participant.ticketRef.courseRef.name}} - {{participant.ticketRef.name}}</a></td></tr>
 		{% if participant.ticketRef.courseRef.level %}<tr><td>Úroveň</td><td>{{participant.ticketRef.courseRef.level}}</td></tr>{% endif %}

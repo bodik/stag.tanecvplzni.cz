@@ -51,7 +51,7 @@
 			<td>
 				{% include 'StagBundle:Participant:boxPayment.html.twig' %}
 			</td>
-			<td>{{ participant.paymentReference }}</td>
+			<td>{{ participant.paymentReferenceNumber }}</td>
 
 			<td><a href="{{ path('course_manage', {'id': participant.ticketRef.courseRef.id}) }}">{{ participant.ticketRef.courseRef.name }} - {{ participant.ticketRef.name }}</a></td>
 			<td>{{ participant.created|date('c')[0:10] }}</td>

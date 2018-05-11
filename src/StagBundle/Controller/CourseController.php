@@ -305,7 +305,7 @@ class CourseController extends Controller {
 				$data[] = [
 					$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(),
 					$participant->getPhoneNumber(), $participant->getGender(), $participant->getPartner(), $participant->getReference(),
-					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReference(),
+					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReferenceNumber(),
 					$participant->getCreated()->format('d.m.Y H:i'), $ticket->getPrice()
 				];
 			}

@@ -201,7 +201,7 @@ class ParticipantController extends Controller {
 				$this->em->persist($participant);
 				$this->em->flush();
 
-				$participant->setPaymentReference($participant->getId());
+				$participant->setPaymentReferenceNumber($participant->getId());
 				$this->em->flush();
 
 				$this->_sendApplicationAcceptedEmail($participant);
@@ -261,7 +261,7 @@ class ParticipantController extends Controller {
 				$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(), $participant->getPhoneNumber(), $participant->getGender(),
 				$participant->getTicketRef()->getCourseRef()->getName(), $participant->getTicketRef()->getCourseRef()->getId(),
 				$participant->getTicketRef()->getName(), $participant->getTicketRef()->getId(), $participant->getTicketRef()->getPrice(),
-				$participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReference(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'),
+				$participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReferenceNumber(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'),
 				$participant->getPartner(), $participant->getReference(), $participant->getNote()
 			];
 		}

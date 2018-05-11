@@ -74,9 +74,9 @@ class Participant {
 	private $payment;
 
 	/**
-	 * @ORM\Column(name="payment_reference", type="string", length=255, nullable=true)
+	 * @ORM\Column(name="payment_reference_number", type="string", length=255, nullable=true)
 	 */
-	private $paymentReference;
+	private $paymentReferenceNumber;
 
 	/**
 	 * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="participants")
@@ -134,8 +134,8 @@ class Participant {
 	public function getPayment() { return $this->payment; }
 	public function setPayment($payment) { $this->payment = $payment; return $this; }
 
-	public function getPaymentReference() { return $this->paymentReference; }
-	public function setPaymentReference($paymentReference) { $this->paymentReference = $paymentReference; return $this; }
+	public function getPaymentReferenceNumber() { return $this->paymentReferenceNumber; }
+	public function setPaymentReferenceNumber($paymentReferenceNumber) { $this->paymentReferenceNumber = $paymentReferenceNumber; return $this; }
 
 	public function getTicketRef() { return $this->ticketRef; }
 	public function setTicketRef($ticketRef) { $this->ticketRef = $ticketRef; return $this; }
