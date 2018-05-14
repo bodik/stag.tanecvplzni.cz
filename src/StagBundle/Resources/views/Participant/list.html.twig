@@ -24,6 +24,7 @@
 			<th>Poznámka</th>
 			<th class="no-sort">Záloha</th>
 			<th class="no-sort">Platba</th>
+			<th>VS platby</th>
 			<th>Kurz</th>
 			<th>Vytvořeno</th>
 			<th>Upraveno</th>
@@ -47,12 +48,10 @@
 			<td>
 				{% include 'StagBundle:Participant:boxDeposit.html.twig' %}
 			</td>
-
-
 			<td>
 				{% include 'StagBundle:Participant:boxPayment.html.twig' %}
 			</td>
-
+			<td>{{ participant.paymentReferenceNumber }}</td>
 
 			<td><a href="{{ path('course_manage', {'id': participant.ticketRef.courseRef.id}) }}">{{ participant.ticketRef.courseRef.name }} - {{ participant.ticketRef.name }}</a></td>
 			<td>{{ participant.created|date('c')[0:10] }}</td>

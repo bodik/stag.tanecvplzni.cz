@@ -24,6 +24,7 @@
 		<li><strong>Úroveň:</strong> {{course.level}}</li>
 		<li><strong>Lektor:</strong> {{course.lecturer}}</li>
 		<li><strong>Místo:</strong> {{course.place}}</li>
+		<li><strong>Platební informace:</strong> {{course.paymentInfo}}</li>
 		<p>
 		<li><strong>Email odpovědi na přihlásku:</strong>{% include 'StagBundle:Course:applemailpopover.html.twig' %}</li>
 		<li><strong>FB:</strong>
@@ -136,9 +137,10 @@
 			<th>Partner</th>
 			<th>Reference</th>
 			<th>Poznámka</th>
-			<th class="no-sort">Vstup</th>
+			<th>Vstup</th>
 			<th class="no-sort">Záloha</th>
-			<th>Platba</th>
+			<th class="no-sort">Platba</th>
+			<th>VS platby</th>
 			<th>Vytvořeno</th>
 			<th class="no-sort hidden-print"></th>
 		</tr>
@@ -162,11 +164,10 @@
 			<td>
 				{% include 'StagBundle:Participant:boxDeposit.html.twig' %}
 			</td>
-
-
 			<td>
 				{% include 'StagBundle:Participant:boxPayment.html.twig' %}
 			</td>
+			<td>{{ participant.paymentReferenceNumber }}</td>
 
 			<td>{{ participant.created|date('c')[0:10] }}</td>
 			<td class="hidden-print">

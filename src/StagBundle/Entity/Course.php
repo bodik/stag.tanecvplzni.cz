@@ -60,6 +60,11 @@ class Course {
 	 * @ORM\Column(name="color", type="string", length=255)
 	 */
 	private $color;
+
+	/**
+	 * @ORM\Column(name="payment_info", type="string", length=1024, nullable=true)
+	 */
+	private $paymentInfo;
 	
 	/**
 	 * @ORM\Column(name="appl_email_text", type="text")
@@ -127,7 +132,10 @@ class Course {
 
 	public function getColor() { return $this->color; }
 	public function setColor($color) { $this->color = $color; return $this; }
-	
+
+	public function getPaymentInfo() { return $this->paymentInfo; }
+	public function setPaymentInfo($paymentInfo) { $this->paymentInfo = $paymentInfo; return $this; }
+
 	public function getApplEmailText() { return $this->applEmailText; }
 	public function setApplEmailText($applEmailText) { $this->applEmailText = $applEmailText; return $this; }
 
