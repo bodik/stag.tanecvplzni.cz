@@ -58,9 +58,6 @@ class ParticipantController extends Controller {
 			$this->em->persist($participant);
 			$this->em->flush();
 
-            $participant->setVs($participant->getId());
-            $this->em->flush();
-
 			$this->addFlash("success","Participant {$participant->getSn()} was created");
 			return $this->redirectToRoute("participant_list");
 		}
@@ -202,12 +199,12 @@ class ParticipantController extends Controller {
 			if ($form->get('tosagreed')->getData() == 1) {
 				$participant = $form->getData();
 				$this->em->persist($participant);
-                $this->em->flush();
+				$this->em->flush();
 
-                $participant->setVs($participant->getId());
-                $this->em->flush();
+				$participant->setPaymentReferenceNumber($participant->getId());
+				$this->em->flush();
 
-                $this->_sendApplicationAcceptedEmail($participant);
+				$this->_sendApplicationAcceptedEmail($participant);
 
 				$this->addFlash("success", "Vaše přihláška byla přijata");
 				return $this->render("StagBundle:Participant:applicationAccepted.html.twig", ["participant" => $participant]);
@@ -255,7 +252,7 @@ class ParticipantController extends Controller {
 			"Id", "Jméno", "Přijmení", "Email", "Telefon", "Pohlaví",
 			"Kurz", "KurzId",
 			"Vstup", "VstupId", "Cena vstupu",
-			"Záloha", "Platba", "Vytvořeno", "Upraveno", "Variabilní symbol",
+			"Záloha", "Platba", "VS platby", "Vytvořeno", "Upraveno",
 			"Partner", "Reference", "Poznámka"
 		];
 
@@ -264,7 +261,7 @@ class ParticipantController extends Controller {
 				$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(), $participant->getPhoneNumber(), $participant->getGender(),
 				$participant->getTicketRef()->getCourseRef()->getName(), $participant->getTicketRef()->getCourseRef()->getId(),
 				$participant->getTicketRef()->getName(), $participant->getTicketRef()->getId(), $participant->getTicketRef()->getPrice(),
-				$participant->getDeposit(), $participant->getPayment(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'), $participant->getVs(),
+				$participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReferenceNumber(), $participant->getCreated()->format('d.m.Y H:i'), $participant->getModified()->format('d.m.Y H:i'),
 				$participant->getPartner(), $participant->getReference(), $participant->getNote()
 			];
 		}

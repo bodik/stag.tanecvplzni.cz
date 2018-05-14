@@ -198,6 +198,7 @@ cestování, fotografování a dobré jídlo";
 		$course->setLecturer("Mamka");
 		$course->setPlace("Salon Rounda");
 		$course->setColor("#a874cc");
+		$course->setPaymentInfo("bankovni ucet 1234556789/0000");
 		$course->setApplEmailText($this->text1);
 		$course->setPictureRef($manager->getRepository("StagBundle:Blob")->findOneByFileName("bachata1.jpg"));
 		$course->setFbEventUrl("https://www.facebook.com/events/".str_shuffle("504753496544609")."/");
