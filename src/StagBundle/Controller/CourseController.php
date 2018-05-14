@@ -288,6 +288,7 @@ class CourseController extends Controller {
 		$data[] = ["Úroveň", $course->getLevel()];
 		$data[] = ["Lektor", $course->getLecturer()];
 		$data[] = ["Místo", $course->getPlace()];
+		$data[] = ["Platební informace", $course->getPaymentInfo()];
 		$data[] = ["FB událost", $course->getFbEventUrl()];
 		$data[] = ["FB skupina", $course->getFbGroupUrl()];
 		$data[] = ["Aktivní", $course->getActive()];
@@ -296,7 +297,7 @@ class CourseController extends Controller {
 		$data[] = [
 			"Id", "Jméno", "Přijmení", "Email",
 			"Telefon", "Pohlaví", "Partner", "Reference",
-			"Poznámka", "Vstup", "Záloha", "Platba",
+			"Poznámka", "Vstup", "Záloha", "Platba", "VS platby",
 			"Vytvořeno", "Cena vstupu"
 		];
 		foreach ($course->getTickets() as $ticket) {
@@ -304,7 +305,7 @@ class CourseController extends Controller {
 				$data[] = [
 					$participant->getId(), $participant->getGn(), $participant->getSn(), $participant->getEmail(),
 					$participant->getPhoneNumber(), $participant->getGender(), $participant->getPartner(), $participant->getReference(),
-					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(),
+					$participant->getNote(), $participant->getTicketRef()->getName(), $participant->getDeposit(), $participant->getPayment(), $participant->getPaymentReferenceNumber(),
 					$participant->getCreated()->format('d.m.Y H:i'), $ticket->getPrice()
 				];
 			}

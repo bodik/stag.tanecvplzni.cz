@@ -72,7 +72,12 @@ class Participant {
 	 * @ORM\Column(name="payment", type="string", length=255, nullable=true)
 	 */
 	private $payment;
-	
+
+	/**
+	 * @ORM\Column(name="payment_reference_number", type="string", length=255, nullable=true)
+	 */
+	private $paymentReferenceNumber;
+
 	/**
 	 * @ORM\ManyToOne(targetEntity="Ticket", inversedBy="participants")
 	 * @ORM\JoinColumn(name="ticket_id", referencedColumnName="id", nullable=false)
@@ -87,6 +92,11 @@ class Participant {
 	 * @ORM\Column(name="modified", type="datetime")
 	 */
 	private $modified;
+
+    /**
+     * @ORM\Column(name="vs", type="integer", nullable=true)
+     */
+	private $vs;
 	
 	
 
@@ -128,12 +138,18 @@ class Participant {
 
 	public function getPayment() { return $this->payment; }
 	public function setPayment($payment) { $this->payment = $payment; return $this; }
-	
+
+	public function getPaymentReferenceNumber() { return $this->paymentReferenceNumber; }
+	public function setPaymentReferenceNumber($paymentReferenceNumber) { $this->paymentReferenceNumber = $paymentReferenceNumber; return $this; }
+
 	public function getTicketRef() { return $this->ticketRef; }
 	public function setTicketRef($ticketRef) { $this->ticketRef = $ticketRef; return $this; }
 	
 	public function getCreated() { return $this->created; }
 	public function getModified() { return $this->modified; }
+
+	public function getVs() { return $this->vs; }
+	public function setVs($vs) { $this->vs = $vs; return $this; }
 	
 	/* lifecycle hooks */
 	
