@@ -12,14 +12,16 @@ class PaymentService
 {
 
     private $paymentApiUrl;
+    private $cacertPath;
 
     /**
-     * Important to set base API url
+     * Important to set parameters
      * TODO: find better way if exists
      * @param string $paymentApiUrl
      */
-    public function _setApiUrl($paymentApiUrl) {
+    public function _setParameters($paymentApiUrl, $cacertPath) {
         $this->paymentApiUrl = $paymentApiUrl;
+        $this->cacertPath = $cacertPath;
     }
 
     public function checkTicketParticipantPayment(
@@ -68,7 +70,7 @@ class PaymentService
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt ($curl, CURLOPT_CAINFO, $this->container->getParameter('cacert_path'));
+        curl_setopt ($curl, CURLOPT_CAINFO, $this->cacertPath);
         $result = curl_exec($curl);
         curl_close($curl);
         return $result;
