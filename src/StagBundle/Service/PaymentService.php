@@ -68,7 +68,7 @@ class PaymentService
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt ($curl, CURLOPT_CAINFO, "/etc/apache2/ssl/default.crt");
+        curl_setopt ($curl, CURLOPT_CAINFO, $this->container->getParameter('cacert_path'));
         $result = curl_exec($curl);
         curl_close($curl);
         return $result;
