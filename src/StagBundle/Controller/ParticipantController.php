@@ -220,7 +220,8 @@ class ParticipantController extends Controller {
 				$this->_sendApplicationAcceptedEmail($participant);
 
 				$this->addFlash("success", "Vaše přihláška byla přijata");
-				return $this->render("StagBundle:Participant:applicationAccepted.html.twig", ["participant" => $participant]);
+				$this->get("session")->set("application_accepted_id", $participant->getId());
+				return $this->redirectToRoute("participant_accepted", ["ticket_id" => $ticket_id], 303);
 			} else {
 				$this->addFlash("success", "Musíte souhlasit ...");
 			}
@@ -245,6 +246,19 @@ class ParticipantController extends Controller {
 
 		return;
 
+	}
+
+	/**
+	 * @Route("/participant/accepted/{ticket_id}", name="participant_accepted")
+	 */
+	public function acceptedAction(Request $request, $ticket_id) {
+		$participant_id = $this->get("session")->get("application_accepted_id");
+		if ($participant_id) {
+			$this->get("session")->remove("application_accepted_id");
+			$participant = $this->em->getRepository("StagBundle:Participant")->find($participant_id);
+			return $this->render("StagBundle:Participant:applicationAccepted.html.twig", ["participant" => $participant]);
+		}
+		return $this->redirectToRoute("participant_application", ["ticket_id" => $ticket_id]);
 	}
 
 
