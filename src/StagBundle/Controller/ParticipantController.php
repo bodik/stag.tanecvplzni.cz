@@ -308,8 +308,6 @@ class ParticipantController extends Controller {
     private function _checkTicketParticipantPayment($participants)
     {
         $this->payment->_setParameters($this->container->getParameter('payment_api_url'), $this->container->getParameter('cacert_path'));
-        foreach ($participants as $participant) {
-            $this->payment->checkTicketParticipantPayment($participant, $participant->getTicketRef(), $this->em);
-        }
+        $this->payment->checkTicketParticipantsPayments($participants, $this->em);
     }
 }

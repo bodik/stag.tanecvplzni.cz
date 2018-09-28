@@ -9,13 +9,6 @@
 		Účastníci
 		<a class="btn btn-xs btn-success" href="{{ path('participant_add') }}"><span class="glyphicon glyphicon-plus"></span> Přidat</a>
 		<a class="btn btn-xs btn-default" href="{{ path('participant_export') }}"><span class="glyphicon glyphicon-export"></span> Exportovat</a>
-		<a
-				class="btn btn-xs btn-success"
-				onclick="updatePayments('{{ paymentApiUrl ~ '/update/' ~ "now"|date_modify("-1 day")|date("Y-m-d", "Europe/Prague") ~ '/' ~ "now"|date("Y-m-d", "Europe/Prague") }}')"
-				title="Aktualizovat platby za poslední den.&#013;Platby se automaticky aktualizují každý den ve 12:00."
-		>
-			<span class="glyphicon glyphicon-refresh"></span> Aktualizovat platby
-		</a>
 	</h1>
 	<table class="datatable table table-responsive">
 	<thead>

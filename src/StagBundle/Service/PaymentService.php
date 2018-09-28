@@ -24,38 +24,48 @@ class PaymentService
         $this->cacertPath = $cacertPath;
     }
 
-    public function checkTicketParticipantPayment(
-        Participant $participant,
-        Ticket $ticket,
+    /**
+     * @param Participant[] $participants
+     * @param EntityManagerInterface $em
+     */
+    public function checkTicketParticipantsPayments(
+        array $participants,
         EntityManagerInterface $em
     ) {
-        if (
-            // performance conditions
-            empty($participant->getPaymentReferenceNumber())
-            || !empty($participant->getDeposit())
-            || !empty($participant->getPayment())
-        ) {
-            return false;
+        $participantsRefNumbers = array();
+        foreach ($participants as $participant) {
+            if (!empty($participant->getPaymentReferenceNumber())) {
+
+                if ( // performance conditions
+                    empty($participant->getPaymentReferenceNumber())
+                    || !empty($participant->getPayment())
+                ) {
+                    continue;
+                }
+
+                array_push($participantsRefNumbers, $participant->getPaymentReferenceNumber());
+            }
         }
 
-        $participantPayment = json_decode($this->_getPaymentByReference($participant->getPaymentReferenceNumber()));
-        if (empty($participantPayment)) {
-            return false;
-        }
+        $participantsPayments = json_decode($this->_getPaymentsByReferences(join(',', $participantsRefNumbers)),true);
 
-        // TODO: implement multiple payments with the same reference, e.g. deposit and payment payed by wire
-        if ($participantPayment->objem < $ticket->getPrice()) {
-            $participant->setDeposit('wire');
-        } else {
-            $participant->setPayment('wire');
-        }
+        foreach ($participants as $participant) {
+            if (!empty($participantsPayments[$participant->getPaymentReferenceNumber()])) {
 
-        $em->persist($participant);
-        $em->flush();
-        return true;
+                // TODO: implement multiple payments with the same reference, e.g. deposit and payment payed by wire
+                if ($participantsPayments[$participant->getPaymentReferenceNumber()] < $participant->getTicketRef()->getPrice()) {
+                    $participant->setDeposit('wire');
+                } else {
+                    $participant->setPayment('wire');
+                }
+
+                $em->persist($participant);
+                $em->flush();
+            }
+        }
     }
 
-    private function _getPaymentByReference($reference) {
+    private function _getPaymentsByReferences($reference) {
         $url = $this->paymentApiUrl . "/get-by-reference";
         $result = $this->_callApi(sprintf(
             '%s/%s',

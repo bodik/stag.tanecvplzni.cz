@@ -443,11 +443,15 @@ class CourseController extends Controller {
     private function _checkCourseParticipantsPayments($course)
     {
         $this->payment->_setParameters($this->container->getParameter('payment_api_url'), $this->container->getParameter('cacert_path'));
-        foreach ($course->getTickets() as $ticket) {
-            foreach ($ticket->getParticipants() as $participant) {
-                $this->payment->checkTicketParticipantPayment($participant, $ticket, $this->em);
+        $participants = array();
+        if (!empty($course->getTickets())) {
+            foreach ($course->getTickets() as $ticket) {
+                foreach ($ticket->getParticipants() as $participant) {
+                    array_push($participants, $participant);
+                }
             }
         }
+        $this->payment->checkTicketParticipantsPayments($participants, $this->em);
     }
 
 }
