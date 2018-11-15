@@ -3,6 +3,7 @@
 ------------------------------
 Číslo přihlášky: {{participant.id}}
 {% if participant.ticketRef.courseRef.paymentInfo %}
+Cena: {{ participant.ticketRef.price }},-
 Platební informace: {{ participant.ticketRef.courseRef.paymentInfo }}, variabilní symbol {{ participant.paymentReferenceNumber }}
 {% endif %}
 
