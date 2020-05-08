@@ -50,7 +50,7 @@ class ParticipantApplicationType extends AbstractType {
 			]);
 
 		$builder->add("tosagreed", CheckboxType::class, [
-			"label" => "Zaškrnutím políčka souhlasíte se zpracováním osobních údajů dle zákona č. 101/2000 Sb., o ochraně osobních údajů, ve znění pozdějších předpisů a zároveň vyjadřujete souhlas s všeobecnými pravidly Tance v Plzni, z. s.",
+			"label" => "Zaškrnutím políčka souhlasíte se zpracováním osobních údajů dle zákona č. 110/2019 Sb., o ochraně osobních údajů, ve znění pozdějších předpisů a zároveň vyjadřujete souhlas s všeobecnými pravidly Tance v Plzni, z. s.",
 			"mapped" => false,
 		]);
 		

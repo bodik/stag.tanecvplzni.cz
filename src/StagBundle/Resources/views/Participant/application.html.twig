@@ -1,6 +1,30 @@
 {% extends 'AppBundle::base.html.twig' %}
 
+{% block stylesheets %}
+<script>
+$(document).ready(function() {
+	$('form[name="participant_application"]').submit(function(event) {
+		$('#participant_application_save').prop("disabled", true);
+		$('#spinner_modal').modal();
+	});
+});
+</script>
+{% endblock %}
+
 {% block body %}
+<div id="spinner_modal" class="modal fade" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-sm" role="document">
+		<div class="modal-content text-center">
+			<div class="modal-header">
+				<h4 class="modal-title" id="myModalLabel">Odesílání přihlášky</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+				<i class="fa fa-spinner fa-spin" style="font-size:24px"></i>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="participants">
 	<h1 class="text-center padded">Přihláška na kurzy, workshopy Tanec v Plzni</h1>
 
@@ -82,7 +106,4 @@
 	{{ form_end(form) }}
 </div>
 
-{% endblock %}
-
-{% block stylesheets %}
 {% endblock %}

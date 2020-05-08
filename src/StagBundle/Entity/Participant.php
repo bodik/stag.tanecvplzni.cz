@@ -92,6 +92,11 @@ class Participant {
 	 * @ORM\Column(name="modified", type="datetime")
 	 */
 	private $modified;
+
+    /**
+     * @ORM\Column(name="vs", type="integer", nullable=true)
+     */
+	private $vs;
 	
 	
 
@@ -142,6 +147,9 @@ class Participant {
 	
 	public function getCreated() { return $this->created; }
 	public function getModified() { return $this->modified; }
+
+	public function getVs() { return $this->vs; }
+	public function setVs($vs) { $this->vs = $vs; return $this; }
 	
 	/* lifecycle hooks */
 	

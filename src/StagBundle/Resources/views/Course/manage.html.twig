@@ -17,10 +17,7 @@
 
 	<ul class="list-inline well {% if not course.active %}inactive{% endif %}">
 		<li><strong>Kurz:</strong> {{course.name}}</li>
-		<li>
-			<strong>Typ:</strong> {{course.type}}
-			{% for k, v in constant('StagBundle\\Entity\\Course::ALL_TYPES') %}{% if v == course.type %}{{ k }}{% endif %}{% endfor %}
-		</li>
+		<li><strong>Typ:</strong> {% for k, v in constant('StagBundle\\Entity\\Course::ALL_TYPES') %}{% if v == course.type %}{{ k }}{% endif %}{% endfor %}</li>
 		<li><strong>Úroveň:</strong> {{course.level}}</li>
 		<li><strong>Lektor:</strong> {{course.lecturer}}</li>
 		<li><strong>Místo:</strong> {{course.place}}</li>
