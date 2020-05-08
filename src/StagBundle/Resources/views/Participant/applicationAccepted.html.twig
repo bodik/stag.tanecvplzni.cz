@@ -13,6 +13,10 @@
 		
 	<div class="row col-md-6">
 		<table class="table">
+		{% if participant.ticketRef.courseRef.bankAccount %}
+		<tr><td>Variabilní symbol</td><td>{{participant.vs}}</td></tr>
+		<tr><td>Číslo bankovního účtu</td><td>{{participant.ticketRef.courseRef.bankAccount}}</td></tr>
+		{% endif %}
 		<tr><td>Číslo přihlášky</td><td>{{participant.id}}</td></tr>
 		{% if participant.ticketRef.courseRef.paymentInfo %}
 		<tr><td>Cena</td><td>{{participant.ticketRef.price}},-</td></tr>

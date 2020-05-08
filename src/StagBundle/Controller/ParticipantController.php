@@ -12,6 +12,7 @@ use StagBundle\Form\DeleteButtonType;
 use StagBundle\Form\ParticipantApplicationType;
 use StagBundle\Form\ParticipantDepositPaymentButtonType;
 use StagBundle\Form\ParticipantType;
+use StagBundle\Service\PaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,10 +20,15 @@ use Symfony\Component\HttpFoundation\Request;
 class ParticipantController extends Controller {
 	private $em;
 	private $appName;
+	private $payment;
 
-	public function __construct(EntityManagerInterface $em) {
+	public function __construct(
+	    EntityManagerInterface $em,
+        PaymentService $payment
+    ) {
 		$this->em = $em;
 		$this->appName = (array_key_exists("SERVER_NAME", $_SERVER) ? $_SERVER["SERVER_NAME"] : "localhost");
+		$this->payment = $payment;
 	}
 
 
@@ -37,7 +43,14 @@ class ParticipantController extends Controller {
 		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
 		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }
 
-        	$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
+        $participants = $this->em->getRepository("StagBundle:Participant")->findAll();
+        $this->_checkTicketParticipantPayment($participants);
+
+        if (!empty($request->get('event')) && $request->get('event') === 'paymentUpdates') {
+            $this->addFlash($request->get('type'), $request->get('message'));
+            return $this->redirect($request->getUri());
+        }
+
 		return $this->render("StagBundle:Participant:list.html.twig", [ "participants" => $participants ] );
 	}
 
@@ -261,6 +274,7 @@ class ParticipantController extends Controller {
 		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }
 
 		$participants = $this->em->getRepository("StagBundle:Participant")->findAll();
+        $this->_checkTicketParticipantPayment($participants);
 
 		$data[] = [
 			"Id", "Jméno", "Přijmení", "Email", "Telefon", "Pohlaví",
@@ -290,4 +304,12 @@ class ParticipantController extends Controller {
 		$response->deleteFileAfterSend(true);
 		return $response;
 	}
+
+    private function _checkTicketParticipantPayment($participants)
+    {
+        $this->payment->_setApiUrl($this->container->getParameter('payment_api_url'));
+        foreach ($participants as $participant) {
+            $this->payment->checkTicketParticipantPayment($participant, $participant->getTicketRef(), $this->em);
+        }
+    }
 }

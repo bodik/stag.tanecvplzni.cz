@@ -5,7 +5,6 @@ namespace StagBundle\Controller;
 use Box\Spout\Common\Type;;
 use Box\Spout\Writer\WriterFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use StagBundle\Entity\Course;
@@ -14,18 +13,23 @@ use StagBundle\Form\CourseActiveButtonType;
 use StagBundle\Form\CourseScheduleType;
 use StagBundle\Form\CourseType;
 use StagBundle\Form\DeleteButtonType;
+use StagBundle\Service\PaymentService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CourseController extends Controller {
 	private $em;
+	private $payment;
 
 
-	public function __construct(EntityManagerInterface $em) {
+	public function __construct(
+	    EntityManagerInterface $em,
+        PaymentService $payment
+    ) {
 		$this->em = $em;
+		$this->payment = $payment;
 	}
 
 
@@ -186,9 +190,16 @@ class CourseController extends Controller {
 		
 		//CAVEAT: participants list outofmemory in profiler during dev stage, probably by participant.ticketRef.courseRef.ticket_id cycle dump in twig
 		//https://stackoverflow.com/questions/30229637/out-of-memory-error-in-symfony
-		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }		
-		
+		if ($this->container->has('profiler')) { $this->container->get('profiler')->disable(); }
+
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+        $this->_checkCourseParticipantsPayments($course);
+
+        if (!empty($request->get('event')) && $request->get('event') === 'paymentUpdates') {
+            $this->addFlash($request->get('type'), $request->get('message'));
+            return $this->redirect($request->getUri());
+        }
+
 		return $this->render("StagBundle:Course:manage.html.twig", ["course" => $course]);
 	}
 
@@ -270,6 +281,8 @@ class CourseController extends Controller {
 	 */
 	public function exportAction(Request $request, $id) {
 		$course = $this->em->getRepository("StagBundle:Course")->find($id);
+
+        $this->_checkCourseParticipantsPayments($course);
 
 		#TODO: convert to single aggregated query, next time
 		$females = 0; $males = 0;
@@ -426,4 +439,15 @@ class CourseController extends Controller {
 		
 		return $timespan;
 	}
+
+    private function _checkCourseParticipantsPayments($course)
+    {
+        $this->payment->_setApiUrl($this->container->getParameter('payment_api_url'));
+        foreach ($course->getTickets() as $ticket) {
+            foreach ($ticket->getParticipants() as $participant) {
+                $this->payment->checkTicketParticipantPayment($participant, $ticket, $this->em);
+            }
+        }
+    }
+
 }
